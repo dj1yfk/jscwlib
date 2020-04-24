@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+       <base href="//fkurz.net/ham/jscwlib.html">
+       <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+       <title>jscwlib - JavaScript CW (Morse Code) generator (Web Audio API)</title>
+       <meta name="keywords" lang="en" content="morse code, morse generator, morse sound generator, morse javascript">
+	   <link rel="stylesheet" type="text/css" href="/fkurz.css">
+	   <link href="/dj1yfk.xml?filter=jscwlib" type="application/atom+xml" rel="alternate" title="jscwlib newsfeed">
+</head>
+<body>
+<h1>jscwlib - JavaScript Morse Code Library</h1>
+<hr>
+<nav>
+<a href="//fkurz.net/">Fabian Kurz</a> &rarr; <a href="/ham/">Ham Radio</a> &rarr; <a class="navself" href="/ham/jscwlib.html">jscwlib</a>
+</nav>
+<hr>
+<h2>Status</h2>
+<dl>
+		<dt><strong>24-April-2020</strong></dt><dd>
+            Website created. No release yet - very preliminary but working code in git.
+        </dd>
+</dl>
+<hr>
+<h2>Introduction</h2>
+<p><em>jscwlib</em> is a JavaScript library that generates Morse code (sound
+and optional graphical output) in the browser. It can easily be embedded in
+websites. It is developed for <a href="https://lcwo.net/">LCWO</a>, but since
+it may be very useful for other purposes, it's available as a separate
+library.</p>
+
+<h2>Minimal example</h2>
+<div style="color:white;background-color:black;border:5px solid #000000;">
+    <pre>&lt;!DOCTYPE html&gt;
+&lt;script src="https://fkurz.net/ham/jscwlib/src/jscwlib.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+function play () {
+    var m = new jscw();
+    m.setWpm(30);
+    m.play("hello");
+}
+&lt;/script&gt;
+
+&lt;button onclick="play();"&gt;Play&lt;/button&gt; </pre>
+</div>
+<p>Note that browsers typically only play sound if it was created by a
+keyboard/mouse/touch event, therefore the need to press a button to start
+it.</p>
+<h2>Methods</h2>
+<h3>setWpm(x)</h3>
+<p>Sets the character speed to <code>x</code> words per minute.</p>
+<h3>setEff(x)</h3>
+<p>Sets the effective speed to <code>x</code> words per minute. If it's equal or higher than
+the character speed, this parameter is ignored. Otherwise the spaces between
+the characters are stretched to achieve the effective speed with a higher
+character speed.</p>
+<h3>setFreq(x)</h3>
+<p>Set the tone frequency to <code>x</code> Hertz.</p>
+<h3>setFilter()</h3>
+<p>Set the cutoff-frequency of the low-pass filter that shapes the generated tone to <code>x</code> Hz.</p>
+<h3>play(text)</h3>
+<p>Plays <code>text</code> in Morse code, with the parameters currently set. The
+text may contain commands to change parameters on the fly:
+<ul>
+    <li><code>|wXX</code> sets the character speed to <code>XX</code> WpM,</li>
+    <li><code>|eXX</code> sets the effective speed to <code>XX</code> WpM,</li>
+    <li><code>|fXXX</code> sets the tone frequency to <code>XXX</code> Hz,</li>
+    <li><code>|vX</code> sets the volume to <code>X</code> (0.0 - 1.0),</li>
+    <li><code>|sXXXX</code> inserts a silence period of <code>XXXX</code>
+        milliseconds.</li>
+</ul>
+</p>
+<h3>getLength()</h3>
+<p>Get the total play time of the current text in seconds.</p>
+<h3>getRemaining()</h3>
+<p>Get the remaining play time of the current text in seconds.</p>
+<h3>draw(c)</h3>
+<p>Draws the last generated Morse code as a timing diagram on a HTML5 canvas (<code>c</code>).</p>
+<hr>
+<h2>Download / Embedding</h2>
+<p>The latest version of the library can be found in the git repository: <a href="https://git.fkurz.net/dj1yfk/jscwlib/">https://git.fkurz.net/dj1yfk/jscwlib/</a>.
+It is published under the very liberal MIT license.</p>
+<p>You can directly embed the library into your own site by hot-linking to 
+<a href="https://fkurz.net/ham/jscwlib/src/jscwlib.js">https://fkurz.net/ham/jscwlib/src/jscwlib.js</a>
+(development branch).
+As soon as there are proper releases, permanent links to those will become
+available.</p>
+
+<hr>
+<h2>Author</h2>
+<p><em>jscwlib</em> was written by Fabian Kurz, DJ1YFK &lt;<a
+    href="mailto:fabian&#64;fkurz.net" >fabian@fkurz.net</a>&gt;.
+
+<br>
+<hr>
+<nav>
+<a href="//fkurz.net/">Fabian Kurz</a> &rarr; <a href="/ham/">Ham Radio</a> &rarr; <a class="navself" href="/ham/jscwlib.html">jscwlib</a>
+</nav>
+<hr>
+Last modified: <!--#echo var="LAST_MODIFIED" -->
+</body>
+</html>

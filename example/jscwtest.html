@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<body>
+    <script src="https://fkurz.net/ham/jscwlib/src/jscwlib.js"></script>
+    <script>
+    var m = false;
+
+    function init_morse() {
+        if (!m) {
+            m = new jscw();
+            m.setWpm(20);
+            m.setEff(20);
+            m.setFreq(600);
+        }
+    }
+
+    window.setInterval(ret, 100);
+    function ret () {
+        if (m) {
+            document.getElementById('rem').innerHTML = m.getRemaining() + " / " + m.getLength();
+        }
+    }
+
+    function make_paris () {
+        var eff = document.getElementById('eff').innerHTML;
+        document.getElementById('text').value = "";
+        for (var i = 0; i < eff; i++) {
+            document.getElementById('text').value += "PARIS ";
+        }
+    }
+
+    </script>
+
+    <br>
+        <button id="touchy">Touch this button before anything else for sound on iPad</button>
+    <br>
+    <script>
+        document.getElementById("touchy").addEventListener("touchend", handleTouchEnd, false);
+        function handleTouchEnd () {
+            init_morse();
+            alert("Touchend event fired");
+        }
+    </script>
+
+
+
+    <input type="text" id="text" size=80 value="PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS">
+    <button onclick="init_morse();m.play(document.getElementById('text').value);">Play</button>
+    <button onclick="make_paris();">Paris Generator</button>
+
+    <br>
+    Freq (<span id="freq">600</span>): <input type="range" min="200" max="1500" step="10" onChange="m.setFreq(this.value);m.play('test');document.getElementById('freq').innerHTML=this.value;"> <br>
+    Filter (<span id="filter">600</span>): <input type="range" min="200" max="1500" step="10" onChange="m.setFilter(this.value);m.play('test');document.getElementById('filter').innerHTML=this.value;"> <br>
+    WpM (<span id="wpm">20</span>): <input type="range" min="5" max="100" step="1" onChange="m.setWpm(this.value);m.play('test');document.getElementById('wpm').innerHTML=this.value;"> <br>
+    Eff (<span id="eff">20</span>): <input type="range" min="5" max="100" step="1" onChange="m.setEff(this.value);m.play('test');document.getElementById('eff').innerHTML=this.value;"> <br>
+    Remaining play time: <span id="rem">0 </span>s
+
+    <br>
+    <button onclick="m.draw(document.getElementById('canvas'));">Draw</button>
+
+    <br>
+    <canvas width=1000 height=20 id="canvas">
+    </canvas>
+
+
+</body>
