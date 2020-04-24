@@ -2,15 +2,13 @@
 <body>
     <script src="https://fkurz.net/ham/jscwlib/src/jscwlib.js"></script>
     <script>
-    var m = false;
+    var m = new jscw();
 
     function init_morse() {
-        if (!m) {
-            m = new jscw();
-            m.setWpm(20);
-            m.setEff(20);
-            m.setFreq(600);
-        }
+        m.init();   // must be fired from user input
+        m.setWpm(20);
+        m.setEff(20);
+        m.setFreq(600);
     }
 
     window.setInterval(ret, 100);
@@ -43,8 +41,9 @@
 
 
 
-    <input type="text" id="text" size=80 value="PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS">
+    <input type="text" id="text" size=80 value="PARIS">
     <button onclick="init_morse();m.play(document.getElementById('text').value);">Play</button>
+    <button onclick="m.pause();">Pause</button>
     <button onclick="make_paris();">Paris Generator</button>
 
     <br>
@@ -60,6 +59,17 @@
     <br>
     <canvas width=1000 height=20 id="canvas">
     </canvas>
+
+
+    <br>
+    <br>
+    <div class="smallplayer" id="ply">
+    </div>
+
+    <script>
+        m.renderPlayer("ply");
+    </script>
+
 
 
 </body>

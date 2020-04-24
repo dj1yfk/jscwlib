@@ -19,58 +19,67 @@
         this.playLength = 0;
         this.playEnd = 0;
         this.playTiming = [];   // last generated text 
+        this.init_done = false;
+        this.text = "";
+        this.paused = false;
+        this.progressbar = false;
 
-		var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        var gainNode = audioCtx.createGain();
-		var oscillator = audioCtx.createOscillator();
-        var biquadFilter = audioCtx.createBiquadFilter();
-        var noiseFilter = audioCtx.createBiquadFilter();
+        this.init = function() {
+		    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            this.gainNode = this.audioCtx.createGain();
+		    this.oscillator = this.audioCtx.createOscillator();
+            this.biquadFilter = this.audioCtx.createBiquadFilter();
+            this.noiseFilter = this.audioCtx.createBiquadFilter();
+            this.whiteNoise = this.audioCtx.createBufferSource();
 
-        noiseFilter.type = "bandpass";
-        noiseFilter.frequency.setValueAtTime(500, audioCtx.currentTime);
-        noiseFilter.Q.setValueAtTime(5, audioCtx.currentTime);
-        noiseFilter.gain.setValueAtTime(0.9, audioCtx.currentTime);
+            this.noiseFilter.type = "bandpass";
+            this.noiseFilter.frequency.setValueAtTime(500, this.audioCtx.currentTime);
+            this.noiseFilter.Q.setValueAtTime(5, this.audioCtx.currentTime);
+            this.noiseFilter.gain.setValueAtTime(0.9, this.audioCtx.currentTime);
 
-        var bufferSize = 2 * audioCtx.sampleRate;
-        var noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-        var noise = noiseBuffer.getChannelData(0);
-        for (var i = 0; i < bufferSize; i++) {
-                noise[i] = Math.random() * 2 - 1;
+            var bufferSize = 2 * this.audioCtx.sampleRate;
+            var noiseBuffer = this.audioCtx.createBuffer(1, bufferSize, this.audioCtx.sampleRate);
+            var noise = noiseBuffer.getChannelData(0);
+            for (var i = 0; i < bufferSize; i++) {
+                    noise[i] = Math.random() * 2 - 1;
+            }
+
+            this.whiteNoise.buffer = noiseBuffer;
+            this.whiteNoise.loop = true;
+    //        whiteNoise.start(0);
+            this.whiteNoise.connect(this.noiseFilter);
+
+            this.noiseFilter.connect(this.audioCtx.destination);
+
+            this.biquadFilter.type = "lowpass";
+            this.biquadFilter.frequency.setValueAtTime(500, this.audioCtx.currentTime);
+            this.biquadFilter.gain.setValueAtTime(0.5, this.audioCtx.currentTime);
+
+            this.oscillator.type = 'sine';
+            this.oscillator.frequency.setValueAtTime(600, this.audioCtx.currentTime); // value in hertz
+
+            this.oscillator.connect(this.gainNode);
+            this.gainNode.connect(this.biquadFilter);
+            this.biquadFilter.connect(this.audioCtx.destination);
+
+            this.gainNode.gain.value = 0;
+            this.oscillator.start();
+            this.init_done = true;
         }
-
-        var whiteNoise = audioCtx.createBufferSource();
-        whiteNoise.buffer = noiseBuffer;
-        whiteNoise.loop = true;
-//        whiteNoise.start(0);
-        whiteNoise.connect(noiseFilter);
-
-        noiseFilter.connect(audioCtx.destination);
-
-        biquadFilter.type = "lowpass";
-        biquadFilter.frequency.setValueAtTime(500, audioCtx.currentTime);
-        biquadFilter.gain.setValueAtTime(0.5, audioCtx.currentTime);
-
-		oscillator.type = 'sine';
-		oscillator.frequency.setValueAtTime(600, audioCtx.currentTime); // value in hertz
-
-        oscillator.connect(gainNode);
-        gainNode.connect(biquadFilter);
-        biquadFilter.connect(audioCtx.destination);
-
-        gainNode.gain.value = 0;
-        oscillator.start();
-
        
         this.getLength = function () {
             return this.playLength;
         }
 
         this.setFilter = function (f) {
-            biquadFilter.frequency.setValueAtTime(f, audioCtx.currentTime);
+            this.biquadFilter.frequency.setValueAtTime(f, this.audioCtx.currentTime);
         }
 
         this.getRemaining = function () {
-            var r = this.playEnd -  audioCtx.currentTime;
+            if (!this.init_done) {
+                return 0;
+            }
+            var r = this.playEnd - this.audioCtx.currentTime;
             if (r >= 0) {
                 return Math.round(r*10)/10;;
             }
@@ -79,32 +88,41 @@
             }
         }
 
+        this.getTime = function () {
+            var t = this.getLength() - this.getRemaining();
+            if (t < 0) {
+                return 0;
+            }
+            else {
+                return t;
+            }
+        }
+
         this.getPlaytime = function() {
-            return this.playLength();
+            return this.playLength;
         }
 
         this.setWpm = function (w) {
             w = parseInt(w);
-            gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
+            this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
             this.wpm = w;
         }
 
         this.setEff = function (e) {
-            gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
+            this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
             e = parseInt(e);
             if (e > this.wpm) {
                 console.log("Cannot set eff " + e + " > wpm (" + this.wpm + ")!");
                 e = this.wpm;
             }
-            console.log("Setting eff = " + e);
             this.eff = e;
         }
 
         this.setFreq = function(f) {
             this.freq = f;
-            gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
-            oscillator.frequency.setValueAtTime(f, audioCtx.currentTime);
-            biquadFilter.frequency.setValueAtTime(f, audioCtx.currentTime);
+            this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
+            this.oscillator.frequency.setValueAtTime(f, this.audioCtx.currentTime);
+            this.biquadFilter.frequency.setValueAtTime(f, this.audioCtx.currentTime);
         }
 
         // draw last generated text on a canvas
@@ -180,17 +198,21 @@
             this.wordspace = 7 * this.fwdotlen - this.letterspace;
         }
 
-        this.play = function(text) {
+        this.setText = function(text) {
+            this.text = text.toLowerCase();
+        }
+
+        this.play = function(playtext) {
             var out = [];   // time instants when we switch the sound on and off
             var ele = [];   // details of timing elements
             var time = 0;
-            var start = audioCtx.currentTime + 0.1;
+            var start = this.audioCtx.currentTime + 0.01;
 
             this.setFreq(this.freq);    // reset freq (might have been changed by |f command)
-
             this.calcSpeed();   // set this.dotlen, effdotlen, fwdotlen, letterspace, worspace
 
-            text = text.toLowerCase();
+            var text = playtext ? playtext.toLowerCase() : this.text;
+            this.text = text;
 
             for (var i = 0; i < text.length; i++) {
                 var c = text.substr(i, 1);
@@ -202,7 +224,7 @@
                     i+= arg[0].length;
                     switch (c) {
                         case 'f':
-                		    oscillator.frequency.setValueAtTime(arg[0], start + time); // value in hertz
+                		    this.oscillator.frequency.setValueAtTime(arg[0], start + time); // value in hertz
                             console.log("Setting f = " + arg[0] + " at " + time);
                             break;
                         case 'w':
@@ -236,7 +258,7 @@
             for (var i = 0; i < out.length; i++) {
                 var s = start + out[i]['t'];
                 var v = out[i]['v'];
-                gainNode.gain.setValueAtTime(v, s);
+                this.gainNode.gain.setValueAtTime(v, s);
             }
 
             this.playLength = out[out.length-1]['t'];
@@ -245,6 +267,26 @@
 
         } // play
 
+        // we cannot really pause, so what we do in case of pause:
+        // 1. cancel future output
+        // 2. remember at which place we were in playing out[]
+        // 3. when resumed, play everything after the current moment
+        this.pause = function () {
+            if (this.audioCtx.state === "running") {
+                this.paused = true;
+                this.audioCtx.suspend();
+            }
+            else {
+                this.paused = false;
+                this.audioCtx.resume();
+            }
+        }
+
+        this.stop = function() {
+            this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
+            this.gainNode.gain.setValueAtTime(0, this.audioCtx.currentTime);
+            this.playEnd = 0;
+        }
 
         // in: a single character (except space) and a start time
         // out: array of timing for this character w/o spaces after the last element, starting at "time"
@@ -264,6 +306,80 @@
 
             out.push({"t": time, "v": 0});
             return out;
+        }
+
+        this.setProgressbar = function(pb, l) {
+            console.log("setProgressbar");
+            console.log(pb);
+            this.progressbar = pb;
+            this.progresslabel = l;
+            console.log(this.progressbar);
+            window.setInterval(this.progressbarUpdate, 100, this)
+        }
+
+        this.progressbarUpdate = function (obj) {
+            if (obj.progressbar) {
+                obj.progressbar.max = obj.getLength();
+                obj.progressbar.value = obj.getLength() - obj.getRemaining();
+                var sec = obj.getTime();
+                var min = 0;
+                
+                while (sec > 60) {
+                    min++;
+                    sec -= 60;
+                }
+
+                sec = Math.floor(sec);
+                if (sec < 10) {
+                    sec = "0" + sec;
+                }
+
+                var fmt_time = min + ":" + sec + " ";
+
+                obj.progresslabel.innerHTML = fmt_time;
+            }
+        }
+
+        // render a player with play/pause button to element "el"
+        this.renderPlayer = function(el) {
+            obj = this;
+            var el = document.getElementById(el);
+            el.innerHTML = "";
+            el.style.width = '160px';
+            el.style.borderWidth = 'thin';
+            el.style.borderStyle= 'dashed';
+            el.style.padding = '6px';
+            el.style.fontFamily = 'Ubuntu,calibri,tahoma,arial,sans-serif';
+
+            var l = document.createElement("label");
+            l.for = "pb";
+            l.innerHTML= "0:00 ";
+
+            var pb = document.createElement("meter");
+            pb.style.width = '120px';
+            obj.setProgressbar(pb, l);
+            var btn_stop = document.createElement("button");
+            btn_stop.innerHTML = "Stop";
+            btn_stop.style.width = "50px";
+            btn_stop.onclick = function () {
+                obj.stop();
+            }
+            var btn_pp = document.createElement("button");
+            btn_pp.innerHTML = "Play / Pause";
+            btn_pp.style.width = "100px";
+            btn_pp.onclick = function () {
+                if (obj.getRemaining()) {
+                    obj.pause();
+                }
+                else {
+                    obj.play(); 
+                }
+            }
+            el.appendChild(l);
+            el.appendChild(pb);
+            el.appendChild(btn_stop);
+            el.appendChild(document.createTextNode(" "));
+            el.appendChild(btn_pp);
         }
 
     } // class jscw

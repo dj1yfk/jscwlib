@@ -37,6 +37,7 @@ library.</p>
 &lt;script&gt;
 function play () {
     var m = new jscw();
+    m.init();
     m.setWpm(30);
     m.play("hello");
 }
@@ -48,6 +49,8 @@ function play () {
 keyboard/mouse/touch event, therefore the need to press a button to start
 it.</p>
 <h2>Methods</h2>
+<h3>init()</h3>
+<p>Initialize Audio Context.</p>
 <h3>setWpm(x)</h3>
 <p>Sets the character speed to <code>x</code> words per minute.</p>
 <h3>setEff(x)</h3>
@@ -59,8 +62,11 @@ character speed.</p>
 <p>Set the tone frequency to <code>x</code> Hertz.</p>
 <h3>setFilter()</h3>
 <p>Set the cutoff-frequency of the low-pass filter that shapes the generated tone to <code>x</code> Hz.</p>
+<h3>setText(text)</h3>
+<p>Set <code>text</code> to be played. Does not start playing.</p>
 <h3>play(text)</h3>
-<p>Plays <code>text</code> in Morse code, with the parameters currently set. The
+<p>Plays <code>text</code> (if not set: the last text set by <code>play</code>
+or <code>setText</code> in Morse code, with the parameters currently set. The
 text may contain commands to change parameters on the fly:
 <ul>
     <li><code>|wXX</code> sets the character speed to <code>XX</code> WpM,</li>
@@ -71,12 +77,21 @@ text may contain commands to change parameters on the fly:
         milliseconds.</li>
 </ul>
 </p>
+<h3>pause()</h3>
+<p>Pauses or resumes the current text.</p>
+<h3>stop()</h3>
+<p>Stops the current text.</p>
 <h3>getLength()</h3>
 <p>Get the total play time of the current text in seconds.</p>
 <h3>getRemaining()</h3>
 <p>Get the remaining play time of the current text in seconds.</p>
+<h3>getTime()</h3>
+<p>Get the current time within the played text in seconds.</p>
 <h3>draw(c)</h3>
 <p>Draws the last generated Morse code as a timing diagram on a HTML5 canvas (<code>c</code>).</p>
+<h3>renderPlayer(div)</h3>
+<p>Renders a player UI (with progress bar and buttons for Stop, Play/Pause)
+into a <code>div</code>.</p>
 <hr>
 <h2>Download / Embedding</h2>
 <p>The latest version of the library can be found in the git repository: <a href="https://git.fkurz.net/dj1yfk/jscwlib/">https://git.fkurz.net/dj1yfk/jscwlib/</a>.
