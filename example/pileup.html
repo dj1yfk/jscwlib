@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<script src="https://fkurz.net/ham/jscwlib/src/jscwlib.js"></script>
+
+<script>
+function play () {
+
+    var calls = ["DJ1YFK", "SO5CW", "DJ9AO", "K8GU", "DK5TX", "WT2P"];
+
+    for (var i = 0; i < calls.length; i++) {
+        var m = new jscw();
+        m.init();
+        m.setWpm(Math.random()*20+20);
+        m.setFreq(Math.random()*600+400);
+        m.setVolume(Math.random());
+        m.play("|s" + Math.floor(Math.random() * Math.floor(5000)) + " " + calls[i]);
+
+        // players
+        var x = document.createElement("div");
+        x.id = "player" + i;
+        document.body.appendChild(x);
+        m.renderPlayer(x.id);
+
+    }
+
+}
+</script>
+<h1>jscwlib pileup example</h1>
+
+<button onclick="play();">Play!</button>
+<br>
+<a href="https://fkurz.net/ham/jscwlib.html">jscwlib home</a>

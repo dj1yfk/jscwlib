@@ -125,6 +125,10 @@
             this.biquadFilter.frequency.setValueAtTime(f, this.audioCtx.currentTime);
         }
 
+        this.setVolume = function(v) {
+            this.volume = v;
+        }
+
         // draw last generated text on a canvas
         this.draw = function(c) {
             var ctx = c.getContext("2d");
@@ -366,6 +370,7 @@
             }
             var btn_pp = document.createElement("button");
             btn_pp.innerHTML = "Play / Pause";
+            btn_pp.title = obj.text;
             btn_pp.style.width = "100px";
             btn_pp.onclick = function () {
                 if (obj.getRemaining()) {
