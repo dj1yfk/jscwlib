@@ -29,6 +29,11 @@ websites. It is developed for <a href="https://lcwo.net/">LCWO</a>, but since
 it may be very useful for other purposes, it's available as a separate
 library.</p>
 
+<p>jscwlib works with current versions of Firefox, Chrome, Edge, Opera and
+Safari, using the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API">Web Audio API</a>.
+For browsers that do not support the Web Audio API (like the Internet
+Explorer), there's a fall-back to the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio">Embed Audio element</a>.</p>
+
 <h2>Minimal example</h2>
 <div style="color:white;background-color:black;border:5px solid #000000;">
     <pre>&lt;!DOCTYPE html&gt;
@@ -50,25 +55,26 @@ keyboard/mouse/touch event, therefore the need to press a button to start
 it.</p>
 <p>Live examples: <a href="jscwlib/example/min_example.html">Minimum example</a>, <a href="jscwlib/example/pileup.html">Pileup</a></p>
 <h2>Methods</h2>
-<h3>init()</h3>
-<p>Initialize Audio Context.</p>
-<h3>setWpm(x)</h3>
-<p>Sets the character speed to <code>x</code> words per minute.</p>
-<h3>setEff(x)</h3>
-<p>Sets the effective speed to <code>x</code> words per minute. If it's equal or higher than
+<dl>
+<dt>init()</dt>
+<dd>Initialize the player</dd>
+<dt>setWpm(x)</dt>
+<dd>Sets the character speed to <code>x</code> words per minute.</dd>
+<dt>setEff(x)</dt>
+<dd>Sets the effective speed to <code>x</code> words per minute. If it's equal or higher than
 the character speed, this parameter is ignored. Otherwise the spaces between
 the characters are stretched to achieve the effective speed with a higher
-character speed.</p>
-<h3>setFreq(x)</h3>
-<p>Set the tone frequency to <code>x</code> Hertz.</p>
-<h3>setFilter()</h3>
-<p>Set the cutoff-frequency of the low-pass filter that shapes the generated tone to <code>x</code> Hz.</p>
-<h3>setText(text)</h3>
-<p>Set <code>text</code> to be played. Does not start playing.</p>
-<h3>setVolume(v)</h3>
-<p>Sets the volume to <code>v</code> (0..1).</p>
-<h3>play(text)</h3>
-<p>Plays <code>text</code> (if not set: the last text set by <code>play</code>
+character speed.</dd>
+<dt>setFreq(x)</dt>
+<dd>Set the tone frequency to <code>x</code> Hertz.</dd>
+<dt>setFilter()</dt>
+<dd>Set the cutoff-frequency of the low-pass filter that shapes the generated tone to <code>x</code> Hz.</dd>
+<dt>setText(text)</dt>
+<dd>Set <code>text</code> to be played. Does not start playing.</dd>
+<dt>setVolume(v)</dt>
+<dd>Sets the volume to <code>v</code> (0..1).</dd>
+<dt>play(text)</dt>
+<dd>Plays <code>text</code> (if not set: the last text set by <code>play</code>
 or <code>setText</code> in Morse code, with the parameters currently set. The
 text may contain commands to change parameters on the fly:
 <ul>
@@ -76,25 +82,26 @@ text may contain commands to change parameters on the fly:
     <li><code>|eXX</code> sets the effective speed to <code>XX</code> WpM,</li>
     <li><code>|fXXX</code> sets the tone frequency to <code>XXX</code> Hz,</li>
     <li><code>|vX</code> sets the volume to <code>X</code> (0.0 - 1.0),</li>
-    <li><code>|sXXXX</code> inserts a silence period of <code>XXXX</code>
+    <li><code>|SXXXX</code> inserts a silence period of <code>XXXX</code>
         milliseconds.</li>
 </ul>
-</p>
-<h3>pause()</h3>
-<p>Pauses or resumes the current text.</p>
-<h3>stop()</h3>
-<p>Stops the current text.</p>
-<h3>getLength()</h3>
-<p>Get the total play time of the current text in seconds.</p>
-<h3>getRemaining()</h3>
-<p>Get the remaining play time of the current text in seconds.</p>
-<h3>getTime()</h3>
-<p>Get the current time within the played text in seconds.</p>
-<h3>draw(c)</h3>
-<p>Draws the last generated Morse code as a timing diagram on a HTML5 canvas (<code>c</code>).</p>
-<h3>renderPlayer(div, obj)</h3>
-<p>Renders a player UI (with progress bar and buttons for Stop, Play/Pause)
-for player <code>obj</code> into a <code>div</code>.</p>
+</dd>
+<dt>pause()</dt>
+<dd>Pauses or resumes the current text.</dd>
+<dt>stop()</dt>
+<dd>Stops the current text.</dd>
+<dt>getLength()</dt>
+<dd>Get the total play time of the current text in seconds.</dd>
+<dt>getRemaining()</dt>
+<dd>Get the remaining play time of the current text in seconds.</dd>
+<dt>getTime()</dt>
+<dd>Get the current time within the played text in seconds.</dd>
+<dt>draw(c)</dt>
+<dd>Draws the last generated Morse code as a timing diagram on a HTML5 canvas (<code>c</code>).</dd>
+<dt>renderPlayer(div, obj)</dt>
+<dd>Renders a player UI (with progress bar and buttons for Stop, Play/Pause)
+for player <code>obj</code> into a <code>div</code>.</dd>
+</dl>
 <hr>
 <h2>Download / Embedding</h2>
 <p>The latest version of the library can be found in the git repository: <a href="https://git.fkurz.net/dj1yfk/jscwlib/">https://git.fkurz.net/dj1yfk/jscwlib/</a>.
