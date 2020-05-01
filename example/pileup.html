@@ -4,21 +4,23 @@
 <script>
 function play () {
 
-    var calls = ["DJ1YFK", "SO5CW", "DJ9AO", "K8GU", "DK5TX", "WT2P"];
+    var calls = ["DJ1YFK", "SO5CW", "DJ9AO", "K8GU", "DK5TX", "WT2P", "DM3JAN", "SQ9S", "SP3BBS", "LB6RH", "DD4SK", "DC1RJJ"];
+
+    var m = Array();
 
     for (var i = 0; i < calls.length; i++) {
-        var m = new jscw();
-        m.init();
-        m.setWpm(Math.random()*20+20);
-        m.setFreq(Math.random()*600+400);
-        m.setVolume(Math.random());
-        m.play("|s" + Math.floor(Math.random() * Math.floor(5000)) + " " + calls[i]);
+        m.push(new jscw());
+        m[i].init();
+        m[i].setWpm(Math.random()*20+20);
+        m[i].setFreq(Math.random()*600+400);
+        m[i].setVolume(Math.random()*0.4);
+        m[i].play("|s" + Math.floor(Math.random() * Math.floor(calls.length * 1000)) + " " + calls[i]);
 
         // players
         var x = document.createElement("div");
         x.id = "player" + i;
         document.body.appendChild(x);
-        m.renderPlayer(x.id);
+        m[i].renderPlayer(x.id, m[i]);
 
     }
 

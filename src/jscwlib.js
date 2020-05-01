@@ -23,47 +23,61 @@
         this.text = "";
         this.paused = false;
         this.progressbar = false;
+        this.mode = 'audio';    /* audio: AudioContext, embed: <audio> tag */
 
         this.init = function() {
 		    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            this.gainNode = this.audioCtx.createGain();
-		    this.oscillator = this.audioCtx.createOscillator();
-            this.biquadFilter = this.audioCtx.createBiquadFilter();
-            this.noiseFilter = this.audioCtx.createBiquadFilter();
-            this.whiteNoise = this.audioCtx.createBufferSource();
 
-            this.noiseFilter.type = "bandpass";
-            this.noiseFilter.frequency.setValueAtTime(500, this.audioCtx.currentTime);
-            this.noiseFilter.Q.setValueAtTime(5, this.audioCtx.currentTime);
-            this.noiseFilter.gain.setValueAtTime(0.9, this.audioCtx.currentTime);
-
-            var bufferSize = 2 * this.audioCtx.sampleRate;
-            var noiseBuffer = this.audioCtx.createBuffer(1, bufferSize, this.audioCtx.sampleRate);
-            var noise = noiseBuffer.getChannelData(0);
-            for (var i = 0; i < bufferSize; i++) {
-                    noise[i] = Math.random() * 2 - 1;
+            /* Oops, no support for audioCtx => fall back to <audio> tag */
+            if (!this.audioCtx) {
+                this.mode = 'embed';
+                if (!this.player) {
+                    this.player = document.createElement("audio");
+                    this.player.id = "hurtz";
+                    this.player.controls = true;
+                    document.body.appendChild(this.player);
+                }
             }
+            else {
+                this.gainNode = this.audioCtx.createGain();
+                this.oscillator = this.audioCtx.createOscillator();
+                this.biquadFilter = this.audioCtx.createBiquadFilter();
+                this.noiseFilter = this.audioCtx.createBiquadFilter();
+                this.whiteNoise = this.audioCtx.createBufferSource();
 
-            this.whiteNoise.buffer = noiseBuffer;
-            this.whiteNoise.loop = true;
-    //        whiteNoise.start(0);
-            this.whiteNoise.connect(this.noiseFilter);
+                this.noiseFilter.type = "bandpass";
+                this.noiseFilter.frequency.setValueAtTime(500, this.audioCtx.currentTime);
+                this.noiseFilter.Q.setValueAtTime(5, this.audioCtx.currentTime);
+                this.noiseFilter.gain.setValueAtTime(0.9, this.audioCtx.currentTime);
 
-            this.noiseFilter.connect(this.audioCtx.destination);
+                var bufferSize = 2 * this.audioCtx.sampleRate;
+                var noiseBuffer = this.audioCtx.createBuffer(1, bufferSize, this.audioCtx.sampleRate);
+                var noise = noiseBuffer.getChannelData(0);
+                for (var i = 0; i < bufferSize; i++) {
+                        noise[i] = Math.random() * 2 - 1;
+                }
 
-            this.biquadFilter.type = "lowpass";
-            this.biquadFilter.frequency.setValueAtTime(500, this.audioCtx.currentTime);
-            this.biquadFilter.gain.setValueAtTime(0.5, this.audioCtx.currentTime);
+                this.whiteNoise.buffer = noiseBuffer;
+                this.whiteNoise.loop = true;
+        //        whiteNoise.start(0);
+                this.whiteNoise.connect(this.noiseFilter);
 
-            this.oscillator.type = 'sine';
-            this.oscillator.frequency.setValueAtTime(600, this.audioCtx.currentTime); // value in hertz
+                this.noiseFilter.connect(this.audioCtx.destination);
 
-            this.oscillator.connect(this.gainNode);
-            this.gainNode.connect(this.biquadFilter);
-            this.biquadFilter.connect(this.audioCtx.destination);
+                this.biquadFilter.type = "lowpass";
+                this.biquadFilter.frequency.setValueAtTime(500, this.audioCtx.currentTime);
+                this.biquadFilter.gain.setValueAtTime(0.5, this.audioCtx.currentTime);
 
-            this.gainNode.gain.value = 0;
-            this.oscillator.start();
+                this.oscillator.type = 'sine';
+                this.oscillator.frequency.setValueAtTime(600, this.audioCtx.currentTime); // value in hertz
+
+                this.oscillator.connect(this.gainNode);
+                this.gainNode.connect(this.biquadFilter);
+                this.biquadFilter.connect(this.audioCtx.destination);
+
+                this.gainNode.gain.value = 0;
+                this.oscillator.start();
+            }
             this.init_done = true;
         }
        
@@ -104,12 +118,14 @@
 
         this.setWpm = function (w) {
             w = parseInt(w);
-            this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
             this.wpm = w;
+            if (this.mode == 'audio')
+                this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
         }
 
         this.setEff = function (e) {
-            this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
+            if (this.mode == 'audio')
+                this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
             e = parseInt(e);
             if (e > this.wpm) {
                 console.log("Cannot set eff " + e + " > wpm (" + this.wpm + ")!");
@@ -120,9 +136,11 @@
 
         this.setFreq = function(f) {
             this.freq = f;
-            this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
-            this.oscillator.frequency.setValueAtTime(f, this.audioCtx.currentTime);
-            this.biquadFilter.frequency.setValueAtTime(f, this.audioCtx.currentTime);
+            if (this.mode == 'audio') {
+                this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
+                this.oscillator.frequency.setValueAtTime(f, this.audioCtx.currentTime);
+                this.biquadFilter.frequency.setValueAtTime(f, this.audioCtx.currentTime);
+            }
         }
 
         this.setVolume = function(v) {
@@ -207,6 +225,17 @@
         }
 
         this.play = function(playtext) {
+
+            var text = playtext ? playtext.toLowerCase() : this.text;
+            this.text = text;
+
+            if (this.mode == 'embed') {
+                this.player.src = "https://cgi2.lcwo.net/cgi-bin/cw.mp3?s=" + this.wpm + "&e=" + this.eff + "&f=" + this.freq + "&t=" + text + "%20%20%20%20%5E";
+                this.player.play();
+                console.log(this.player);
+                return;
+            }
+
             var out = [];   // time instants when we switch the sound on and off
             var ele = [];   // details of timing elements
             var time = 0;
@@ -215,8 +244,6 @@
             this.setFreq(this.freq);    // reset freq (might have been changed by |f command)
             this.calcSpeed();   // set this.dotlen, effdotlen, fwdotlen, letterspace, worspace
 
-            var text = playtext ? playtext.toLowerCase() : this.text;
-            this.text = text;
 
             for (var i = 0; i < text.length; i++) {
                 var c = text.substr(i, 1);
@@ -287,9 +314,14 @@
         }
 
         this.stop = function() {
-            this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
-            this.gainNode.gain.setValueAtTime(0, this.audioCtx.currentTime);
-            this.playEnd = 0;
+            if (this.mode == 'audio') {
+                this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
+                this.gainNode.gain.setValueAtTime(0, this.audioCtx.currentTime);
+                this.playEnd = 0;
+            }
+            else {
+                this.player.pause();
+            }
         }
 
         // in: a single character (except space) and a start time
@@ -323,9 +355,20 @@
 
         this.progressbarUpdate = function (obj) {
             if (obj.progressbar) {
-                obj.progressbar.max = obj.getLength();
-                obj.progressbar.value = obj.getLength() - obj.getRemaining();
-                var sec = obj.getTime();
+                if (this.mode == 'audio') {
+                    obj.progressbar.max = obj.getLength();
+                    obj.progressbar.value = obj.getLength() - obj.getRemaining();
+                }
+                else {
+                    try {
+                        obj.progressbar.max = obj.player.duration;
+                        obj.progressbar.value = obj.player.currentTime;
+                    }
+                    catch (e) {
+                        return;
+                    }
+                }
+                var sec = obj.progressbar.value;
                 var min = 0;
                 
                 while (sec > 60) {
@@ -345,8 +388,7 @@
         }
 
         // render a player with play/pause button to element "el"
-        this.renderPlayer = function(el) {
-            obj = this;
+        this.renderPlayer = function(el, obj) {
             var el = document.getElementById(el);
             el.innerHTML = "";
             el.style.width = '160px';
@@ -385,6 +427,7 @@
             el.appendChild(btn_stop);
             el.appendChild(document.createTextNode(" "));
             el.appendChild(btn_pp);
+            this.el = el;
         }
 
     } // class jscw

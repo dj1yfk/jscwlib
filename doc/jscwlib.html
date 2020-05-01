@@ -48,6 +48,7 @@ function play () {
 <p>Note that browsers typically only play sound if it was created by a
 keyboard/mouse/touch event, therefore the need to press a button to start
 it.</p>
+<p>Live examples: <a href="jscwlib/example/min_example.html">Minimum example</a>, <a href="jscwlib/example/pileup.html">Pileup</a></p>
 <h2>Methods</h2>
 <h3>init()</h3>
 <p>Initialize Audio Context.</p>
@@ -91,9 +92,9 @@ text may contain commands to change parameters on the fly:
 <p>Get the current time within the played text in seconds.</p>
 <h3>draw(c)</h3>
 <p>Draws the last generated Morse code as a timing diagram on a HTML5 canvas (<code>c</code>).</p>
-<h3>renderPlayer(div)</h3>
+<h3>renderPlayer(div, obj)</h3>
 <p>Renders a player UI (with progress bar and buttons for Stop, Play/Pause)
-into a <code>div</code>.</p>
+for player <code>obj</code> into a <code>div</code>.</p>
 <hr>
 <h2>Download / Embedding</h2>
 <p>The latest version of the library can be found in the git repository: <a href="https://git.fkurz.net/dj1yfk/jscwlib/">https://git.fkurz.net/dj1yfk/jscwlib/</a>.
