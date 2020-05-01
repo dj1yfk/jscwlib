@@ -25,16 +25,21 @@
         this.progressbar = false;
         this.mode = 'audio';    /* audio: AudioContext, embed: <audio> tag */
 
-        this.init = function() {
-		    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        try {
+    	    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            console.log("AudioContext OK");   
+        }
+        catch (e) {
+            console.log("AudioContext not supported. Fall back to HTML audio element");   
+            this.mode = 'embed';
+        }
 
-            /* Oops, no support for audioCtx => fall back to <audio> tag */
-            if (!this.audioCtx) {
-                this.mode = 'embed';
+        this.init = function() {
+            if (this.mode == 'embed') {
                 if (!this.player) {
                     this.player = document.createElement("audio");
-                    this.player.id = "hurtz";
-                    this.player.controls = true;
+                    //this.player.id = "hurtz";
+                    //this.player.controls = true;
                     document.body.appendChild(this.player);
                 }
             }
@@ -82,7 +87,17 @@
         }
        
         this.getLength = function () {
-            return this.playLength;
+            if (this.mode == 'audio') {
+                return this.playLength;
+            }
+            else {
+                if (this.player) {
+                    return this.player.duration;
+                }
+                else {
+                    return 0;
+                }
+            }
         }
 
         this.setFilter = function (f) {
@@ -93,7 +108,13 @@
             if (!this.init_done) {
                 return 0;
             }
-            var r = this.playEnd - this.audioCtx.currentTime;
+            if (this.mode == 'audio') {
+                var r = this.playEnd - this.audioCtx.currentTime;
+            }
+            else {
+                var r = this.player.duration - this.player.currentTime;
+            }
+
             if (r >= 0) {
                 return Math.round(r*10)/10;;
             }
@@ -103,7 +124,12 @@
         }
 
         this.getTime = function () {
-            var t = this.getLength() - this.getRemaining();
+            if (this.mode == 'audio') {
+                var t = this.getLength() - this.getRemaining();
+            }
+            else {
+                var t = this.player.currentTime;
+            }
             if (t < 0) {
                 return 0;
             }
@@ -226,7 +252,7 @@
 
         this.play = function(playtext) {
 
-            var text = playtext ? playtext.toLowerCase() : this.text;
+            var text = playtext ? playtext : this.text;
             this.text = text;
 
             if (this.mode == 'embed') {
@@ -234,7 +260,9 @@
                 this.player.play();
                 console.log(this.player);
                 return;
-            }
+            }    
+
+            text = text.toLowerCase();
 
             var out = [];   // time instants when we switch the sound on and off
             var ele = [];   // details of timing elements
@@ -355,13 +383,13 @@
 
         this.progressbarUpdate = function (obj) {
             if (obj.progressbar) {
-                if (this.mode == 'audio') {
+                if (obj.mode == 'audio') {
                     obj.progressbar.max = obj.getLength();
                     obj.progressbar.value = obj.getLength() - obj.getRemaining();
                 }
                 else {
                     try {
-                        obj.progressbar.max = obj.player.duration;
+                 //       obj.progressbar.max = obj.player.duration;
                         obj.progressbar.value = obj.player.currentTime;
                     }
                     catch (e) {

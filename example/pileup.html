@@ -12,9 +12,9 @@ function play () {
         m.push(new jscw());
         m[i].init();
         m[i].setWpm(Math.random()*20+20);
-        m[i].setFreq(Math.random()*600+400);
+        m[i].setFreq(Math.round(Math.random()*600+400));
         m[i].setVolume(Math.random()*0.4);
-        m[i].play("|s" + Math.floor(Math.random() * Math.floor(calls.length * 1000)) + " " + calls[i]);
+        m[i].play("|S" + Math.floor(Math.random() * Math.floor(calls.length * 1000)) + " " + calls[i]);
 
         // players
         var x = document.createElement("div");
