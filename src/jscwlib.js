@@ -389,7 +389,7 @@
                 }
                 else {
                     try {
-                 //       obj.progressbar.max = obj.player.duration;
+                        obj.progressbar.max =  obj.player.duration;
                         obj.progressbar.value = obj.player.currentTime;
                     }
                     catch (e) {
@@ -429,7 +429,7 @@
             l.for = "pb";
             l.innerHTML= "0:00 ";
 
-            var pb = document.createElement("meter");
+            var pb = document.createElement("progress");
             pb.style.width = '120px';
             obj.setProgressbar(pb, l);
             var btn_stop = document.createElement("button");
