@@ -21,25 +21,25 @@
         this.playTiming = [];   // last generated text 
         this.init_done = false;
         this.text = "";
-        this.paused = false;
+        this.paused = true;
         this.progressbar = false;
         this.mode = 'audio';    /* audio: AudioContext, embed: <audio> tag */
+        this.icondir = "https://fkurz.net/ham/jscwlib/img/";
+        this.cgiurl = "https://cgi2.lcwo.net/cgi-bin/";
 
         try {
     	    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             console.log("AudioContext OK");   
         }
         catch (e) {
-            console.log("AudioContext not supported. Fall back to HTML audio element");   
             this.mode = 'embed';
+            console.log("AudioContext not supported. Fall back to HTML audio element");   
         }
 
         this.init = function() {
             if (this.mode == 'embed') {
                 if (!this.player) {
                     this.player = document.createElement("audio");
-                    //this.player.id = "hurtz";
-                    //this.player.controls = true;
                     document.body.appendChild(this.player);
                 }
             }
@@ -64,7 +64,7 @@
 
                 this.whiteNoise.buffer = noiseBuffer;
                 this.whiteNoise.loop = true;
-        //        whiteNoise.start(0);
+                // this.whiteNoise.start(0);
                 this.whiteNoise.connect(this.noiseFilter);
 
                 this.noiseFilter.connect(this.audioCtx.destination);
@@ -98,6 +98,10 @@
                     return 0;
                 }
             }
+        }
+
+        this.setIcondir = function (i) {
+            this.icondir = f;
         }
 
         this.setFilter = function (f) {
@@ -248,21 +252,31 @@
 
         this.setText = function(text) {
             this.text = text.toLowerCase();
+            if (this.btn_down) {
+                this.btn_down.href = this.cgiurl + "cw.mp3?s=" + this.wpm + "&e=" + this.eff + "&f=" + this.freq + "&t=" + this.text + "%20%20%20%20%5E";
+                this.btn_down.download = "cw.mp3";
+            }
         }
 
         this.play = function(playtext) {
+            if (!this.init_done) {
+                this.init();
+            }
+
+            this.paused = false;
 
             var text = playtext ? playtext : this.text;
             this.text = text;
 
             if (this.mode == 'embed') {
-                this.player.src = "https://cgi2.lcwo.net/cgi-bin/cw.mp3?s=" + this.wpm + "&e=" + this.eff + "&f=" + this.freq + "&t=" + text + "%20%20%20%20%5E";
+                this.player.src = this.cgiurl + "cw.mp3?s=" + this.wpm + "&e=" + this.eff + "&f=" + this.freq + "&t=" + text + "%20%20%20%20%5E";
                 this.player.play();
                 console.log(this.player);
                 return;
             }    
 
             text = text.toLowerCase();
+            this.setText(text);
 
             var out = [];   // time instants when we switch the sound on and off
             var ele = [];   // details of timing elements
@@ -314,6 +328,10 @@
                 }
             }
 
+            if (!out.length) {
+                return;
+            }
+
             for (var i = 0; i < out.length; i++) {
                 var s = start + out[i]['t'];
                 var v = out[i]['v'];
@@ -326,10 +344,7 @@
 
         } // play
 
-        // we cannot really pause, so what we do in case of pause:
-        // 1. cancel future output
-        // 2. remember at which place we were in playing out[]
-        // 3. when resumed, play everything after the current moment
+        // pause simply suspends this audioCtx
         this.pause = function () {
             if (this.audioCtx.state === "running") {
                 this.paused = true;
@@ -339,6 +354,7 @@
                 this.paused = false;
                 this.audioCtx.resume();
             }
+            console.log("paused: " + this.paused);
         }
 
         this.stop = function() {
@@ -409,9 +425,16 @@
                     sec = "0" + sec;
                 }
 
-                var fmt_time = min + ":" + sec + " ";
+                var fmt_time = " " + min + ":" + sec;
 
                 obj.progresslabel.innerHTML = fmt_time;
+
+                if (obj.paused || obj.getRemaining() == 0) {
+                    obj.btn_pp.src = obj.icondir + "/play.png";
+                }
+                else {
+                    obj.btn_pp.src = obj.icondir + "/pause.png";
+                }
             }
         }
 
@@ -419,10 +442,11 @@
         this.renderPlayer = function(el, obj) {
             var el = document.getElementById(el);
             el.innerHTML = "";
-            el.style.width = '160px';
+            el.style.width = '140px';
             el.style.borderWidth = 'thin';
             el.style.borderStyle= 'dashed';
             el.style.padding = '6px';
+            el.style.margin= '6px';
             el.style.fontFamily = 'Ubuntu,calibri,tahoma,arial,sans-serif';
 
             var l = document.createElement("label");
@@ -431,24 +455,24 @@
             l.style.fontSize = "12px";
 
             var pb = document.createElement("progress");
-            pb.style.width = '120px';
+            pb.style.width = '140px';
             pb.style.height = '15px';
             obj.setProgressbar(pb, l);
-           var btn_pp = document.createElement("a");
-            btn_pp.innerHTML = "Play / Pause";
-            btn_pp.href="javascript:return false;";
-            btn_pp.title = obj.text;
+            var btn_pp = document.createElement("img");
+            btn_pp.src = obj.icondir + "play.png";
+            btn_pp.title = "Play / Pause";
             btn_pp.style.borderRadius = "3px";
             btn_pp.style.backgroundColor = "#dadada";
             btn_pp.style.cursor = "pointer";
             btn_pp.style.border = "1px solid #555555";
             btn_pp.style.textAlign = "center";
-            btn_pp.style.fontSize = "12px";
-            btn_pp.style.padding = "4px 8px";
+            btn_pp.style.padding = "0px 0px";
             btn_pp.style.margin = "4px";
             btn_pp.style.display = "inline-block";
+            btn_pp.style.verticalAlign = "middle";
             btn_pp.style.textDecoration = "none";
             btn_pp.style.color = "#000000";
+            obj.btn_pp = btn_pp;
             btn_pp.onclick = function () {
                 if (obj.getRemaining()) {
                     obj.pause();
@@ -456,29 +480,52 @@
                 else {
                     obj.play(); 
                 }
+
             }
-            var btn_stop = document.createElement("a");
-            btn_stop.href="javascript:return false;";
+            var btn_stop = document.createElement("img");
             btn_stop.title = obj.text;
             btn_stop.style.borderRadius = "3px";
             btn_stop.style.backgroundColor = "#dadada";
             btn_stop.style.cursor = "pointer";
             btn_stop.style.border = "1px solid #555555";
             btn_stop.style.textAlign = "center";
-            btn_stop.style.fontSize = "12px";
-            btn_stop.style.padding = "4px 8px";
+            btn_stop.style.padding = "0px 0px";
             btn_stop.style.margin = "4px";
             btn_stop.style.display = "inline-block";
             btn_stop.style.textDecoration = "none";
+            btn_stop.style.verticalAlign = "middle";
             btn_stop.style.color = "#000000";
-            btn_stop.innerHTML = "Stop";
+            btn_stop.src = obj.icondir + "stop.png";
+            btn_stop.title = "Stop";
             btn_stop.onclick = function () {
                 obj.stop();
             }
-            el.appendChild(l);
+            var btn_down = document.createElement("a");
+            var btn_down_img = document.createElement("img");
+            btn_down_img.style.borderRadius = "3px";
+            btn_down_img.style.backgroundColor = "#dadada";
+            btn_down_img.style.cursor = "pointer";
+            btn_down_img.style.border = "1px solid #555555";
+            btn_down_img.style.textAlign = "center";
+            btn_down_img.style.padding = "0px 0px";
+            btn_down_img.style.margin = "4px";
+            btn_down_img.style.display = "inline-block";
+            btn_down_img.style.verticalAlign = "middle";
+            btn_down_img.style.textDecoration = "none";
+            btn_down_img.style.color = "#000000";
+            btn_down_img.src = obj.icondir + "download.png";
+            btn_down.appendChild(btn_down_img);
+            btn_down.title = "Download MP3";
+            obj.btn_down = btn_down;
+            btn_down.onclick = function () {
+                obj.setText(obj.text);
+            }
+
             el.appendChild(pb);
             el.appendChild(btn_stop);
             el.appendChild(btn_pp);
+            el.appendChild(btn_down);
+            el.appendChild(l);
             this.el = el;
         }
 
