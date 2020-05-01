@@ -26,6 +26,7 @@
         this.mode = 'audio';    /* audio: AudioContext, embed: <audio> tag */
         this.icondir = "https://fkurz.net/ham/jscwlib/img/";
         this.cgiurl = "https://cgi2.lcwo.net/cgi-bin/";
+        this.real = false;  // If set to true, use Real speed, not PARIS 
 
         try {
     	    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -108,6 +109,11 @@
             this.biquadFilter.frequency.setValueAtTime(f, this.audioCtx.currentTime);
         }
 
+        this.setReal = function (r) {
+            console.log("setReal: " + r);
+            this.real = r ? true : false;
+        }
+
         this.getRemaining = function () {
             if (!this.init_done) {
                 return 0;
@@ -154,6 +160,7 @@
         }
 
         this.setEff = function (e) {
+            console.log("setEff = " + e);
             if (this.mode == 'audio')
                 this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
             e = parseInt(e);
@@ -240,11 +247,18 @@
                 this.eff = this.wpm;
             }
 
+            var eff = this.eff;
+            
+            // real speed (not PARIS) => no farnsworth timing, eff = char speed
+            if (this.real) {
+                eff = this.wpm;
+            }
+
             this.dotlen = 1.2 / this.wpm;   // ms
-            this.effdotlen = 1.2 / this.eff;
+            this.effdotlen = 1.2 / eff;
             // stretch all pauses by this magic formula (fitted to a measured
             // set :) to get a good match. One day I will do the proper math!
-            var stretch = (2.5 - 1.5/(Math.pow((this.wpm / this.eff),1.25)));
+            var stretch = (2.5 - 1.5/(Math.pow((this.wpm / eff),1.25)));
             this.fwdotlen = this.effdotlen  * stretch;
             this.letterspace = 3 * this.fwdotlen;
             this.wordspace = 7 * this.fwdotlen - this.letterspace;
@@ -286,6 +300,8 @@
             this.setFreq(this.freq);    // reset freq (might have been changed by |f command)
             this.calcSpeed();   // set this.dotlen, effdotlen, fwdotlen, letterspace, worspace
 
+            // number of actual characters (not including control sequences)
+            var nc = 0;
 
             for (var i = 0; i < text.length; i++) {
                 var c = text.substr(i, 1);
@@ -322,6 +338,7 @@
                     out = out.concat(this.gen_morse_timing(c, time));
                     time = out[out.length - 1]['t'];
                     time += this.letterspace;
+                    nc++;
                 }
                 else {
                     time += this.wordspace;
@@ -331,6 +348,29 @@
             if (!out.length) {
                 return;
             }
+
+            // real characters requested, not PARIS.
+            // this means we need to multiply the 
+            // PARIS timing by a factor, which we now
+            // calculate
+            if (this.real == true) {
+                // length of generated CW (last element end)
+                var l = out[out.length-1]['t'];
+                console.log("Characters: " + nc);
+                console.log("Length: " + l);
+                var real = nc / (l/60) / 5;
+                console.log("Real speed words/min: " + real);
+                var mult = this.wpm / real;
+                console.log("mult " + mult);
+                for (var i = 0; i < out.length; i++) {
+                    out[i]['t'] = out[i]['t'] / mult;
+                }
+                this.paris = this.wpm * mult;
+            }
+            else {
+                this.paris = this.eff;
+            }
+            console.log("Equivalent PARIS speed = " + this.paris);
 
             for (var i = 0; i < out.length; i++) {
                 var s = start + out[i]['t'];
@@ -430,10 +470,14 @@
                 obj.progresslabel.innerHTML = fmt_time;
 
                 if (obj.paused || obj.getRemaining() == 0) {
-                    obj.btn_pp.src = obj.icondir + "/play.png";
+                    if (obj.btn_pp.src != obj.icondir + "play.png") {
+                        obj.btn_pp.src = obj.icondir + "play.png";
+                    }
                 }
                 else {
-                    obj.btn_pp.src = obj.icondir + "/pause.png";
+                    if (obj.btn_pp.src != obj.icondir + "pause.png") {
+                        obj.btn_pp.src = obj.icondir + "pause.png";
+                    }
                 }
             }
         }

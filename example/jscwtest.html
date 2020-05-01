@@ -4,13 +4,6 @@
     <script>
     var m = new jscw();
 
-    function init_morse() {
-        m.init();   // must be fired from user input
-        m.setWpm(20);
-        m.setEff(20);
-        m.setFreq(600);
-    }
-
     window.setInterval(ret, 100);
     function ret () {
         if (m) {
@@ -42,7 +35,7 @@
 
 
     <input type="text" id="text" size=80 value="PARIS">
-    <button onclick="init_morse();m.play(document.getElementById('text').value);">Play</button>
+    <button onclick="m.play(document.getElementById('text').value);">Play</button>
     <button onclick="m.pause();">Pause</button>
     <button onclick="make_paris();">Paris Generator</button>
 
@@ -55,6 +48,9 @@
 
     <br>
     <button onclick="m.draw(document.getElementById('canvas'));">Draw</button>
+
+    <br>
+    <input onclick="m.setReal(this.checked);" type="checkbox" value="1"> Real speed (no PARIS, no Farnsworth)
 
     <br>
     <canvas width=1000 height=20 id="canvas">
