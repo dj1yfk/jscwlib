@@ -428,20 +428,27 @@
             var l = document.createElement("label");
             l.for = "pb";
             l.innerHTML= "0:00 ";
+            l.style.fontSize = "12px";
 
             var pb = document.createElement("progress");
             pb.style.width = '120px';
+            pb.style.height = '15px';
             obj.setProgressbar(pb, l);
-            var btn_stop = document.createElement("button");
-            btn_stop.innerHTML = "Stop";
-            btn_stop.style.width = "50px";
-            btn_stop.onclick = function () {
-                obj.stop();
-            }
-            var btn_pp = document.createElement("button");
+           var btn_pp = document.createElement("a");
             btn_pp.innerHTML = "Play / Pause";
+            btn_pp.href="javascript:return false;";
             btn_pp.title = obj.text;
-            btn_pp.style.width = "100px";
+            btn_pp.style.borderRadius = "3px";
+            btn_pp.style.backgroundColor = "#dadada";
+            btn_pp.style.cursor = "pointer";
+            btn_pp.style.border = "1px solid #555555";
+            btn_pp.style.textAlign = "center";
+            btn_pp.style.fontSize = "12px";
+            btn_pp.style.padding = "4px 8px";
+            btn_pp.style.margin = "4px";
+            btn_pp.style.display = "inline-block";
+            btn_pp.style.textDecoration = "none";
+            btn_pp.style.color = "#000000";
             btn_pp.onclick = function () {
                 if (obj.getRemaining()) {
                     obj.pause();
@@ -450,10 +457,27 @@
                     obj.play(); 
                 }
             }
+            var btn_stop = document.createElement("a");
+            btn_stop.href="javascript:return false;";
+            btn_stop.title = obj.text;
+            btn_stop.style.borderRadius = "3px";
+            btn_stop.style.backgroundColor = "#dadada";
+            btn_stop.style.cursor = "pointer";
+            btn_stop.style.border = "1px solid #555555";
+            btn_stop.style.textAlign = "center";
+            btn_stop.style.fontSize = "12px";
+            btn_stop.style.padding = "4px 8px";
+            btn_stop.style.margin = "4px";
+            btn_stop.style.display = "inline-block";
+            btn_stop.style.textDecoration = "none";
+            btn_stop.style.color = "#000000";
+            btn_stop.innerHTML = "Stop";
+            btn_stop.onclick = function () {
+                obj.stop();
+            }
             el.appendChild(l);
             el.appendChild(pb);
             el.appendChild(btn_stop);
-            el.appendChild(document.createTextNode(" "));
             el.appendChild(btn_pp);
             this.el = el;
         }
