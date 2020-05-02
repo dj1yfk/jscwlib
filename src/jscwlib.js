@@ -1,5 +1,10 @@
     function jscw () {
 
+        var download_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4LjciIGhlaWdodD0iMTAiPjxwYXRoIHN0eWxlPSJzdHJva2U6IzAwMDtzdHJva2Utd2lkdGg6MC4yNnB4OyIgZD0ibSA0LjQsMi41IHYgNC43IGwgMS42LC0xLjYgdiAwLjMgbCAtMS42NywxLjY3IC0xLjY3LC0xLjY3IHYgLTAuMyBsIDEuNTYsMS42IDAsLTQuNyB6IiAvPjxwYXRoIHN0eWxlPSJzdHJva2U6IzAwMDtzdHJva2Utd2lkdGg6MC40OyIgZD0iTSAyLjUsOCBIIDYuMSIgLz48L3N2Zz4K";
+        var play_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCI+PHBhdGggZD0iTTMgMiBMMyA4IEw3IDUgWiIgc3R5bGU9ImZpbGw6I2ZmZjtzdHJva2Utd2lkdGg6MC4zO3N0cm9rZTojMDAwO3N0cm9rZS1saW5lam9pbjpiZXZlbDsiLz48L3N2Zz4K";
+        var pause_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCI+PHN0eWxlPi5he2ZpbGw6I2ZmZjtzdHJva2Utd2lkdGg6MC4zO3N0cm9rZTojMDAwO308L3N0eWxlPjxyZWN0IHdpZHRoPSIxLjYiIGhlaWdodD0iNSIgeD0iMyIgeT0iMi41IiByeT0iMC40IiBjbGFzcz0iYSIvPjxyZWN0IHdpZHRoPSIxLjYiIGhlaWdodD0iNSIgeD0iNS40IiB5PSIyLjUiIHJ5PSIwLjQiIGNsYXNzPSJhIi8+PC9zdmc+Cg==";
+        var stop_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNSIgaGVpZ2h0PSIyNSIgdmlld0JveD0iMCAwIDEwIDEwIj48cmVjdCB3aWR0aD0iMy43NSIgaGVpZ2h0PSIzLjc1IiB4PSIzLjEyNSIgeT0iMy4xMjUiIHJ5PSIwLjIiIHN0eWxlPSJmaWxsOiNmZmY7c3Ryb2tlLXdpZHRoOjAuMztzdHJva2U6IzAwMCIvPjwvc3ZnPgo=";
+
         var alphabet = {"a": ".-", "b": "-...", "c": "-.-.", "d": "-..", "e": ".", 
             "f": "..-.", "g": "--.", "h": "....", "i": "..", "j": ".---", "k":
             "-.-", "l": ".-..", "m": "--", "n": "-.", "o": "---", "p": ".--.",
@@ -24,7 +29,6 @@
         this.paused = true;
         this.progressbar = false;
         this.mode = 'audio';    /* audio: AudioContext, embed: <audio> tag */
-        this.icondir = "https://fkurz.net/ham/jscwlib/img/";
         this.cgiurl = "https://cgi2.lcwo.net/cgi-bin/";
         this.real = false;  // If set to true, use Real speed, not PARIS 
         this.vvv = false;
@@ -104,10 +108,6 @@
                     return 0;
                 }
             }
-        }
-
-        this.setIcondir = function (i) {
-            this.icondir = f;
         }
 
         this.setFilter = function (f) {
@@ -552,13 +552,13 @@
                 obj.progresslabel.innerHTML = fmt_time;
 
                 if (obj.paused || obj.getRemaining() == 0) {
-                    if (obj.btn_pp.src != obj.icondir + "play.png") {
-                        obj.btn_pp.src = obj.icondir + "play.png";
+                    if (obj.btn_pp.src != play_svg) {
+                        obj.btn_pp.src = play_svg;
                     }
                 }
                 else {
-                    if (obj.btn_pp.src != obj.icondir + "pause.png") {
-                        obj.btn_pp.src = obj.icondir + "pause.png";
+                    if (obj.btn_pp.src != pause_svg) {
+                        obj.btn_pp.src = pause_svg;
                     }
                 }
             }
@@ -585,7 +585,7 @@
             pb.style.height = '15px';
             obj.setProgressbar(pb, l);
             var btn_pp = document.createElement("img");
-            btn_pp.src = obj.icondir + "play.png";
+            btn_pp.src = play_svg;
             btn_pp.title = "Play / Pause";
             btn_pp.style.borderRadius = "3px";
             btn_pp.style.backgroundColor = "#dadada";
@@ -598,6 +598,8 @@
             btn_pp.style.verticalAlign = "middle";
             btn_pp.style.textDecoration = "none";
             btn_pp.style.color = "#000000";
+            btn_pp.style.width = "25px";
+            btn_pp.style.height = "25px";
             obj.btn_pp = btn_pp;
             btn_pp.onclick = function () {
                 if (obj.getRemaining()) {
@@ -621,8 +623,10 @@
             btn_stop.style.textDecoration = "none";
             btn_stop.style.verticalAlign = "middle";
             btn_stop.style.color = "#000000";
-            btn_stop.src = obj.icondir + "stop.png";
+            btn_stop.src = stop_svg;
             btn_stop.title = "Stop";
+            btn_stop.style.width = "25px";
+            btn_stop.style.height = "25px";
             btn_stop.onclick = function () {
                 obj.stop();
             }
@@ -639,7 +643,9 @@
             btn_down_img.style.verticalAlign = "middle";
             btn_down_img.style.textDecoration = "none";
             btn_down_img.style.color = "#000000";
-            btn_down_img.src = obj.icondir + "download.png";
+            btn_down_img.src = download_svg; 
+            btn_down_img.style.width = "25px";
+            btn_down_img.style.height = "25px";
             btn_down.appendChild(btn_down_img);
             btn_down.title = "Download MP3";
             obj.btn_down = btn_down;
