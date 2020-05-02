@@ -92,6 +92,16 @@ text may contain commands to change parameters on the fly:
 <dd>Pauses or resumes the current text.</dd>
 <dt>stop()</dt>
 <dd>Stops the current text.</dd>
+<dt>setPrefix(p)</dt>
+<dd>Sets the transmission prefix to <code>p</code>. Each transmission is
+prefixed with this string (e.g. <code>VVV = </code>, but it does not influence
+the calculation of speed.</dd>
+<dt>setSuffix(s)</dt>
+<dd>Sets the transmission suffix to <code>s</code>. Each transmission is
+suffixed refixed with this string (e.g. <code> +</code>, but it does not influence
+the calculation of speed.</dd>
+<dt>enablePS(b)</dt>
+<dd>When set to true, enable the transmission of the prefix and suffix.</dd>
 <dt>getLength()</dt>
 <dd>Get the total play time of the current text in seconds.</dd>
 <dt>getRemaining()</dt>

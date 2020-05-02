@@ -188,6 +188,18 @@
         this.setVolume = function(v) {
             this.volume = v;
         }
+        
+        this.setPrefix = function (p) {
+            this.prefix = p;
+        }
+
+        this.setSuffix = function (s) {
+            this.suffix = s;
+        }
+
+        this.enablePS = function (b) {
+            this.vvv = b ? true : false;
+        }
 
         // draw last generated text on a canvas
         this.draw = function(c) {
@@ -306,26 +318,26 @@
             // returns an an object:
             // { "nc": num_chars, "length": length_seconds, "timings": timing_array, "paris": paris_speed }
 
+            if (this.vvv && !this.real) {
+                text = this.prefix + text + this.suffix;
+            }
             var ret = this.gen_morse_events(text);
 
-            // send "vvv = " before the text and "+" after the text?
-            if (this.vvv) {
-                // Real speed requested: Re-generate the whole text at the
-                // calculated PARIS speed for the bare text but with vvv/ar added.
-                if (this.real) {
-                    this.real = false;
-                    var wpm_set = this.wpm;
-                    var eff_set = this.eff;
-                    this.wpm = ret["paris"];
-                    this.eff = ret["paris"];
-                    ret = this.gen_morse_events(this.prefix + text + this.suffix);
-                    // restore settings
-                    this.wpm = wpm_set;
-                    this.eff = eff_set;
-                }
-                else {
-                    ret = this.gen_morse_events(this.prefix + text + this.suffix);
-                }
+            // if we want prefix/suffix *and* real characters, we need to
+            // calculate generate the correct timing for the text *without*
+            // prefix/suffix first (which we did above), and now re-build
+            // it at the calculated PARIS speed, with prefix/suffix added.
+            if (this.vvv && this.real) {
+                this.real = false;
+                var wpm_set = this.wpm;
+                var eff_set = this.eff;
+                this.wpm = ret["paris"];
+                this.eff = ret["paris"];
+                ret = this.gen_morse_events(this.prefix + text + this.suffix);
+                // restore settings
+                this.wpm = wpm_set;
+                this.eff = eff_set;
+                this.real = true;
             }
 
             var out = ret["timings"];
@@ -514,26 +526,30 @@
                 }
                 var sec = obj.progressbar.value;
                 var min = 0;
+
+                sec -= obj.textStart;   // start in negative time if we have vvv prefx
+                var sign = sec >= 0 ? " " : "-";
+                sec = Math.abs(sec);
                 
                 while (sec > 60) {
                     min++;
                     sec -= 60;
                 }
 
-                sec = Math.floor(sec);
+                if (sign == "-") {
+                    sec = Math.ceil(sec);
+                }
+                else {
+                    sec = Math.floor(sec);
+                }
+
                 if (sec < 10) {
                     sec = "0" + sec;
                 }
 
-                var fmt_time = " " + min + ":" + sec;
+                var fmt_time = " " + sign + min + ":" + sec;
 
                 obj.progresslabel.innerHTML = fmt_time;
-                if (obj.vvv && (obj.progressbar.value < obj.textStart || obj.textEnd < obj.progressbar.value)) {
-                    obj.progresslabel.style.color = 'gray';
-                }
-                else {
-                    obj.progresslabel.style.color = 'black';
-                }
 
                 if (obj.paused || obj.getRemaining() == 0) {
                     if (obj.btn_pp.src != obj.icondir + "play.png") {
