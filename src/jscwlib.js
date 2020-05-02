@@ -7,7 +7,7 @@
             "...-", "w": ".--", "x": "-..-", "y": "-.--", "z": "--..", 
             "1": ".----", "2": "..---", "3": "...--", "4": "....-", "5":
             ".....", "6": "-....", "7": "--...", "8": "---..", "9": "----.",
-            "0": "-----", "/": "-..-.",
+            "0": "-----", "/": "-..-.", "+": ".-.-.", "=": "-...-",
             " ":" " };
         var el_len = { ".": 1, "-": 3, " ": 4 };
 
@@ -27,6 +27,11 @@
         this.icondir = "https://fkurz.net/ham/jscwlib/img/";
         this.cgiurl = "https://cgi2.lcwo.net/cgi-bin/";
         this.real = false;  // If set to true, use Real speed, not PARIS 
+        this.vvv = false;
+        this.prefix = "vvv = ";
+        this.suffix = " +";
+        this.textStart = 0;     // time when the actual text starts (without "vvv +", if activated)
+        this.textEnd   = Number.MAX_VALUE;     // time when the actual text ends (i.e. without the "+")
 
         try {
     	    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -292,90 +297,53 @@
             text = text.toLowerCase();
             this.setText(text);
 
-            var out = [];   // time instants when we switch the sound on and off
-            var ele = [];   // details of timing elements
-            var time = 0;
             var start = this.audioCtx.currentTime + 0.01;
 
-            this.setFreq(this.freq);    // reset freq (might have been changed by |f command)
-            this.calcSpeed();   // set this.dotlen, effdotlen, fwdotlen, letterspace, worspace
+            // generate array with all events on a timeline.
+            // possible events are 
+            // 1) changes of volume (the Morse "keying") itself
+            // 2) changes of tone frequency 
+            // returns an an object:
+            // { "nc": num_chars, "length": length_seconds, "timings": timing_array, "paris": paris_speed }
 
-            // number of actual characters (not including control sequences)
-            var nc = 0;
+            var ret = this.gen_morse_events(text);
 
-            for (var i = 0; i < text.length; i++) {
-                var c = text.substr(i, 1);
-                if (c == "|") { /* text command */
-                    i++;
-                    c = text.substr(i, 1);
-                    i++;
-                    var arg = text.substr(i).split(" ");
-                    i+= arg[0].length;
-                    switch (c) {
-                        case 'f':
-                		    this.oscillator.frequency.setValueAtTime(arg[0], start + time); // value in hertz
-                            console.log("Setting f = " + arg[0] + " at " + time);
-                            break;
-                        case 'w':
-                            this.wpm = arg[0];
-                            this.calcSpeed();
-                            break;
-                        case 'e':
-                            this.eff = arg[0];
-                            this.calcSpeed();
-                            break;
-                        case 'v':
-                            this.volume = parseFloat(arg[0]);
-                            break;
-                        case 's':
-                            time += arg[0] / 1000;
-                            break;
-                        default:
-                            alert(c);
-                    }
-                }
-                else if (c != " ") {
-                    out = out.concat(this.gen_morse_timing(c, time));
-                    time = out[out.length - 1]['t'];
-                    time += this.letterspace;
-                    nc++;
+            // send "vvv = " before the text and "+" after the text?
+            if (this.vvv) {
+                // Real speed requested: Re-generate the whole text at the
+                // calculated PARIS speed for the bare text but with vvv/ar added.
+                if (this.real) {
+                    this.real = false;
+                    var wpm_set = this.wpm;
+                    var eff_set = this.eff;
+                    this.wpm = ret["paris"];
+                    this.eff = ret["paris"];
+                    ret = this.gen_morse_events(this.prefix + text + this.suffix);
+                    // restore settings
+                    this.wpm = wpm_set;
+                    this.eff = eff_set;
                 }
                 else {
-                    time += this.wordspace;
+                    ret = this.gen_morse_events(this.prefix + text + this.suffix);
                 }
             }
+
+            var out = ret["timings"];
 
             if (!out.length) {
                 return;
             }
 
-            // real characters requested, not PARIS.
-            // this means we need to multiply the 
-            // PARIS timing by a factor, which we now
-            // calculate
-            if (this.real == true) {
-                // length of generated CW (last element end)
-                var l = out[out.length-1]['t'];
-                console.log("Characters: " + nc);
-                console.log("Length: " + l);
-                var real = nc / (l/60) / 5;
-                console.log("Real speed words/min: " + real);
-                var mult = this.wpm / real;
-                console.log("mult " + mult);
-                for (var i = 0; i < out.length; i++) {
-                    out[i]['t'] = out[i]['t'] / mult;
-                }
-                this.paris = this.wpm * mult;
-            }
-            else {
-                this.paris = this.eff;
-            }
-            console.log("Equivalent PARIS speed = " + this.paris);
-
             for (var i = 0; i < out.length; i++) {
                 var s = start + out[i]['t'];
-                var v = out[i]['v'];
-                this.gainNode.gain.setValueAtTime(v, s);
+                // volume change
+                if (out[i].hasOwnProperty('v')) {
+                    this.gainNode.gain.setValueAtTime(out[i]['v'], s);
+                }
+                // freq change
+                if (out[i].hasOwnProperty('f')) {
+           		    this.oscillator.frequency.setValueAtTime(out[i]['f'], s); // value in hertz
+                }
             }
 
             this.playLength = out[out.length-1]['t'];
@@ -428,6 +396,98 @@
             return out;
         }
 
+        this.gen_morse_events = function(text) {
+            var out = [];
+            var time = 0;
+           
+            this.textStart = 0;
+            this.textEnd = Number.MAX_VALUE;
+
+            this.setFreq(this.freq);    // reset freq (might have been changed by |f command)
+            this.calcSpeed();   // set this.dotlen, effdotlen, fwdotlen, letterspace, worspace
+
+            // number of actual characters (not including control sequences)
+            var nc = 0;
+
+            for (var i = 0; i < text.length; i++) {
+                var c = text.substr(i, 1);
+                if (c == "|") { /* text command */
+                    i++;
+                    c = text.substr(i, 1);
+                    i++;
+                    var arg = text.substr(i).split(" ");
+                    i+= arg[0].length;
+                    switch (c) {
+                        case 'f':
+                            out = out.concat({"t": time, "f": arg[0]});
+                            console.log("Setting f = " + arg[0] + " at " + time);
+                            break;
+                        case 'w':
+                            this.wpm = arg[0];
+                            this.calcSpeed();
+                            break;
+                        case 'e':
+                            this.eff = arg[0];
+                            this.calcSpeed();
+                            break;
+                        case 'v':
+                            this.volume = parseFloat(arg[0]);
+                            break;
+                        case 's':
+                            time += arg[0] / 1000;
+                            break;
+                        default:
+                            alert(c);
+                    }
+                }
+                else if (c != " ") {
+                    out = out.concat(this.gen_morse_timing(c, time));
+                    time = out[out.length - 1]['t'];
+                    time += this.letterspace;
+                    nc++;
+                }
+                else {
+                    time += this.wordspace;
+                }
+
+                // is the prefix over?
+                if (this.vvv && i == (this.prefix.length - 1)) {
+                    this.textStart = time;
+                }
+                // is the suffix beginning?
+                if (this.vvv && i == text.length - this.suffix.length) {
+                    this.textEnd = time;
+                }
+            }
+
+            // real characters requested, not PARIS.
+            // this means we need to multiply the 
+            // PARIS timing by a factor, which we now
+            // calculate
+            if (this.real == true) {
+                // length of generated CW (last element end)
+                var l = out[out.length-1]['t'];
+                console.log("Characters: " + nc);
+                console.log("Length: " + l);
+                var real = nc / (l/60) / 5;
+                console.log("Real speed words/min: " + real);
+                var mult = this.wpm / real;
+                console.log("mult " + mult);
+                for (var i = 0; i < out.length; i++) {
+                    out[i]['t'] = out[i]['t'] / mult;
+                }
+                this.paris = this.wpm * mult;
+                this.textStart /= mult;
+                this.textEnd /= mult;
+            }
+            else {
+                this.paris = this.eff;
+            }
+            console.log("Equivalent PARIS speed = " + this.paris);
+
+            return { "nc": nc, "paris": this.paris, "length": time, "timings": out };
+        } // gen_morse_events
+
         this.setProgressbar = function(pb, l) {
             console.log("setProgressbar");
             console.log(pb);
@@ -468,6 +528,12 @@
                 var fmt_time = " " + min + ":" + sec;
 
                 obj.progresslabel.innerHTML = fmt_time;
+                if (obj.vvv && (obj.progressbar.value < obj.textStart || obj.textEnd < obj.progressbar.value)) {
+                    obj.progresslabel.style.color = 'gray';
+                }
+                else {
+                    obj.progresslabel.style.color = 'black';
+                }
 
                 if (obj.paused || obj.getRemaining() == 0) {
                     if (obj.btn_pp.src != obj.icondir + "play.png") {
