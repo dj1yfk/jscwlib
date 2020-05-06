@@ -34,7 +34,7 @@ Safari, using the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_
 For browsers that do not support the Web Audio API (like the Internet
 Explorer), there's a fall-back to the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio">Embed Audio element</a>.</p>
 
-<h2>Minimal example</h2>
+<h2>Example usage</h2>
 <div style="color:white;background-color:black;border:5px solid #000000;">
     <pre>&lt;!DOCTYPE html&gt;
 &lt;script src="https://fkurz.net/ham/jscwlib/src/jscwlib.js"&gt;&lt;/script&gt;
@@ -45,19 +45,22 @@ function play () {
     m.init();
     m.setWpm(30);
     m.play("hello");
+    m.renderPlayer('player', m);
 }
 &lt;/script&gt;
 
-&lt;button onclick="play();"&gt;Play&lt;/button&gt; </pre>
+&lt;button onclick="play();"&gt;Play&lt;/button&gt; 
+&lt;br&gt;&lt;div id="player"&gt;&lt;/div&gt;    
+</pre>
 </div>
 <p>Note that browsers typically only play sound if it was created by a
 keyboard/mouse/touch event, therefore the need to press a button to start
 it.</p>
-<p>Live examples: <a href="jscwlib/example/min_example.html">Minimum example</a>, <a href="jscwlib/example/pileup.html">Pileup</a></p>
+<p>Live examples: <a href="jscwlib/example/min_example.html">Minimum example</a> (above), <a href="jscwlib/example/pileup.html">Pileup</a></p>
 <h2>Methods</h2>
 <dl>
 <dt>init()</dt>
-<dd>Initialize the player</dd>
+<dd>Initialize the player.</dd>
 <dt>setWpm(x)</dt>
 <dd>Sets the character speed to <code>x</code> words per minute.</dd>
 <dt>setEff(x)</dt>
@@ -94,11 +97,11 @@ text may contain commands to change parameters on the fly:
 <dd>Stops the current text.</dd>
 <dt>setPrefix(p)</dt>
 <dd>Sets the transmission prefix to <code>p</code>. Each transmission is
-prefixed with this string (e.g. <code>VVV = </code>, but it does not influence
+prefixed with this string (e.g. <code>VVV = </code>), but it does not influence
 the calculation of speed.</dd>
 <dt>setSuffix(s)</dt>
 <dd>Sets the transmission suffix to <code>s</code>. Each transmission is
-suffixed refixed with this string (e.g. <code> +</code>, but it does not influence
+suffixed refixed with this string (e.g. <code> +</code>), but it does not influence
 the calculation of speed.</dd>
 <dt>enablePS(b)</dt>
 <dd>When set to true, enable the transmission of the prefix and suffix.</dd>

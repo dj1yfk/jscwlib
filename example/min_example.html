@@ -7,7 +7,12 @@ function play () {
     m.init();
     m.setWpm(30);
     m.play("hello");
+    m.renderPlayer('player', m);
 }
 </script>
 
 <button onclick="play();">Play</button>
+<br>
+<div id="player"></div>
+<hr>
+<a href="https://fkurz.net/ham/jscwlib.html">jscwlib homepage</a>

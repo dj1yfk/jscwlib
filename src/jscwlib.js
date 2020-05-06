@@ -1,9 +1,11 @@
     function jscw () {
 
-        var download_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4LjciIGhlaWdodD0iMTAiPjxwYXRoIHN0eWxlPSJzdHJva2U6IzAwMDtzdHJva2Utd2lkdGg6MC4yNnB4OyIgZD0ibSA0LjQsMi41IHYgNC43IGwgMS42LC0xLjYgdiAwLjMgbCAtMS42NywxLjY3IC0xLjY3LC0xLjY3IHYgLTAuMyBsIDEuNTYsMS42IDAsLTQuNyB6IiAvPjxwYXRoIHN0eWxlPSJzdHJva2U6IzAwMDtzdHJva2Utd2lkdGg6MC40OyIgZD0iTSAyLjUsOCBIIDYuMSIgLz48L3N2Zz4K";
-        var play_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCI+PHBhdGggZD0iTTMgMiBMMyA4IEw3IDUgWiIgc3R5bGU9ImZpbGw6I2ZmZjtzdHJva2Utd2lkdGg6MC4zO3N0cm9rZTojMDAwO3N0cm9rZS1saW5lam9pbjpiZXZlbDsiLz48L3N2Zz4K";
+        var download_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4LjciIGhlaWdodD0iMTAiIHZpZXdCb3g9IjAgMCA4LjcgMTAiPjxwYXRoIHN0eWxlPSJzdHJva2U6IzAwMDtzdHJva2Utd2lkdGg6MC4yNnB4OyIgZD0ibSA0LjQsMi41IHYgNC43IGwgMS42LC0xLjYgdiAwLjMgbCAtMS42NywxLjY3IC0xLjY3LC0xLjY3IHYgLTAuMyBsIDEuNTYsMS42IDAsLTQuNyB6IiAvPjxwYXRoIHN0eWxlPSJzdHJva2U6IzAwMDtzdHJva2Utd2lkdGg6MC40OyIgZD0iTSAyLjUsOCBIIDYuMSIgLz48L3N2Zz4K";
+        var play_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgdmlld0JveD0iMCAwIDEwIDEwIj48cGF0aCBkPSJNMyAyIEwzIDggTDcgNSBaIiBzdHlsZT0iZmlsbDojZmZmO3N0cm9rZS13aWR0aDowLjM7c3Ryb2tlOiMwMDA7c3Ryb2tlLWxpbmVqb2luOmJldmVsOyIvPjwvc3ZnPgo=";
         var pause_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCI+PHN0eWxlPi5he2ZpbGw6I2ZmZjtzdHJva2Utd2lkdGg6MC4zO3N0cm9rZTojMDAwO308L3N0eWxlPjxyZWN0IHdpZHRoPSIxLjYiIGhlaWdodD0iNSIgeD0iMyIgeT0iMi41IiByeT0iMC40IiBjbGFzcz0iYSIvPjxyZWN0IHdpZHRoPSIxLjYiIGhlaWdodD0iNSIgeD0iNS40IiB5PSIyLjUiIHJ5PSIwLjQiIGNsYXNzPSJhIi8+PC9zdmc+Cg==";
         var stop_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNSIgaGVpZ2h0PSIyNSIgdmlld0JveD0iMCAwIDEwIDEwIj48cmVjdCB3aWR0aD0iMy43NSIgaGVpZ2h0PSIzLjc1IiB4PSIzLjEyNSIgeT0iMy4xMjUiIHJ5PSIwLjIiIHN0eWxlPSJmaWxsOiNmZmY7c3Ryb2tlLXdpZHRoOjAuMztzdHJva2U6IzAwMCIvPjwvc3ZnPgo=";
+
+        var settings_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiI+PHBhdGggZD0ibTEwNy43NSAyMi4xNTl2MjEuNTcxYy04LjgzNSAyLjExNy0xNy4yODYgNS42MDgtMjUuMDQgMTAuMzQ3bC0xNS4yMzQtMTUuMjM0LTI4LjYzMiAyOC42MzQgMTUuMjYgMTUuMjZjLTQuNzQ0OCA3Ljc0NDQtOC4yNDQzIDE2LjE4Ni0xMC4zNzEgMjUuMDE2aC0yMS41NzN2NDAuNDkzaDIxLjU3MWMyLjExNjEgOC44MzgyIDUuNjA3NiAxNy4yODkgMTAuMzQ3IDI1LjA0M2wtMTUuMjM0IDE1LjIzNCAyOC42MzIgMjguNjM0IDE1LjI2Mi0xNS4yNjJjNy43NDQ0IDQuNzQ0OCAxNi4xODYgOC4yNDQzIDI1LjAxNiAxMC4zNzF2MjEuNTczaDQwLjQ5M3YtMjEuNTcxYzguODM3NS0yLjExNjMgMTcuMjg4LTUuNjA3OCAyNS4wNDEtMTAuMzQ3bDE1LjIzNiAxNS4yMzYgMjguNjMyLTI4LjYzNC0xNS4yNi0xNS4yNmM0Ljc0NS03Ljc0NSA4LjI0NDUtMTYuMTg3IDEwLjM3MS0yNS4wMThoMjEuNTczdi00MC40OTNoLTIxLjU3MWMtMi4xMTYzLTguODM3NS01LjYwNzgtMTcuMjg4LTEwLjM0Ny0yNS4wNDFsMTUuMjUtMTUuMjIyLTI4LjY0LTI4LjYzNC0xNS4yNiAxNS4yNmMtNy43NDUtNC43NDUtMTYuMTg3LTguMjQ0NS0yNS4wMTgtMTAuMzcxdi0yMS41NzNoLTQwLjQ5M3ptMjAuMjQ3IDU3LjUzN2E0OC4zMDMgNDguMzAzIDAgMCAxIDQ4LjMgNDguMzA0IDQ4LjMwMyA0OC4zMDMgMCAwIDEgLTQ4LjMgNDguMyA0OC4zMDMgNDguMzAzIDAgMCAxIC00OC4zMDMgLTQ4LjMgNDguMzAzIDQ4LjMwMyAwIDAgMSA0OC4zMDMgLTQ4LjMwNHoiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZmlsbD0iI2ZmZmZmZiIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjgiIC8+PC9zdmc+Cgo=";
 
         var alphabet = {"a": ".-", "b": "-...", "c": "-.-.", "d": "-..", "e": ".", 
             "f": "..-.", "g": "--.", "h": "....", "i": "..", "j": ".---", "k":
@@ -15,6 +17,10 @@
             "0": "-----", "/": "-..-.", "+": ".-.-.", "=": "-...-",
             " ":" " };
         var el_len = { ".": 1, "-": 3, " ": 4 };
+
+        this.controls_options = {"wpm_min": 5, "wpm_max": 50, "eff_min": 1, "eff_max": 50, "freq_min": 300, "freq_max": 900};
+        this.control_labels = {};
+        this.control_inputs = {};
 
         this.wpm = 20;
         this.eff = 1000;
@@ -36,6 +42,7 @@
         this.suffix = " +";
         this.textStart = 0;     // time when the actual text starts (without "vvv +", if activated)
         this.textEnd   = Number.MAX_VALUE;     // time when the actual text ends (i.e. without the "+")
+        this.showSettings = false;
 
         try {
     	    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -160,10 +167,11 @@
         this.setWpm = function (w) {
             w = parseInt(w);
             this.wpm = w;
-            if (this.mode == 'audio')
+            if (this.mode == 'audio' && this.init_done)
                 this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
+            this.updateControls();
         }
-
+ 
         this.setEff = function (e) {
             console.log("setEff = " + e);
             if (this.mode == 'audio')
@@ -178,11 +186,12 @@
 
         this.setFreq = function(f) {
             this.freq = f;
-            if (this.mode == 'audio') {
+            if (this.mode == 'audio' && this.init_done) {
                 this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
                 this.oscillator.frequency.setValueAtTime(f, this.audioCtx.currentTime);
                 this.biquadFilter.frequency.setValueAtTime(f, this.audioCtx.currentTime);
             }
+            this.updateControls();
         }
 
         this.setVolume = function(v) {
@@ -200,6 +209,25 @@
         this.enablePS = function (b) {
             this.vvv = b ? true : false;
         }
+
+        this.updateControls = function () {
+            if (this.control_labels["wpm"]) {
+                this.control_labels["wpm"].innerHTML = this.wpm + " WpM";
+            }
+            if (this.control_labels["freq"]) {
+                this.control_labels["freq"].innerHTML = this.freq + " Hz";
+            }
+        } 
+
+        // this does not work?!
+        this.enableControls = function (obj, b) {
+            console.log("enableControls = " + b);
+            console.log(obj.control_inputs);
+            for (var p in obj.control_inputs) {
+                obj.control_inputs[p].disabled = !b;
+            }
+        }
+
 
         // draw last generated text on a canvas
         this.draw = function(c) {
@@ -554,11 +582,13 @@
                 if (obj.paused || obj.getRemaining() == 0) {
                     if (obj.btn_pp.src != play_svg) {
                         obj.btn_pp.src = play_svg;
+                        obj.enableControls(obj, true);
                     }
                 }
                 else {
                     if (obj.btn_pp.src != pause_svg) {
                         obj.btn_pp.src = pause_svg;
+                        obj.enableControls(obj, false);
                     }
                 }
             }
@@ -568,22 +598,25 @@
         this.renderPlayer = function(el, obj) {
             var el = document.getElementById(el);
             el.innerHTML = "";
-            el.style.width = '140px';
+            el.style.width = '170px';
             el.style.borderWidth = 'thin';
             el.style.borderStyle= 'dashed';
             el.style.padding = '6px';
             el.style.margin= '6px';
             el.style.fontFamily = 'Ubuntu,calibri,tahoma,arial,sans-serif';
 
+            var pb = document.createElement("progress");
+            pb.style.width = '165px';
+            pb.style.height = '15px';
+            pb.id = "pb";
+
             var l = document.createElement("label");
-            l.for = "pb";
+            l.htmlFor =  "pb";
             l.innerHTML= "0:00 ";
             l.style.fontSize = "12px";
-
-            var pb = document.createElement("progress");
-            pb.style.width = '140px';
-            pb.style.height = '15px';
+            
             obj.setProgressbar(pb, l);
+
             var btn_pp = document.createElement("img");
             btn_pp.src = play_svg;
             btn_pp.title = "Play / Pause";
@@ -653,13 +686,130 @@
                 obj.setText(obj.text);
             }
 
+            var btn_set = document.createElement("a");
+            btn_set.style.position = "relative";
+            btn_set.style.display = "inline-block";
+
+            var btn_set_img = document.createElement("img");
+            btn_set_img.style.borderRadius = "3px";
+            btn_set_img.style.backgroundColor = "#dadada";
+            btn_set_img.style.cursor = "pointer";
+            btn_set_img.style.border = "1px solid #555555";
+            btn_set_img.style.textAlign = "center";
+            btn_set_img.style.padding = "0px 0px";
+            btn_set_img.style.margin = "4px";
+            btn_set_img.style.display = "inline-block";
+            btn_set_img.style.verticalAlign = "middle";
+            btn_set_img.style.textDecoration = "none";
+            btn_set_img.style.color = "#000000";
+            btn_set_img.src = settings_svg; 
+            btn_set_img.style.width = "25px";
+            btn_set_img.style.height = "25px";
+
+            // popup dialog for settings
+            var pop = document.createElement("span");
+            pop.style.width = "300px";
+            pop.style.backgroundColor = '#eaeaea';
+            pop.style.borderRadius = "6px";
+            pop.style.borderWidth = 'thin';
+            pop.style.borderStyle= 'solid';
+            pop.style.position = "absolute";
+            pop.style.zIndex = "1";
+            pop.style.bottom = "-90px";
+            pop.style.left = "50px";
+            pop.style.marginLeft = "-145px";
+            pop.style.padding = "5px 5px";
+            pop.style.fontSize = "12px";
+            pop.style.visibility = "hidden";
+            pop.innerHTML = 'Settings<br>';
+            obj.pop = pop;
+
+            // controls
+
+            // speed
+            var speed = document.createElement("input"); 
+            speed.id = "speed";
+            speed.type = "range";
+            speed.min = obj.controls_options["wpm_min"];
+            speed.max = obj.controls_options["wpm_max"];
+            speed.value = obj.wpm;
+            speed.step = 1;
+            speed.style.display = "inline-block";
+            speed.style.verticalAlign = "middle";
+            speed.onchange = function () {
+                obj.setWpm(this.value);
+            }
+
+            var speed_label = document.createElement("label");
+            speed_label.htmlFor = "speed";
+            speed_label.style.fontSize = "12px";
+            speed_label.innerHTML = "0 WpM";
+            
+            obj.control_labels["wpm"] = speed_label;
+            obj.control_inputs["wpm"] = speed;
+
+            pop.appendChild(speed);
+            pop.appendChild(speed_label);
+
+            // freq
+            var freq = document.createElement("input"); 
+            freq.id = "freq";
+            freq.type = "range";
+            freq.min = obj.controls_options["freq_min"];
+            freq.max = obj.controls_options["freq_max"];
+            freq.value = obj.freq;
+            freq.step = 1;
+            freq.style.display = "inline-block";
+            freq.style.verticalAlign = "middle";
+            freq.onchange = function () {
+                obj.setFreq(this.value);
+            }
+
+            var freq_label = document.createElement("label");
+            freq_label.htmlFor = "freq";
+            freq_label.style.fontSize = "12px";
+            freq_label.innerHTML = "600 Hz";
+
+            obj.control_labels["freq"] = freq_label;
+            obj.control_inputs["freq"] = freq;
+            
+            pop.appendChild(freq);
+            pop.appendChild(freq_label);
+
+            btn_set.appendChild(pop);
+            btn_set.appendChild(btn_set_img);
+            btn_set.title = "Settings";
+            obj.btn_set = btn_set;
+            btn_set_img.onclick = function () {
+                obj.toggle_settings();
+            }
+
+            obj.updateControls();
+
             el.appendChild(pb);
             el.appendChild(btn_stop);
             el.appendChild(btn_pp);
             el.appendChild(btn_down);
+            el.appendChild(btn_set);
             el.appendChild(l);
             this.el = el;
         }
+
+        this.toggle_settings = function () {
+            this.showSettings = !this.showSettings;
+
+            if (this.showSettings) {
+                console.log("show");
+                this.pop.style.visibility = "visible";
+            }
+            else {
+                console.log("hide");
+                this.pop.style.visibility = "hidden";
+            }
+        }
+
+
+
 
     } // class jscw
 
