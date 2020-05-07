@@ -18,7 +18,7 @@
             " ":" " };
         var el_len = { ".": 1, "-": 3, " ": 4 };
 
-        this.controls_options = {"wpm_min": 5, "wpm_max": 50, "eff_min": 1, "eff_max": 50, "freq_min": 300, "freq_max": 900};
+        this.controls_options = {"wpm_min": 5, "wpm_max": 50, "eff_min": 1, "eff_max": 50, "freq_min": 300, "freq_max": 20900, "volume_min": 0, "volume_max": 100};
         this.control_labels = {};
         this.control_inputs = {};
 
@@ -174,14 +174,17 @@
  
         this.setEff = function (e) {
             console.log("setEff = " + e);
-            if (this.mode == 'audio')
+            if (this.mode == 'audio' && this.init_done)
                 this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
             e = parseInt(e);
+            /*
             if (e > this.wpm) {
                 console.log("Cannot set eff " + e + " > wpm (" + this.wpm + ")!");
                 e = this.wpm;
             }
+            */
             this.eff = e;
+            this.updateControls();
         }
 
         this.setFreq = function(f) {
@@ -196,6 +199,10 @@
 
         this.setVolume = function(v) {
             this.volume = v;
+            this.updateControls();
+            if (this.mode == 'audio' && this.init_done) {
+                this.gainNode.gain.setValueAtTime(v, this.audioCtx.currentTime);
+            }
         }
         
         this.setPrefix = function (p) {
@@ -212,10 +219,16 @@
 
         this.updateControls = function () {
             if (this.control_labels["wpm"]) {
-                this.control_labels["wpm"].innerHTML = this.wpm + " WpM";
+                this.control_labels["wpm"].innerHTML = this.wpm + "&nbsp;WpM";
+            }
+            if (this.control_labels["eff"]) {
+                this.control_labels["eff"].innerHTML = this.eff + "&nbsp;WpM";
             }
             if (this.control_labels["freq"]) {
-                this.control_labels["freq"].innerHTML = this.freq + " Hz";
+                this.control_labels["freq"].innerHTML = this.freq + "&nbsp;Hz";
+            }
+            if (this.control_labels["vol"]) {
+                this.control_labels["vol"].innerHTML = this.volume * 100 + "&nbsp;%";
             }
         } 
 
@@ -224,6 +237,8 @@
             console.log("enableControls = " + b);
             console.log(obj.control_inputs);
             for (var p in obj.control_inputs) {
+                if (p == "vol")
+                    continue;
                 obj.control_inputs[p].disabled = !b;
             }
         }
@@ -709,22 +724,24 @@
             // popup dialog for settings
             var pop = document.createElement("span");
             pop.style.width = "300px";
+            //pop.style.height = "300px";
             pop.style.backgroundColor = '#eaeaea';
             pop.style.borderRadius = "6px";
             pop.style.borderWidth = 'thin';
             pop.style.borderStyle= 'solid';
             pop.style.position = "absolute";
             pop.style.zIndex = "1";
-            pop.style.bottom = "-90px";
-            pop.style.left = "50px";
-            pop.style.marginLeft = "-145px";
+            pop.style.top = "30px";
+            pop.style.left = "30px";
             pop.style.padding = "5px 5px";
             pop.style.fontSize = "12px";
             pop.style.visibility = "hidden";
-            pop.innerHTML = 'Settings<br>';
+            pop.innerHTML = '<b>Settings</b>';
             obj.pop = pop;
 
-            // controls
+            // controls go into a table
+
+            var tbl = document.createElement('table');
 
             // speed
             var speed = document.createElement("input"); 
@@ -736,6 +753,7 @@
             speed.step = 1;
             speed.style.display = "inline-block";
             speed.style.verticalAlign = "middle";
+            speed.style.width = "150px";
             speed.onchange = function () {
                 obj.setWpm(this.value);
             }
@@ -748,8 +766,45 @@
             obj.control_labels["wpm"] = speed_label;
             obj.control_inputs["wpm"] = speed;
 
-            pop.appendChild(speed);
-            pop.appendChild(speed_label);
+            var tr = tbl.insertRow();
+            var td = tr.insertCell();
+            td.appendChild(document.createTextNode("Speed:"));
+            td = tr.insertCell();
+            td.appendChild(speed);
+            td = tr.insertCell();
+            td.appendChild(speed_label);
+
+            // eff
+            var eff = document.createElement("input"); 
+            eff.id = "eff";
+            eff.type = "range";
+            eff.min = obj.controls_options["wpm_min"];
+            eff.max = obj.controls_options["wpm_max"];
+            eff.value = obj.eff;
+            eff.step = 1;
+            eff.style.display = "inline-block";
+            eff.style.verticalAlign = "middle";
+            eff.style.width = "150px";
+            eff.style.height = "10px";
+            eff.onchange = function () {
+                obj.setEff(this.value);
+            }
+
+            var eff_label = document.createElement("label");
+            eff_label.htmlFor = "eff";
+            eff_label.style.fontSize = "12px";
+            eff_label.innerHTML = "0 WpM";
+            
+            obj.control_labels["eff"] = eff_label;
+            obj.control_inputs["eff"] = eff;
+
+            tr = tbl.insertRow();
+            td = tr.insertCell();
+            td.appendChild(document.createTextNode("eff. Speed:"));
+            td = tr.insertCell();
+            td.appendChild(eff);
+            td = tr.insertCell();
+            td.appendChild(eff_label);
 
             // freq
             var freq = document.createElement("input"); 
@@ -761,6 +816,7 @@
             freq.step = 1;
             freq.style.display = "inline-block";
             freq.style.verticalAlign = "middle";
+            freq.style.width = "150px";
             freq.onchange = function () {
                 obj.setFreq(this.value);
             }
@@ -772,9 +828,47 @@
 
             obj.control_labels["freq"] = freq_label;
             obj.control_inputs["freq"] = freq;
+
+            tr = tbl.insertRow();
+            td = tr.insertCell();
+            td.appendChild(document.createTextNode("Frequency:"));
+            td = tr.insertCell();
+            td.appendChild(freq);
+            td = tr.insertCell();
+            td.appendChild(freq_label);
+
+            // volume
+            var vol = document.createElement("input"); 
+            vol.id = "vol";
+            vol.type = "range";
+            vol.min = obj.controls_options["volume_min"];
+            vol.max = obj.controls_options["volume_max"];
+            vol.value = obj.v * 100;
+            vol.step = 1;
+            vol.style.display = "inline-block";
+            vol.style.verticalAlign = "middle";
+            vol.style.width = "150px";
+            vol.onchange = function () {
+                obj.setVolume(this.value/100);
+            }
+
+            var vol_label = document.createElement("label");
+            vol_label.htmlFor = "vol";
+            vol_label.style.fontSize = "12px";
+            vol_label.innerHTML = "50%";
+
+            obj.control_labels["vol"] = vol_label;
+            obj.control_inputs["vol"] = vol;
             
-            pop.appendChild(freq);
-            pop.appendChild(freq_label);
+            tr = tbl.insertRow();
+            td = tr.insertCell();
+            td.appendChild(document.createTextNode("Volume:"));
+            td = tr.insertCell();
+            td.appendChild(vol);
+            td = tr.insertCell();
+            td.appendChild(vol_label);
+
+            pop.appendChild(tbl);
 
             btn_set.appendChild(pop);
             btn_set.appendChild(btn_set_img);
