@@ -18,14 +18,15 @@
             " ":" " };
         var el_len = { ".": 1, "-": 3, " ": 4 };
 
-        this.controls_options = {"wpm_min": 5, "wpm_max": 50, "eff_min": 1, "eff_max": 50, "freq_min": 300, "freq_max": 20900, "volume_min": 0, "volume_max": 100};
+        this.controls_options = {"wpm_min": 5, "wpm_max": 50, "eff_min": 1, "eff_max": 50, "freq_min": 300, "freq_max": 1500, "volume_min": 0, "volume_max": 100};
         this.control_labels = {};
         this.control_inputs = {};
 
         this.wpm = 20;
         this.eff = 1000;
         this.freq = 600;
-        this.volume = 0.5;
+        this.volume = 0.5;      // relative volume how CW is generated internally
+        this.playvolume = 1;  // player volume (relative * player volume = total volume)
         this.dotlen;
         this.playLength = 0;
         this.playEnd = 0;
@@ -61,7 +62,8 @@
                 }
             }
             else {
-                this.gainNode = this.audioCtx.createGain();
+                this.gainNode = this.audioCtx.createGain(); // this gainNode modulates the CW
+                this.gainNodePlay = this.audioCtx.createGain(); // this gainNode is the overall volume
                 this.oscillator = this.audioCtx.createOscillator();
                 this.biquadFilter = this.audioCtx.createBiquadFilter();
                 this.noiseFilter = this.audioCtx.createBiquadFilter();
@@ -95,9 +97,11 @@
 
                 this.oscillator.connect(this.gainNode);
                 this.gainNode.connect(this.biquadFilter);
-                this.biquadFilter.connect(this.audioCtx.destination);
+                this.biquadFilter.connect(this.gainNodePlay);
+                this.gainNodePlay.connect(this.audioCtx.destination);
 
                 this.gainNode.gain.value = 0;
+                this.gainNodePlay.gain.value = this.playvolume;
                 this.oscillator.start();
             }
             this.init_done = true;
@@ -177,12 +181,6 @@
             if (this.mode == 'audio' && this.init_done)
                 this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
             e = parseInt(e);
-            /*
-            if (e > this.wpm) {
-                console.log("Cannot set eff " + e + " > wpm (" + this.wpm + ")!");
-                e = this.wpm;
-            }
-            */
             this.eff = e;
             this.updateControls();
         }
@@ -198,10 +196,10 @@
         }
 
         this.setVolume = function(v) {
-            this.volume = v;
+            this.playvolume = v;
             this.updateControls();
             if (this.mode == 'audio' && this.init_done) {
-                this.gainNode.gain.setValueAtTime(v, this.audioCtx.currentTime);
+                this.gainNodePlay.gain.setValueAtTime(v, this.audioCtx.currentTime);
             }
         }
         
@@ -228,11 +226,10 @@
                 this.control_labels["freq"].innerHTML = this.freq + "&nbsp;Hz";
             }
             if (this.control_labels["vol"]) {
-                this.control_labels["vol"].innerHTML = this.volume * 100 + "&nbsp;%";
+                this.control_labels["vol"].innerHTML = Math.round(this.playvolume * 100) + "&nbsp;%";
             }
         } 
 
-        // this does not work?!
         this.enableControls = function (obj, b) {
             console.log("enableControls = " + b);
             console.log(obj.control_inputs);
@@ -843,7 +840,7 @@
             vol.type = "range";
             vol.min = obj.controls_options["volume_min"];
             vol.max = obj.controls_options["volume_max"];
-            vol.value = obj.v * 100;
+            vol.value = obj.playvolume * 100;
             vol.step = 1;
             vol.style.display = "inline-block";
             vol.style.verticalAlign = "middle";
