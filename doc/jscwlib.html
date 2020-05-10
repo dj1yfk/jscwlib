@@ -77,7 +77,7 @@ character speed.</dd>
 <dt>setText(text)</dt>
 <dd>Set <code>text</code> to be played. Does not start playing.</dd>
 <dt>setVolume(v)</dt>
-<dd>Sets the volume to <code>v</code> (0..1).</dd>
+<dd>Sets the volume to <code>v</code> (0 .. 100).</dd>
 <dt>play(text)</dt>
 <dd>Plays <code>text</code> (if not set: the last text set by <code>play</code>
 or <code>setText</code> in Morse code, with the parameters currently set. The
@@ -95,6 +95,8 @@ text may contain commands to change parameters on the fly:
 <dd>Pauses or resumes the current text.</dd>
 <dt>stop()</dt>
 <dd>Stops the current text.</dd>
+<dt>setStartDelay(s)</dt>
+<dd>Delays the actual text by <code>s</code> seconds, after play() is invoked.</dd>
 <dt>setPrefix(p)</dt>
 <dd>Sets the transmission prefix to <code>p</code>. Each transmission is
 prefixed with this string (e.g. <code>VVV = </code>), but it does not influence
@@ -114,8 +116,16 @@ the calculation of speed.</dd>
 <dt>draw(c)</dt>
 <dd>Draws the last generated Morse code as a timing diagram on a HTML5 canvas (<code>c</code>).</dd>
 <dt>renderPlayer(div, obj)</dt>
-<dd>Renders a player UI (with progress bar and buttons for Stop, Play/Pause)
-for player <code>obj</code> into a <code>div</code>.</dd>
+<dd>Renders a player UI (with progress bar and buttons for Stop, Play/Pause and
+the possibility to change CW parameters) for player <code>obj</code> into a <code>div</code>.</dd>
+</dl>
+<h3>Events</h3>
+<dl>
+<dt>onPlay<dt>
+<dd>A user defined function that will be invoked each time the player is
+started. E.g.:
+<pre><code>m.onPlay = function () { alert("Player started"); }
+</code></pre></dd>
 </dl>
 <hr>
 <h2>Download / Embedding</h2>

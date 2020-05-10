@@ -43,9 +43,10 @@
         this.vvv = false;
         this.prefix = "vvv = ";
         this.suffix = " +";
-        this.textStart = 0;     // time when the actual text starts (without "vvv +", if activated)
+        this.textStart = 0;     // time when the actual text starts (without "vvv +" or startDelay, if activated)
         this.textEnd   = Number.MAX_VALUE;     // time when the actual text ends (i.e. without the "+")
         this.showSettings = false;
+        this.startDelay = 0;    // delay in seconds before audio starts
 
         try {
     	    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -205,6 +206,11 @@
             }
         }
         
+        this.setStartDelay = function (s) {
+            console.log("setStartDelay = " + s);
+            this.startDelay = s;
+        }
+
         this.setPrefix = function (p) {
             this.prefix = p;
         }
@@ -336,11 +342,17 @@
                 this.init();
             }
 
+            if (this.onPlay) {
+                console.log("OnPlay");
+                this.onPlay();
+            }
+
             this.paused = false;
 
             var text = playtext ? playtext : this.text;
             this.text = text;
 
+            // fallback to HTML5
             if (this.mode == 'embed') {
                 this.player.src = this.cgiurl + "cw.mp3?s=" + this.wpm + "&e=" + this.eff + "&f=" + this.freq + "&t=" + text + "%20%20%20%20%5E";
                 this.player.play();
@@ -436,6 +448,11 @@
             var out = [];
             var l = alphabet[c];
 
+            if (!l) {
+                console.log("Don't know CW for character: '" + c + "'");
+                return false;
+            }
+
             for (var j = 0; j < l.length; j++) {
                 var el = l.substr(j,1);  // . or -
                 out.push({"t": time, "v": this.volume});
@@ -452,9 +469,9 @@
 
         this.gen_morse_events = function(text) {
             var out = [];
-            var time = 0;
+            var time = this.startDelay;
            
-            this.textStart = 0;
+            this.textStart = time;
             this.textEnd = Number.MAX_VALUE;
 
             this.setFreq(this.freq);    // reset freq (might have been changed by |f command)
@@ -477,28 +494,33 @@
                             console.log("Setting f = " + arg[0] + " at " + time);
                             break;
                         case 'w':
-                            this.wpm = arg[0];
-                            this.calcSpeed();
+                            if (arg[0] > 1) {
+                                this.wpm = arg[0];
+                                this.calcSpeed();
+                            }
                             break;
                         case 'e':
                             this.eff = arg[0];
                             this.calcSpeed();
                             break;
                         case 'v':
-                            this.volume = parseFloat(arg[0]);
+                            this.volume = parseFloat(arg[0])/100;
                             break;
                         case 's':
                             time += arg[0] / 1000;
                             break;
                         default:
-                            alert(c);
+                            //alert(c);
                     }
                 }
                 else if (c != " ") {
-                    out = out.concat(this.gen_morse_timing(c, time));
-                    time = out[out.length - 1]['t'];
-                    time += this.letterspace;
-                    nc++;
+                    var ti = this.gen_morse_timing(c, time);
+                    if (ti) {
+                        out = out.concat(this.gen_morse_timing(c, time));
+                        time = out[out.length - 1]['t'];
+                        time += this.letterspace;
+                        nc++;
+                    }
                 }
                 else {
                     time += this.wordspace;
@@ -655,7 +677,6 @@
                 else {
                     obj.play(); 
                 }
-
             }
             var btn_stop = document.createElement("img");
             btn_stop.title = obj.text;
