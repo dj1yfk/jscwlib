@@ -7,6 +7,13 @@
        <meta name="keywords" lang="en" content="morse code, morse generator, morse sound generator, morse javascript">
 	   <link rel="stylesheet" type="text/css" href="/fkurz.css">
 	   <link href="/dj1yfk.xml?filter=jscwlib" type="application/atom+xml" rel="alternate" title="jscwlib newsfeed">
+<style>
+.container {
+    display: inline-grid;
+    grid-template-columns: auto auto;
+    grid-gap: 5px;
+}
+</style>
 </head>
 <body>
 <h1>jscwlib - JavaScript Morse Code Library</h1>
@@ -35,23 +42,36 @@ For browsers that do not support the Web Audio API (like the Internet
 Explorer), there's a fall-back to the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio">Embed Audio element</a>.</p>
 
 <h2>Example usage</h2>
-<div style="color:white;background-color:black;border:5px solid #000000;">
+<div class="container">
+<div>Code</div><div>Live Result</div>
+<div style="color:white;background-color:black;border:1px solid #000000;">
     <pre>&lt;!DOCTYPE html&gt;
 &lt;script src="https://fkurz.net/ham/jscwlib/src/jscwlib.js"&gt;&lt;/script&gt;
 
-&lt;script&gt;
-function play () {
-    var m = new jscw();
-    m.init();
-    m.setWpm(30);
-    m.play("hello");
-    m.renderPlayer('player', m);
-}
-&lt;/script&gt;
-
-&lt;button onclick="play();"&gt;Play&lt;/button&gt; 
 &lt;br&gt;&lt;div id="player"&gt;&lt;/div&gt;    
+
+&lt;script&gt;
+  var m = new jscw();
+  m.setWpm(30);
+  m.setText("hello");
+  m.renderPlayer('player', m);
+&lt;/script&gt;
 </pre>
+</div>
+<div style="color:black;background-color:#ffffff;border:1px solid #000000;">
+
+<script src="https://fkurz.net/ham/jscwlib/src/jscwlib.js"></script>
+
+<div id="player"></div>
+
+<script>
+  var m = new jscw();
+  m.setWpm(30);
+  m.setText("hello");
+  m.renderPlayer('player', m);
+</script>
+
+</div>
 </div>
 <p>Note that browsers typically only play sound if it was created by a
 keyboard/mouse/touch event, therefore the need to press a button to start

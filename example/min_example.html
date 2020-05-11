@@ -1,18 +1,14 @@
 <!DOCTYPE html>
 <script src="https://fkurz.net/ham/jscwlib/src/jscwlib.js"></script>
 
+<div id="player"></div>
+
 <script>
-function play () {
-    var m = new jscw();
-    m.init();
-    m.setWpm(30);
-    m.play("hello");
-    m.renderPlayer('player', m);
-}
+  var m = new jscw();
+  m.setWpm(30);
+  m.setText("hello");
+  m.renderPlayer('player', m);
 </script>
 
-<button onclick="play();">Play</button>
-<br>
-<div id="player"></div>
 <hr>
 <a href="https://fkurz.net/ham/jscwlib.html">jscwlib homepage</a>
