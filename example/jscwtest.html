@@ -9,6 +9,8 @@
     function ret () {
         if (m) {
             document.getElementById('rem').innerHTML = m.getRemaining() + " / " + m.getLength();
+            if (m.getRemaining()) 
+                m.oscilloscope(document.getElementById('osci'));
         }
     }
 
@@ -49,6 +51,7 @@
 
     <br>
     <button onclick="m.draw(document.getElementById('canvas'));">Draw</button>
+    <button onclick="m.oscilloscope(document.getElementById('osci'));">Start Oscilloscope</button>
 
     <br>
     <input onclick="m.setReal(this.checked);" type="checkbox" value="1"> Real speed (no PARIS, no Farnsworth)
@@ -56,7 +59,10 @@
     <br>
     <canvas width=1000 height=20 id="canvas">
     </canvas>
+    <br>
 
+    <canvas width=1400 height=400 id="osci">
+    </canvas>
 
     <br>
     <br>
@@ -67,6 +73,13 @@
         m.renderPlayer("ply", m);
     </script>
 
+    <button onclick="m.setQ(1);m.setVolume(3);">Q1</button>
+    <button onclick="m.setQ(3);m.setVolume(2.5);">Q3</button>
+    <button onclick="m.setQ(5);m.setVolume(2);">Q5</button>
+    <button onclick="m.setQ(10);m.setVolume(1);">Q10</button>
+    <button onclick="m.setQ(15);m.setVolume(0.5);">Q15</button>
+    <button onclick="m.setQ(20);m.setVolume(0.3);">Q20</button>
+    <button onclick="m.setQ(25);m.setVolume(0.2);">Q25</button>
 
 
 </body>

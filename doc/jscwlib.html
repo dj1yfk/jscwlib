@@ -48,7 +48,7 @@ Explorer), there's a fall-back to the <a href="https://developer.mozilla.org/en-
     <pre>&lt;!DOCTYPE html&gt;
 &lt;script src="https://fkurz.net/ham/jscwlib/src/jscwlib.js"&gt;&lt;/script&gt;
 
-&lt;br&gt;&lt;div id="player"&gt;&lt;/div&gt;    
+&lt;div id="player"&gt;&lt;/div&gt;    
 
 &lt;script&gt;
   var m = new jscw();
@@ -76,7 +76,10 @@ Explorer), there's a fall-back to the <a href="https://developer.mozilla.org/en-
 <p>Note that browsers typically only play sound if it was created by a
 keyboard/mouse/touch event, therefore the need to press a button to start
 it.</p>
-<p>Live examples: <a href="jscwlib/example/min_example.html">Minimum example</a> (above), <a href="jscwlib/example/pileup.html">Pileup</a></p>
+<p>Live examples: <a href="jscwlib/example/min_example.html">Minimum
+    example</a> (above), <a href="jscwlib/example/pileup.html">Pileup</a>, <a
+    href="jscwlib/example/jscwtest.html">Oscilloscope, visualisation of CW
+    timing </a>.</p>
 <h2>Methods</h2>
 <dl>
 <dt>init()</dt>
@@ -92,8 +95,10 @@ character speed.</dd>
 <dd>When true, generate code with <em>real</em> character speed, not PARIS timing.</dd>
 <dt>setFreq(x)</dt>
 <dd>Set the tone frequency to <code>x</code> Hertz.</dd>
-<dt>setFilter()</dt>
-<dd>Set the cutoff-frequency of the low-pass filter that shapes the generated tone to <code>x</code> Hz.</dd>
+<dt>setFilter(f)</dt>
+<dd>Set the cutoff-frequency of the low-pass filter that shapes the generated tone to <code>f</code> Hz.</dd>
+<dt>setQ(q)</dt>
+<dd>Set low-pass filter Q to <code>q</code>.</dd>
 <dt>setText(text)</dt>
 <dd>Set <code>text</code> to be played. Does not start playing.</dd>
 <dt>setVolume(v)</dt>
@@ -138,6 +143,8 @@ the calculation of speed.</dd>
 <dt>renderPlayer(div, obj)</dt>
 <dd>Renders a player UI (with progress bar and buttons for Stop, Play/Pause and
 the possibility to change CW parameters) for player <code>obj</code> into a <code>div</code>.</dd>
+<dt>oscilloscope(c)</dt>
+<dd>Draws the currently generated waveform on canvas <code>c</code>.</dd>
 </dl>
 <h3>Events</h3>
 <dl>
