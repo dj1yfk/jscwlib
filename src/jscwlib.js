@@ -684,7 +684,7 @@
         this.renderPlayer = function(el, obj) {
             var el = document.getElementById(el);
             el.innerHTML = "";
-            el.style.width = '200px';
+            el.style.width = '220px';
             el.style.borderWidth = 'thin';
             el.style.borderStyle= 'dashed';
             el.style.padding = '6px';
@@ -692,7 +692,7 @@
             el.style.fontFamily = 'Ubuntu,calibri,tahoma,arial,sans-serif';
 
             var pb = document.createElement("progress");
-            pb.style.width = '195px';
+            pb.style.width = '215px';
             pb.style.height = '15px';
             pb.id = "pb";
 
