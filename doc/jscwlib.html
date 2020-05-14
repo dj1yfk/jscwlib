@@ -53,7 +53,7 @@ Explorer), there's a fall-back to the <a href="https://developer.mozilla.org/en-
 &lt;script&gt;
   var m = new jscw();
   m.setWpm(30);
-  m.setText("hello");
+  m.setText("go vegan");
   m.renderPlayer('player', m);
 &lt;/script&gt;
 </pre>
@@ -67,7 +67,7 @@ Explorer), there's a fall-back to the <a href="https://developer.mozilla.org/en-
 <script>
   var m = new jscw();
   m.setWpm(30);
-  m.setText("hello");
+  m.setText("go vegan");
   m.renderPlayer('player', m);
 </script>
 </div>
@@ -92,6 +92,8 @@ the characters are stretched to achieve the effective speed with a higher
 character speed.</dd>
 <dt>setReal(bool)</dt>
 <dd>When true, generate code with <em>real</em> character speed, not PARIS timing.</dd>
+<dt>setEws(n)</dt>
+<dd>Add extra word spacing of <em>n</em> &times; the normal word space.</dd>
 <dt>setFreq(x)</dt>
 <dd>Set the tone frequency to <code>x</code> Hertz.</dd>
 <dt>setFilter(f)</dt>

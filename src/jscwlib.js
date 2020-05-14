@@ -20,15 +20,23 @@
             " ":" " };
         var el_len = { ".": 1, "-": 3, " ": 4 };
 
-        this.controls_options = {"wpm_min": 5, "wpm_max": 50, "eff_min": 1, "eff_max": 50, "freq_min": 300, "freq_max": 1500, "volume_min": 0, "volume_max": 100};
+        this.controls_options = {
+            "wpm_min": 5, "wpm_max": 50, 
+            "eff_min": 1, "eff_max": 50, 
+            "ews_min": 0, "ews_max": 5, 
+            "freq_min": 300, "freq_max": 1500, 
+            "volume_min": 0, "volume_max": 100
+        };
+
         this.control_labels = {};
         this.control_inputs = {};
 
         this.wpm = 20;
         this.eff = 1000;
+        this.ews = 0;           // extra word space
         this.freq = 600;
         this.volume = 0.5;      // relative volume how CW is generated internally
-        this.playvolume = 1;  // player volume (relative * player volume = total volume)
+        this.playvolume = 1;    // player volume (relative * player volume = total volume)
         this.dotlen;
         this.playLength = 0;
         this.playEnd = 0;
@@ -186,6 +194,7 @@
         }
 
         this.setWpm = function (w) {
+            console.log("setWpm = " + w);
             w = parseInt(w);
             this.wpm = w;
             if (this.mode == 'audio' && this.init_done)
@@ -199,6 +208,15 @@
                 this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
             e = parseInt(e);
             this.eff = e;
+            this.updateControls();
+        }
+
+        this.setEws = function (w) {
+            console.log("setEws = " + w);
+            w = parseFloat(w);
+            this.ews = w;
+            if (this.mode == 'audio' && this.init_done)
+                this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
             this.updateControls();
         }
 
@@ -244,6 +262,9 @@
             }
             if (this.control_labels["eff"]) {
                 this.control_labels["eff"].innerHTML = this.eff + "&nbsp;WpM";
+            }
+            if (this.control_labels["ews"]) {
+                this.control_labels["ews"].innerHTML = (this.ews + 1) + "&nbsp;&times;";
             }
             if (this.control_labels["freq"]) {
                 this.control_labels["freq"].innerHTML = this.freq + "&nbsp;Hz";
@@ -376,7 +397,7 @@
         this.setText = function(text) {
             this.text = text.toLowerCase();
             if (this.btn_down) {
-                this.btn_down.href = this.cgiurl + "cw.mp3?s=" + this.wpm + "&e=" + this.eff + "&f=" + this.freq + "&t=" + this.text + "%20%20%20%20%5E";
+                this.btn_down.href = this.cgiurl + "cw.mp3?s=" + this.wpm + "&e=" + this.eff + "&f=" + this.freq + "&t=|W" + this.ews + " " + this.text + "%20%20%20%20%5E";
                 this.btn_down.download = "cw.mp3";
             }
         }
@@ -398,7 +419,7 @@
 
             // fallback to HTML5
             if (this.mode == 'embed') {
-                this.player.src = this.cgiurl + "cw.mp3?s=" + this.wpm + "&e=" + this.eff + "&f=" + this.freq + "&t=" + text + "%20%20%20%20%5E";
+                this.player.src = this.cgiurl + "cw.mp3?s=" + this.wpm + "&e=" + this.eff + "&f=" + this.freq + "&t=|W" + this.ews + " " + text + "%20%20%20%20%5E";
                 this.player.play();
                 console.log(this.player);
                 return;
@@ -568,6 +589,9 @@
                 }
                 else {
                     time += this.wordspace;
+                    if (this.ews) {
+                        time += (this.wordspace + this.letterspace) * this.ews;
+                    }
                 }
 
                 // is the prefix over?
@@ -875,6 +899,38 @@
             td.appendChild(eff);
             td = tr.insertCell();
             td.appendChild(eff_label);
+
+            // ews
+            var ews = document.createElement("input"); 
+            ews.id = "ews";
+            ews.type = "range";
+            ews.min = obj.controls_options["ews_min"];
+            ews.max = obj.controls_options["ews_max"];
+            ews.value = obj.ews;
+            ews.step = 0.1;
+            ews.style.display = "inline-block";
+            ews.style.verticalAlign = "middle";
+            ews.style.width = "150px";
+            ews.style.height = "10px";
+            ews.onchange = function () {
+                obj.setEws(this.value);
+            }
+
+            var ews_label = document.createElement("label");
+            ews_label.htmlFor = "ews";
+            ews_label.style.fontSize = "12px";
+            ews_label.innerHTML = "0";
+            
+            obj.control_labels["ews"] = ews_label;
+            obj.control_inputs["ews"] = ews;
+
+            tr = tbl.insertRow();
+            td = tr.insertCell();
+            td.appendChild(document.createTextNode("Word space:"));
+            td = tr.insertCell();
+            td.appendChild(ews);
+            td = tr.insertCell();
+            td.appendChild(ews_label);
 
             // freq
             var freq = document.createElement("input"); 
