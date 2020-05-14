@@ -24,7 +24,8 @@
             "wpm_min": 5, "wpm_max": 50, 
             "eff_min": 1, "eff_max": 50, 
             "ews_min": 0, "ews_max": 5, 
-            "freq_min": 300, "freq_max": 1500, 
+            "freq_min": 300, "freq_max": 1500,
+            "edge_min": 1, "edge_max": 25,
             "volume_min": 0, "volume_max": 100
         };
 
@@ -37,6 +38,7 @@
         this.freq = 600;
         this.volume = 0.5;      // relative volume how CW is generated internally
         this.playvolume = 1;    // player volume (relative * player volume = total volume)
+        this.q = 10;
         this.dotlen;
         this.playLength = 0;
         this.playEnd = 0;
@@ -75,7 +77,8 @@
             else {
                 this.gainNode = this.audioCtx.createGain(); // this gainNode modulates the CW
                 this.gainNodePlay = this.audioCtx.createGain(); // this gainNode is the overall volume
-                this.gainNodeLimiter = this.audioCtx.createGain(); // this limits the osc output so we don't start clipping even with a high Q of the filter
+                this.gainNodeLimiter = this.audioCtx.createGain(); // this limits the osc output to avoid clipping with high Q filters 
+
                 this.oscillator = this.audioCtx.createOscillator();
                 this.biquadFilter = this.audioCtx.createBiquadFilter();
                 this.noiseFilter = this.audioCtx.createBiquadFilter();
@@ -106,7 +109,7 @@
 
                 this.biquadFilter.type = "lowpass";
                 this.biquadFilter.frequency.setValueAtTime(500, this.audioCtx.currentTime);
-                this.biquadFilter.Q.setValueAtTime(10, this.audioCtx.currentTime);
+                this.biquadFilter.Q.setValueAtTime(this.q, this.audioCtx.currentTime);
 
                 this.oscillator.type = 'sine';
                 this.oscillator.frequency.setValueAtTime(600, this.audioCtx.currentTime); // value in hertz
@@ -120,7 +123,7 @@
 
                 this.gainNode.gain.value = 0;
                 this.gainNodePlay.gain.value = this.playvolume;
-                this.gainNodeLimiter.gain.value = 0.5;
+                this.gainNodeLimiter.gain.value = 0.55;
                 this.oscillator.start();
             }
             this.init_done = true;
@@ -147,7 +150,12 @@
 
         this.setQ = function (q) {
             console.log("setQ = " + q);
+            this.q = q;
             this.biquadFilter.Q.setValueAtTime(q, this.audioCtx.currentTime);
+            // the filter gain depends on the Q - this will compensate for it
+            // (values determined experimentally)
+            this.gainNodeLimiter.gain.setValueAtTime(1.8 * Math.exp(-0.115 * q), this.audioCtx.currentTime);
+            this.updateControls();
         }
 
         this.setReal = function (r) {
@@ -269,6 +277,9 @@
             if (this.control_labels["freq"]) {
                 this.control_labels["freq"].innerHTML = this.freq + "&nbsp;Hz";
             }
+            if (this.control_labels["edge"]) {
+                this.control_labels["edge"].innerHTML = this.q + "&nbsp;";
+            }
             if (this.control_labels["vol"]) {
                 this.control_labels["vol"].innerHTML = Math.round(this.playvolume * 100) + "&nbsp;%";
             }
@@ -278,7 +289,7 @@
             console.log("enableControls = " + b);
             console.log(obj.control_inputs);
             for (var p in obj.control_inputs) {
-                if (p == "vol")
+                if (p == "vol" || p == "edge")
                     continue;
                 obj.control_inputs[p].disabled = !b;
             }
@@ -962,6 +973,40 @@
             td.appendChild(freq);
             td = tr.insertCell();
             td.appendChild(freq_label);
+
+            // edge
+            var edge = document.createElement("input"); 
+            edge.id = "edge";
+            edge.type = "range";
+            edge.min = obj.controls_options["edge_min"];
+            edge.max = obj.controls_options["edge_max"];
+            edge.value = obj.edge;
+            edge.step = 1;
+            edge.style.display = "inline-block";
+            edge.style.verticalAlign = "middle";
+            edge.style.width = "150px";
+            edge.onchange = function () {
+                obj.setQ(this.value);
+            }
+
+            var edge_label = document.createElement("label");
+            edge_label.htmlFor = "edge";
+            edge_label.style.fontSize = "12px";
+            edge_label.innerHTML = "10";
+
+            obj.control_labels["edge"] = edge_label;
+            obj.control_inputs["edge"] = edge;
+
+            tr = tbl.insertRow();
+            td = tr.insertCell();
+            td.appendChild(document.createTextNode("Edge:"));
+            td = tr.insertCell();
+            td.appendChild(edge);
+            td = tr.insertCell();
+            td.appendChild(edge_label);
+
+
+
 
             // volume
             var vol = document.createElement("input"); 
