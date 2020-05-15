@@ -56,7 +56,7 @@
 
         this.controls_options = {
             "wpm_min": 5, "wpm_max": 50, 
-            "eff_min": 1, "eff_max": 50, 
+            "eff_min": 0, "eff_max": 50, 
             "ews_min": 0, "ews_max": 5, 
             "freq_min": 300, "freq_max": 1500,
             "edge_min": 1, "edge_max": 25,
@@ -67,7 +67,7 @@
         this.control_inputs = {};
 
         this.wpm = 20;
-        this.eff = 1000;
+        this.eff = 0;
         this.ews = 0;           // extra word space
         this.freq = 600;
         this.volume = 0.5;      // relative volume how CW is generated internally
@@ -304,7 +304,12 @@
                 this.control_labels["wpm"].innerHTML = this.wpm + "&nbsp;WpM";
             }
             if (this.control_labels["eff"]) {
-                this.control_labels["eff"].innerHTML = this.eff + "&nbsp;WpM";
+                if (this.eff) {
+                    this.control_labels["eff"].innerHTML = this.eff + "&nbsp;WpM";
+                }
+                else {
+                    this.control_labels["eff"].innerHTML =  "&nbsp;(off)";
+                }
             }
             if (this.control_labels["ews"]) {
                 this.control_labels["ews"].innerHTML = (this.ews + 1) + "&nbsp;&times;";
@@ -425,7 +430,7 @@
             var eff = this.eff;
             
             // real speed (not PARIS) => no farnsworth timing, eff = char speed
-            if (this.real) {
+            if (this.real || this.eff == 0) {
                 eff = this.wpm;
             }
 
@@ -927,8 +932,8 @@
             var eff = document.createElement("input"); 
             eff.id = "eff";
             eff.type = "range";
-            eff.min = obj.controls_options["wpm_min"];
-            eff.max = obj.controls_options["wpm_max"];
+            eff.min = obj.controls_options["eff_min"];
+            eff.max = obj.controls_options["eff_max"];
             eff.value = obj.eff;
             eff.step = 1;
             eff.style.display = "inline-block";
