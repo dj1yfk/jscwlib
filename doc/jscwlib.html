@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+       <meta charset="utf-8"/>
        <base href="//fkurz.net/ham/jscwlib.html">
-       <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
        <title>jscwlib - JavaScript CW (Morse Code) generator (Web Audio API)</title>
        <meta name="keywords" lang="en" content="morse code, morse generator, morse sound generator, morse javascript">
 	   <link rel="stylesheet" type="text/css" href="/fkurz.css">
@@ -53,7 +53,7 @@ Explorer), there's a fall-back to the <a href="https://developer.mozilla.org/en-
 &lt;script&gt;
   var m = new jscw();
   m.setWpm(30);
-  m.setText("go vegan");
+  m.setText("hello cześć привет");
   m.renderPlayer('player', m);
 &lt;/script&gt;
 </pre>
@@ -67,7 +67,7 @@ Explorer), there's a fall-back to the <a href="https://developer.mozilla.org/en-
 <script>
   var m = new jscw();
   m.setWpm(30);
-  m.setText("go vegan");
+  m.setText("hello cześć привет");
   m.renderPlayer('player', m);
 </script>
 </div>
@@ -82,7 +82,7 @@ it.</p>
 <h2>Methods</h2>
 <dl>
 <dt>init()</dt>
-<dd>Initialize the player.</dd>
+<dd>Initialize the player (optional - will be called internally if not done by the user).</dd>
 <dt>setWpm(x)</dt>
 <dd>Sets the character speed to <code>x</code> words per minute.</dd>
 <dt>setEff(x)</dt>
@@ -101,7 +101,9 @@ character speed.</dd>
 <dt>setQ(q)</dt>
 <dd>Set low-pass filter Q to <code>q</code>.</dd>
 <dt>setText(text)</dt>
-<dd>Set <code>text</code> to be played. Does not start playing.</dd>
+<dd>Set <code>text</code> to be played. Does not start playing yet. Text may
+contain latin or cyrillic characters. Additional character sets can easily be
+implemented.</dd>
 <dt>setVolume(v)</dt>
 <dd>Sets the volume to <code>v</code> (0 .. 100).</dd>
 <dt>play(text)</dt>
