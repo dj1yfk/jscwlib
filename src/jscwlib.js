@@ -91,6 +91,7 @@
         this.textEnd   = Number.MAX_VALUE;     // time when the actual text ends (i.e. without the "+")
         this.showSettings = false;
         this.startDelay = 0;    // delay in seconds before audio starts
+        this.prosign = false;   // we're within a prosign (no letter spaces)
 
         try {
     	    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -622,12 +623,24 @@
                             //alert(c);
                     }
                 }
+                else if (c == '<') {
+                    this.prosign = true;
+                }
+                else if (c == '>') {
+                    this.prosign = false;
+                    time += 2*this.dotlen;
+                }
                 else if (c != " ") {
                     var ti = this.gen_morse_timing(c, time);
                     if (ti) {
                         out = out.concat(this.gen_morse_timing(c, time));
                         time = out[out.length - 1]['t'];
-                        time += this.letterspace;
+                        if (!this.prosign) {
+                            time += this.letterspace;
+                        }
+                        else {
+                            time += this.dotlen;
+                        }
                         nc++;
                     }
                 }
