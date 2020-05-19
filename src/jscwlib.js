@@ -267,7 +267,6 @@
             console.log("setFreq: " + f);
             this.freq = f;
             if (this.mode == 'audio' && this.init_done) {
-                this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
                 this.oscillator.frequency.setValueAtTime(f, this.audioCtx.currentTime);
                 this.setFilter(f);
             }
@@ -328,7 +327,7 @@
         this.enableControls = function (obj, b) {
             console.log("enableControls = " + b);
             for (var p in obj.control_inputs) {
-                if (p == "vol" || p == "edge")
+                if (p == "vol" || p == "edge" || p == "freq")
                     continue;
                 obj.control_inputs[p].disabled = !b;
             }
