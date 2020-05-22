@@ -506,6 +506,7 @@
                 this.wpm = wpm_set;
                 this.eff = eff_set;
                 this.real = true;
+                this.updateControls();
             }
 
             var out = ret["timings"];
