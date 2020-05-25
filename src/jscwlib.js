@@ -385,6 +385,8 @@
             if (this.control_labels["vol"]) {
                 this.control_labels["vol"].innerHTML = Math.round(this.playvolume * 100) + "&nbsp;%";
             }
+
+            this.refresh_download_link();
         } 
 
         this.enableControls = function (obj, b) {
@@ -508,9 +510,12 @@
 
         this.setText = function(text) {
             this.text = text.toLowerCase();
+            this.refresh_download_link();
+        }
+
+        this.refresh_download_link = function() {
             if (this.btn_down) {
                 this.btn_down.href = this.cgiurl + "cw.mp3?d=001&s=" + this.wpm + "&e=" + this.eff + "&f=" + this.freq + "&t=|W" + this.ews + " " + this.text + "%20%20%20%20%5E";
-                this.btn_down.download = "cw.mp3";
             }
         }
 
