@@ -1,4 +1,4 @@
-    function jscw () {
+    function jscw (params) {
 
         var download_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4LjciIGhlaWdodD0iMTAiIHZpZXdCb3g9IjAgMCA4LjcgMTAiPjxwYXRoIHN0eWxlPSJzdHJva2U6IzAwMDtzdHJva2Utd2lkdGg6MC4yNnB4OyIgZD0ibSA0LjQsMi41IHYgNC43IGwgMS42LC0xLjYgdiAwLjMgbCAtMS42NywxLjY3IC0xLjY3LC0xLjY3IHYgLTAuMyBsIDEuNTYsMS42IDAsLTQuNyB6IiAvPjxwYXRoIHN0eWxlPSJzdHJva2U6IzAwMDtzdHJva2Utd2lkdGg6MC40OyIgZD0iTSAyLjUsOCBIIDYuMSIgLz48L3N2Zz4K";
         var play_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgdmlld0JveD0iMCAwIDEwIDEwIj48cGF0aCBkPSJNMyAyIEwzIDggTDcgNSBaIiBzdHlsZT0iZmlsbDojZmZmO3N0cm9rZS13aWR0aDowLjM7c3Ryb2tlOiMwMDA7c3Ryb2tlLWxpbmVqb2luOmJldmVsOyIvPjwvc3ZnPgo=";
@@ -182,6 +182,14 @@
         this.showSettings = false;
         this.startDelay = 0;    // delay in seconds before audio starts
         this.prosign = false;   // we're within a prosign (no letter spaces)
+
+        // override with values passed to the constructor
+        if (params) {
+            for (var p in params) {
+                this[p] = params[p];
+            }
+        }
+
 
         try {
     	    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();

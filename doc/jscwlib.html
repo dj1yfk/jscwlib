@@ -50,9 +50,8 @@ Explorer), there's a fall-back to the <a href="https://developer.mozilla.org/en-
 &lt;div id="player"&gt;&lt;/div&gt;    
 
 &lt;script&gt;
-  var m = new jscw();
-  m.setWpm(30);
-  m.setText("hello cześć привет");
+  var m = new jscw({"wpm": 25});
+  m.setText("hello cześć привет &lt;do&gt;おはよう&lt;sn&gt;");
   m.renderPlayer('player', m);
 &lt;/script&gt;
 </pre>
@@ -64,9 +63,8 @@ Explorer), there's a fall-back to the <a href="https://developer.mozilla.org/en-
 <div id="player"></div>
 
 <script>
-  var m = new jscw();
-  m.setWpm(30);
-  m.setText("hello cześć привет");
+  var m = new jscw({"wpm": 25});
+  m.setText("hello cześć привет <do>おはよう<sn>");
   m.renderPlayer('player', m);
 </script>
 </div>
@@ -78,6 +76,14 @@ it.</p>
     example</a> (above), <a href="jscwlib/example/pileup.html">Pileup</a>, <a
     href="jscwlib/example/jscwtest.html">Oscilloscope, visualisation of CW
     timing </a>.</p>
+<h2>Constructor</h2>
+<dl>
+    <dt>new jscw(params)</dt>
+    <dd><code>params</code> is an <em>optional</em> object containing initial
+    settings corresponding to the variables that you can later also set by
+    the methods listed below.<br>Example: <code>var m = new jscw({"wpm": 40,
+        "freq": 700, "text": "Hello"});</code></dd>
+</dl>
 <h2>Methods</h2>
 <dl>
 <dt>init()</dt>
