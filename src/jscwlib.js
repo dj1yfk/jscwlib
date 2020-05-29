@@ -550,6 +550,7 @@
         }
 
         this.setText = function(text) {
+            text = text.replace(/\|W/g, "|z");
             this.text = text.toLowerCase();
             this.refresh_download_link();
         }
@@ -589,7 +590,6 @@
              * changes wpm. So at this point we change |W to |z and later
              * handle |z commands instead of |W
              */
-
             text = text.replace(/\|W/g, "|z");
 
             text = text.toLowerCase();
