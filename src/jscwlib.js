@@ -583,6 +583,15 @@
                 return;
             }    
 
+            /*
+             * ugly: in ebook2cw we use |Wx to set the extra word spacing. Here
+             * we convert everything to lowercase so it becomes |w which
+             * changes wpm. So at this point we change |W to |z and later
+             * handle |z commands instead of |W
+             */
+
+            text = text.replace(/\|W/g, "|z");
+
             text = text.toLowerCase();
             this.setText(text);
 
@@ -729,6 +738,11 @@
                             break;
                         case 'e':
                             this.eff = arg[0];
+                            this.calcSpeed();
+                            break;
+                        case 'z':   // |W => extra word spacing
+                            this.ews = arg[0];
+                            console.log("EWS = " + this.ews);
                             this.calcSpeed();
                             break;
                         case 'v':
