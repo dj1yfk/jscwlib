@@ -344,15 +344,19 @@
             console.log("setWpm = " + w);
             w = parseInt(w);
             this.wpm = w;
-            if (this.mode == 'audio' && this.init_done)
+            if (this.mode == 'audio' && this.init_done) {
                 this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
+                this.gainNode.gain.setValueAtTime(0, this.audioCtx.currentTime);
+            }
             this.updateControls();
         }
  
         this.setEff = function (e) {
             console.log("setEff = " + e);
-            if (this.mode == 'audio' && this.init_done)
+            if (this.mode == 'audio' && this.init_done) {
                 this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
+                this.gainNode.gain.setValueAtTime(0, this.audioCtx.currentTime);
+            }
             e = parseInt(e);
             this.eff = e;
             this.updateControls();
@@ -362,8 +366,10 @@
             console.log("setEws = " + w);
             w = parseFloat(w);
             this.ews = w;
-            if (this.mode == 'audio' && this.init_done)
+            if (this.mode == 'audio' && this.init_done) {
                 this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
+                this.gainNode.gain.setValueAtTime(0, this.audioCtx.currentTime);
+            }
             this.updateControls();
         }
 
