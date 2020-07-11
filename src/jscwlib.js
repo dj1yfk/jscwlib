@@ -425,7 +425,7 @@
                     this.control_labels["ews"].innerHTML = (this.ews + 1) + "&nbsp;&times;";
                 }
                 else {
-                    this.control_labels["ews"].innerHTML = "&nsbp;(off)";
+                    this.control_labels["ews"].innerHTML = "&nbsp;(off)";
                 }
             }
             if (this.control_labels["freq"]) {
