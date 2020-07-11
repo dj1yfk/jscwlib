@@ -421,7 +421,12 @@
                 }
             }
             if (this.control_labels["ews"]) {
-                this.control_labels["ews"].innerHTML = (this.ews + 1) + "&nbsp;&times;";
+                if (this.ews) {
+                    this.control_labels["ews"].innerHTML = (this.ews + 1) + "&nbsp;&times;";
+                }
+                else {
+                    this.control_labels["ews"].innerHTML = "&nsbp;(off)";
+                }
             }
             if (this.control_labels["freq"]) {
                 this.control_labels["freq"].innerHTML = this.freq + "&nbsp;Hz";
