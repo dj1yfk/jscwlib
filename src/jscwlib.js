@@ -672,11 +672,23 @@
             // array. For short text, this is not noticeable at all.
             start += out.length/10000;
 
+            // if there's a "lamp" element, we generate visual CW.
+            var lamp = document.getElementById('lamp')
+
             for (var i = 0; i < out.length; i++) {
                 var s = start + out[i]['t'];
                 // volume change
                 if (out[i].hasOwnProperty('v')) {
                     this.gainNode.gain.setValueAtTime(out[i]['v'], s);
+                    var tmp;
+                    if (lamp) {
+                        if (out[i]['v'] == 0) {
+                            setTimeout(function() { lamp.style.backgroundColor = 'white';}, out[i]['t']*1000);
+                        }
+                        else {
+                            setTimeout(function() { lamp.style.backgroundColor = 'yellow';}, out[i]['t']*1000);
+                        }
+                    }
                 }
                 // freq change
                 if (out[i].hasOwnProperty('f')) {
