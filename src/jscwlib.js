@@ -578,6 +578,14 @@
         }
 
         this.setText = function(text) {
+            // text may be base64 encoded
+            try {
+                text = atob(text)
+                console.log("setText: Text is base64 encoded.");
+            }
+            catch (e){
+                console.log("setText: Text is not base64 encoded.");
+            }
             text = text.replace(/\|W/g, "|z");
             this.text = text.toLowerCase();
             this.refresh_download_link();
