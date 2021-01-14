@@ -45,7 +45,7 @@ Explorer), there's a fall-back to the <a href="https://developer.mozilla.org/en-
 
 <h2>Example usage</h2>
 <div class="container">
-<div>Code</div><div>Live Result</div>
+<div>Code</div><div>Live Result (change the text if you wish)</div>
 <div style="color:white;background-color:black;border:1px solid #000000;">
     <pre>&lt;!DOCTYPE html&gt;
 &lt;script src="https://fkurz.net/ham/jscwlib/src/jscwlib.js"&gt;&lt;/script&gt;
@@ -53,8 +53,8 @@ Explorer), there's a fall-back to the <a href="https://developer.mozilla.org/en-
 &lt;div id="player"&gt;&lt;/div&gt;    
 
 &lt;script&gt;
-  var m = new jscw({"wpm": 25});
-  m.setText("hello cześć привет &lt;do&gt;おはよう&lt;sn&gt;");
+  var m = new jscw({"wpm": <span id='wpm'>25</span>});
+  m.setText("<span id='txt'>hello cześć привет &lt;do&gt;おはよう&lt;sn&gt;</span>");
   m.renderPlayer('player', m);
 &lt;/script&gt;
 </pre>
@@ -69,7 +69,19 @@ Explorer), there's a fall-back to the <a href="https://developer.mozilla.org/en-
   var m = new jscw({"wpm": 25});
   m.setText("hello cześć привет <do>おはよう<sn>");
   m.renderPlayer('player', m);
+
+  function sync() {
+      console.log("SYNC");
+      var txt = document.getElementById('ta').value;
+      m.setText(txt);
+      document.getElementById('txt').textContent = txt;
+      document.getElementById('wpm').textContent = m.wpm;
+  }
+
+  m.onParamChange = sync;
+
 </script>
+<textarea id='ta' style="margin:10px;" onkeyup="sync(this.value);" cols="25" rows="5">hello cześć привет &lt;do&gt;おはよう&lt;sn&gt;</textarea>
 </div>
 </div>
 <p>Note that browsers typically only play sound if it was created by a
@@ -165,6 +177,11 @@ the possibility to change CW parameters) for player <code>obj</code> into a <cod
 </dl>
 <h3>Events</h3>
 <dl>
+<dt>onParamChange<dt>
+<dd>A user defined function that will be invoked each time the user changed
+parameters if the player. E.g.:
+<pre><code>m.onParamChange = function () { alert("Parameters changed"); }
+</code></pre></dd>
 <dt>onPlay<dt>
 <dd>A user defined function that will be invoked each time the player is
 started. E.g.:

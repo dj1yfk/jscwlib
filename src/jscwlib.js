@@ -426,6 +426,12 @@
         }
 
         this.updateControls = function () {
+
+            if (this.onParamChange) {
+                console.log("onParamChange");
+                this.onParamChange();
+            }
+
             if (this.control_labels["wpm"]) {
                 this.control_labels["wpm"].innerHTML = this.wpm + "&nbsp;WpM";
             }
