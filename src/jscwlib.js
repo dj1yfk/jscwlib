@@ -934,6 +934,10 @@
                     if (obj.btn_pp.src != play_svg) {
                         obj.btn_pp.src = play_svg;
                         obj.enableControls(obj, true);
+                        if (obj.onFinished && obj.getRemaining() == 0) { /* onFinished callback? */
+                            console.log("onFinished");
+                            obj.onFinished();
+                        }
                     }
                 }
                 else {
@@ -942,6 +946,8 @@
                         obj.enableControls(obj, false);
                     }
                 }
+
+
             }
         }
 
