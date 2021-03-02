@@ -190,6 +190,7 @@
         this.showSettings = false;
         this.startDelay = 0;    // delay in seconds before audio starts
         this.prosign = false;   // we're within a prosign (no letter spaces)
+        this.finishedTimeout = null;
 
         // see if volume is saved in localStorage
         try {
@@ -630,6 +631,7 @@
                 this.onPlay();
             }
 
+
             this.paused = false;
 
             var text = playtext ? playtext : this.text;
@@ -725,6 +727,11 @@
             this.playEnd = start + this.playLength;
             this.playTiming = out;
 
+            if (this.onFinished) {
+                clearTimeout(this.finishedTimeout);
+                this.finishedTimeout = setTimeout(this.onFinished, this.playLength*1000);
+            }
+
         } // play
 
         // pause simply suspends this audioCtx
@@ -732,10 +739,12 @@
             if (this.audioCtx.state === "running") {
                 this.paused = true;
                 this.audioCtx.suspend();
+                clearTimeout(this.finishedTimeout);
             }
             else {
                 this.paused = false;
                 this.audioCtx.resume();
+                this.finishedTimeout = setTimeout(this.onFinished, this.getRemaining()*1000);
             }
             console.log("paused: " + this.paused);
         }
@@ -745,6 +754,7 @@
                 this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
                 this.gainNode.gain.setValueAtTime(0, this.audioCtx.currentTime);
                 this.playEnd = 0;
+                clearTimeout(this.finishedTimeout);
             }
             else {
                 this.player.pause();
@@ -934,11 +944,7 @@
                     if (obj.btn_pp.src != play_svg) {
                         obj.btn_pp.src = play_svg;
                         obj.enableControls(obj, true);
-                        if (obj.onFinished && obj.getRemaining() == 0) { /* onFinished callback? */
-                            console.log("onFinished");
-                            obj.onFinished();
-                        }
-                    }
+                   }
                 }
                 else {
                     if (obj.btn_pp.src != pause_svg) {

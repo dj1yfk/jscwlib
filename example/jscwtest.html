@@ -5,6 +5,9 @@
     <script>
     var m = new jscw();
     m.setText("Hello");
+    m.onFinished = function () {
+        console.log("onFinished");
+    }
 
     window.setInterval(ret, 100);
     function ret () {
