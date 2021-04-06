@@ -719,7 +719,8 @@
                 }
                 // freq change
                 if (out[i].hasOwnProperty('f')) {
-           		    this.oscillator.frequency.setValueAtTime(out[i]['f'], s); // value in hertz
+                    this.oscillator.frequency.setValueAtTime(out[i]['f'], s); // value in hertz
+                    this.biquadFilter.frequency.setValueAtTime(out[i]['f'], s);
                 }
             }
 
