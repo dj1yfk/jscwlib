@@ -48,20 +48,8 @@ Explorer), there's a fall-back to the <a href="https://developer.mozilla.org/en-
 
 <h2>Example usage</h2>
 <div class="container">
-<div>Code</div><div>Live Result (change the text if you wish)</div>
-<div style="color:white;background-color:black;border:1px solid #000000;">
-    <pre>&lt;!DOCTYPE html&gt;
-&lt;script src="https://fkurz.net/ham/jscwlib/src/jscwlib.js"&gt;&lt;/script&gt;
-
-&lt;div id="player"&gt;&lt;/div&gt;    
-
-&lt;script&gt;
-  var m = new jscw({"wpm": <span id='wpm'>25</span>});
-  m.setText("<span id='txt'>hello cześć привет &lt;do&gt;おはよう&lt;sn&gt;</span>");
-  m.renderPlayer('player', m);
-&lt;/script&gt;
-</pre>
-</div>
+<div>Live Result (change the text if you wish)</div>
+<div>Code</div>
 <div style="color:black;background-color:#ffffff;border:1px solid #000000;">
 
 <script src="https://fkurz.net/ham/jscwlib/src/jscwlib.js"></script>
@@ -87,6 +75,20 @@ Explorer), there's a fall-back to the <a href="https://developer.mozilla.org/en-
 </script>
 <textarea id='ta' style="margin:10px;" onkeyup="sync(this.value);" cols="25" rows="5">hello cześć привет &lt;do&gt;おはよう&lt;sn&gt;</textarea>
 </div>
+<div style="color:white;background-color:black;border:1px solid #000000;">
+    <pre>&lt;!DOCTYPE html&gt;
+&lt;script src="https://fkurz.net/ham/jscwlib/src/jscwlib.js"&gt;&lt;/script&gt;
+
+&lt;div id="player"&gt;&lt;/div&gt;    
+
+&lt;script&gt;
+  var m = new jscw({"wpm": <span id='wpm'>25</span>});
+  m.setText("<span id='txt'>hello cześć привет &lt;do&gt;おはよう&lt;sn&gt;</span>");
+  m.renderPlayer('player', m);
+&lt;/script&gt;
+</pre>
+</div>
+
 </div>
 <p>Note that browsers typically only play sound if it was created by a
 keyboard/mouse/touch event, therefore the need to press a button to start
@@ -210,6 +212,15 @@ It is published under the very liberal MIT license.</p>
 <hr>
 <h2>Author</h2>
 <p><em>jscwlib</em> was written by Fabian Kurz, DJ1YFK &lt;<a href="mailto:fabian&#64;fkurz.net" >fabian@fkurz.net</a>&gt;.
+<hr>
+<h2>Use cases</h2>
+<p>Here are a few real life examples where jscwlib is or can be used:</p>
+<ul>
+    <li><a href="https://lcwo.net/">LCWO.net</a> uses jscwlib as the primary Morse generator</li>
+    <li>You can embed jscwlib in <a href="https://apps.ankiweb.net/">Anki</a> cards (<a href="jscwlib/example/anki.html">template</a>)! (tnx Matt, KI5PGL)</li>
+    <li>Some small neat CW trainers by <a href="https://ji1jdi.hatenablog.com/">JI1JDI</a> on his blog.</li>
+    <li><a href="http://www.elkins.org/">K5JF's</a> Morse training site uses jscwlib.</li>
+</ul>
 
 <br>
 <hr>
