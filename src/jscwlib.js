@@ -202,6 +202,16 @@
         catch (e) {
             console.log("No volume in local storage.");
         }
+        // see if Q is saved in localStorage
+        try {
+            var ql = parseFloat(localStorage.getItem("jscwlib_q"));
+            if (ql >= 0 && ql <= 25) {
+                this.q = ql;
+            }
+        }
+        catch (e) {
+            console.log("No Q in local storage.");
+        }
 
         // override default parameters with values passed to the constructor
         if (params) {
@@ -283,6 +293,9 @@
                 this.gainNodePlay.gain.value = this.playvolume;
                 this.gainNodeLimiter.gain.value = 0.55;
                 this.oscillator.start();
+
+                this.setFreq(this.freq);
+                this.setQ(this.q);
             }
             this.init_done = true;
         }
@@ -308,6 +321,13 @@
 
         this.setQ = function (q) {
             console.log("setQ = " + q);
+            /* try storing Q in local storage */
+            try {
+                localStorage.setItem('jscwlib_q', q);
+            }
+            catch (e) {
+                console.log("localStorage not available. Not saving q.");
+            }
             this.q = q;
             this.biquadFilter.Q.setValueAtTime(q, this.audioCtx.currentTime);
             // the filter gain depends on the Q - this will compensate for it
