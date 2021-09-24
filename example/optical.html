@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<meta charset="utf-8"/>
+<body>
+    <script src="https://fkurz.net/ham/jscwlib/src/jscwlib.js"></script>
+    <script>
+    var group = '';
+    var m = new jscw();
+    m.setText(group);
+    m.setVolume(0);
+
+    function play() {
+        var c = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        group = '';
+        for (var i = 0; i < 5; i++) {
+            group += c.charAt(Math.floor(Math.random() * c.length));
+        }
+        m.setText(group);
+        m.play();
+    }
+
+    function show () {
+        document.getElementById('gr').innerHTML = group;
+    }
+
+
+    </script>
+    <div id="lamp" style="background-color:white;"><br><br><br><br><br></div>
+
+    <br>
+    <br>
+    WpM (<span id="wpm">20</span>): <input type="range" min="5" max="100" step="1" onChange="m.setWpm(this.value);document.getElementById('wpm').innerHTML=this.value;"> <br>
+    <br>
+
+    <button onClick="javascript:play();">Play new group</button> 
+    <button onClick="javascript:show();">Show group</button> 
+
+    <br>
+    <div id="gr">.</div>
+
+
+    <div class="smallplayer" id="ply">
+    </div>
+    <script>
+        m.renderPlayer("ply", m);
+    </script>
+    <a href="https://fkurz.net/ham/jscwlib.html">jscwlib - homepage</a>
+
+</body>

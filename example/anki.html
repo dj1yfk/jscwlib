@@ -1,0 +1,19 @@
+<!-- Template for an Anki card which plays the word in Morse code.
+     Note that embedding the script with a <script> tag does not work reliably,
+     thus the hack with a XMLHttpRequest. Tnx to KI5PGL who came up with the
+     idea to use jscwlib in Anki! -->
+<div id="player"></div>  
+<script>
+    var r = new XMLHttpRequest();
+    r.open("GET", "https://fkurz.net/ham/jscwlib/src/jscwlib.js");
+    r.onreadystatechange = function () {
+        eval(r.responseText);
+        var m = new jscw();
+        m.setWpm(30);
+        m.setEff(30);
+        m.setFreq(600);
+        m.setText("{{Word}}");
+        m.renderPlayer('player', m);
+    }
+    r.send();
+</script>

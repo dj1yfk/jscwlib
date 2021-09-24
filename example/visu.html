@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<meta charset="utf-8"/>
+<body>
+    <table><tr><td><canvas width=245 height=200 id="o1"></canvas></td><td><canvas width=245 height=200 id="o2"></canvas></td></tr><tr><td><div id="p1"></div></td><td><div id="p2"></div></td></tr></table>
+    <script src="https://fkurz.net/ham/jscwlib/src/jscwlib.js"></script>
+    <script>
+        var m1 = new jscw({"text": "o", "freq": 300 });
+        var m2 = new jscw({"text": "o", "freq": 1000 });
+    </script>
+    <script>
+        m1.renderPlayer("p1", m1);
+        m2.renderPlayer("p2", m2);
+        m1.onFinished = function () { m1.oscilloscope(document.getElementById('o1')); }
+        m2.onFinished = function () { m2.oscilloscope(document.getElementById('o2')); }
+    </script>
+
+</body>
