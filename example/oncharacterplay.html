@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<script src="https://fkurz.net/ham/jscwlib/src/jscwlib.js"></script>
+
+<div id="player"></div>
+<p id="text"></p>
+
+<script>
+  var text = "Hello!";
+  var m = new jscw();
+  m.setWpm(30);
+  m.setText(text);
+  m.renderPlayer('player', m);
+
+  document.getElementById('text').innerHTML = text;
+
+  m.onCharacterPlay = function (c) {
+      var p = document.getElementById('text');
+      p.innerHTML = text.substr(0, c['n']) + 
+          '<b style="color:red;">' + text.substr(c['n'], 1) + '</b>' +
+          text.substr(c['n'] + 1);
+  }
+
+</script>
+
+
+<hr>
+<a href="https://fkurz.net/ham/jscwlib.html">jscwlib homepage</a>

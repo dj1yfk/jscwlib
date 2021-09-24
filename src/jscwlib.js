@@ -725,6 +725,9 @@
 
             for (var i = 0; i < out.length; i++) {
                 var s = start + out[i]['t'];
+                if (out[i].hasOwnProperty('c')) {
+                    this.setCharacterCb(out[i]['c'], out[i]['t']*1000);
+                }
                 // volume change
                 if (out[i].hasOwnProperty('v')) {
                     this.gainNode.gain.setValueAtTime(out[i]['v'], s);
@@ -783,6 +786,19 @@
             }
         }
 
+        // dummy function - will be called each time a character starts
+        // playing, and will receive the position in the string and the
+        // character itself in "c"
+        this.onCharacterPlay = function (c) {
+            console.log(c);
+        }
+
+        this.setCharacterCb = function (c, t) {
+            var cb = this.onCharacterPlay;
+            setTimeout(function() { cb(c); }, t);
+        }
+
+
         // in: a single character (except space) and a start time
         // out: array of timing for this character w/o spaces after the last element, starting at "time"
         this.gen_morse_timing = function(c, time) {
@@ -793,9 +809,6 @@
                 console.log("Don't know CW for character: '" + c + "'");
                 return false;
             }
-//            else {
-//                console.log("Character: " + c + " Code point: " + c.codePointAt(0));
-//            }
 
             for (var j = 0; j < l.length; j++) {
                 var el = l.substr(j,1);  // . or -
@@ -872,8 +885,9 @@
                 }
                 else if (c != " ") {
                     var ti = this.gen_morse_timing(c, time);
+                    ti[0]['c'] = {"n": i, "c": c };  // in the first element, include the character and the position, so we can fire the onCharacterPlay function
                     if (ti) {
-                        out = out.concat(this.gen_morse_timing(c, time));
+                        out = out.concat(ti);
                         time = out[out.length - 1]['t'];
                         if (!this.prosign) {
                             time += this.letterspace;

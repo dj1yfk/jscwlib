@@ -181,7 +181,7 @@ the possibility to change CW parameters) for player <code>obj</code> into a <cod
 <dt>oscilloscope(c)</dt>
 <dd>Draws the currently generated waveform on canvas <code>c</code>.</dd>
 </dl>
-<h3>Events</h3>
+<h3>Events / Callbacks</h3>
 <dl>
 <dt>onParamChange<dt>
 <dd>A user defined function that will be invoked each time the user changed
@@ -198,6 +198,11 @@ started. E.g.:
 <dd>A user defined function that will be invoked each time the player stopped
 playing. E.g.:
 <pre><code>m.onFinished = function () { alert("Player stopped"); }
+</code></pre></dd>
+<dt>onCharacterPlay</dt>
+<dd>A user defined function that will be invoked each time a character is
+played. <a href="jscwlib/example/oncharacterplay.html">See example usage</a>. E.g.:
+<pre><code>m.onCharacterPlay = function (c) { console.log(c); }
 </code></pre></dd>
 </dl>
 
