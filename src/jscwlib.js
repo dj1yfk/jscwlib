@@ -1,6 +1,6 @@
 /*  jscwlib - JavaScript Morse Code Library
  *
- *  Author:     Fabian Kurz, DJ1YFK
+ *  Author:     Fabian Kurz, DJ5CW
  *  Homepage:   https://fkurz.net/ham/jscwlib.html
  *  Repository: https://git.fkurz.net/dj1yfk/jscwlib
  *  

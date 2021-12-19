@@ -6,7 +6,7 @@
        <title>jscwlib - JavaScript CW (Morse Code) generator (Web Audio API)</title>
        <meta name="keywords" lang="en" content="morse code, morse generator, morse sound generator, morse javascript">
 	   <link rel="stylesheet" type="text/css" href="/fkurz.css">
-	   <link href="/dj1yfk.xml?filter=jscwlib" type="application/atom+xml" rel="alternate" title="jscwlib newsfeed">
+	   <link href="/dj5cw.xml?filter=jscwlib" type="application/atom+xml" rel="alternate" title="jscwlib newsfeed">
 <style>
 .container {
     display: inline-grid;
@@ -66,6 +66,7 @@ Explorer), there's a fall-back to the <a href="https://developer.mozilla.org/en-
       console.log("SYNC");
       var txt = document.getElementById('ta').value;
       m.setText(txt);
+      txt = txt.replace(/(?:\r\n|\r|\n)/g, " ");
       document.getElementById('txt').textContent = txt;
       document.getElementById('wpm').textContent = m.wpm;
   }
@@ -216,7 +217,7 @@ It is published under the very liberal MIT license.</p>
 
 <hr>
 <h2>Author</h2>
-<p><em>jscwlib</em> was written by Fabian Kurz, DJ1YFK &lt;<a href="mailto:fabian&#64;fkurz.net" >fabian@fkurz.net</a>&gt;.
+<p><em>jscwlib</em> was written by Fabian Kurz, DJ5CW &lt;<a href="mailto:fabian&#64;fkurz.net" >fabian@fkurz.net</a>&gt;.
 <hr>
 <h2>Use cases</h2>
 <p>Here are a few real life examples where jscwlib is or can be used:</p>
