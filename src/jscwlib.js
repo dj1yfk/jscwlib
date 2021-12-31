@@ -632,7 +632,7 @@
 
         this.refresh_download_link = function() {
             if (this.btn_down) {
-                this.btn_down.href = this.cgiurl + "cw.mp3?d=001&s=" + this.wpm + "&e=" + this.eff + "&f=" + this.freq + "&t=|W" + this.ews + " " + this.text;
+                this.btn_down.href = this.cgiurl + "cw.mp3?d=001&s=" + this.wpm + "&e=" + this.eff + "&f=" + this.freq + "&t=|W" + this.ews + " " + this.text.replace('|z', '|W');
                 // Silently remove anything above 8k characters to avoid
                 // hitting the maximum request URI length of Apache running ebook2cw.
                 if (this.btn_down.href.length > 8000) {
