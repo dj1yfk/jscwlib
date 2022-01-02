@@ -65,8 +65,8 @@ Explorer), there's a fall-back to the <a href="https://developer.mozilla.org/en-
   function sync() {
       console.log("SYNC");
       var txt = document.getElementById('ta').value;
-      m.setText(txt);
       txt = txt.replace(/(?:\r\n|\r|\n)/g, " ");
+      m.setText(txt);
       document.getElementById('txt').textContent = txt;
       document.getElementById('wpm').textContent = m.wpm;
   }
