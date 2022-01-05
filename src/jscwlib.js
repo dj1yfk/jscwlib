@@ -1150,7 +1150,7 @@
             pop.style.fontSize = "12px";
             pop.style.visibility = "hidden";
             pop.innerHTML = '<b>Settings</b>';
-            obj.pop = pop
+            obj.pop = pop;
 
             // controls go into a table
 
