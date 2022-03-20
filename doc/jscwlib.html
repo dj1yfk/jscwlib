@@ -24,6 +24,8 @@
 <hr>
 <h2>Status</h2>
 <dl>
+		<dt><strong>2022-March-20</strong></dt><dd>Release v0.2.2. Added Arabic
+        characters and some more improvements - see <a href="https://git.fkurz.net/dj1yfk/jscwlib/commits/branch/master">commit history!</a></dd>
 		<dt><strong>2021-April-6</strong></dt><dd>Release v0.2.1. Various small
 		improvements - see <a href="https://git.fkurz.net/dj1yfk/jscwlib/commits/branch/master">commit
 		history!</a></dd>
@@ -67,6 +69,7 @@ Explorer), there's a fall-back to the <a href="https://developer.mozilla.org/en-
       var txt = document.getElementById('ta').value;
       txt = txt.replace(/(?:\r\n|\r|\n)/g, " ");
       m.setText(txt);
+      txt = txt.replace(/\"/g, '\\"');
       document.getElementById('txt').textContent = txt;
       document.getElementById('wpm').textContent = m.wpm;
   }
@@ -212,7 +215,7 @@ played. <a href="jscwlib/example/oncharacterplay.html">See example usage</a>. E.
 <p>The latest version of the library can be found in the git repository: <a href="https://git.fkurz.net/dj1yfk/jscwlib/">https://git.fkurz.net/dj1yfk/jscwlib/</a>.
 It is published under the very liberal MIT license.</p>
 <p style="max-width: 90em;">You may directly embed the library into your own site by hot-linking to 
-<a href="https://fkurz.net/ham/jscwlib/releases/jscwlib-0.2.1.js">https://fkurz.net/ham/jscwlib/releases/jscwlib-0.2.1.js</a>
+<a href="https://fkurz.net/ham/jscwlib/releases/jscwlib-0.2.2.js">https://fkurz.net/ham/jscwlib/releases/jscwlib-0.2.2.js</a>
 </p>
 
 <hr>
