@@ -743,7 +743,7 @@
             var start = this.audioCtx.currentTime + 0.01;
 
             // if the generated audio is very long, we need to add an extra
-            // delay of about one second for every 10k elements in the our
+            // delay of about one second for every 10k elements in the out
             // array. For short text, this is not noticeable at all.
             start += out.length/10000;
 
