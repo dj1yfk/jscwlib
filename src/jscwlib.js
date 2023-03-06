@@ -748,6 +748,8 @@
 
             // if there's a "lamp" element, we generate visual CW.
             var lamp = document.getElementById('lamp')
+            var turn_lamp_off = function() { lamp.style.backgroundColor = 'white';};
+            var turn_lamp_on = function() { lamp.style.backgroundColor = 'yellow';};
 
             for (var i = 0; i < out.length; i++) {
                 var s = start + out[i]['t'];
@@ -760,10 +762,10 @@
                     var tmp;
                     if (lamp) {
                         if (out[i]['v'] == 0) {
-                            setTimeout(function() { lamp.style.backgroundColor = 'white';}, out[i]['t']*1000);
+                            this.timers.push(setTimeout(turn_lamp_off, out[i]['t']*1000));
                         }
                         else {
-                            setTimeout(function() { lamp.style.backgroundColor = 'yellow';}, out[i]['t']*1000);
+                            this.timers.push(setTimeout(turn_lamp_on, out[i]['t']*1000));
                         }
                     }
                 }
