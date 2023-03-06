@@ -214,6 +214,7 @@
         this.showSettings = false;
         this.startDelay = 0;    // delay in seconds before audio starts
         this.prosign = false;   // we're within a prosign (no letter spaces)
+        this.characterPlayTimers = [];
         this.finishedTimeout = null;
 
         this.help_url = "https://fkurz.net/ham/jscwlib.html";   // Shows up in the settings dialog - to disable, change to null
@@ -790,6 +791,7 @@
             if (this.audioCtx.state === "running") {
                 this.paused = true;
                 this.audioCtx.suspend();
+                this.characterPlayTimeouts.splice(0).forEach(clearTimeout);
                 clearTimeout(this.finishedTimeout);
             }
             else {
@@ -805,6 +807,7 @@
                 this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
                 this.gainNode.gain.setValueAtTime(0, this.audioCtx.currentTime);
                 this.playEnd = 0;
+                this.characterPlayTimeouts.splice(0).forEach(clearTimeout);
                 clearTimeout(this.finishedTimeout);
             }
             else {
@@ -821,7 +824,8 @@
 
         this.setCharacterCb = function (c, t) {
             var cb = this.onCharacterPlay;
-            setTimeout(function() { cb(c); }, t);
+            var timer = setTimeout(function() { cb(c); }, t);
+            this.characterPlayTimers.push(timer);
         }
 
 
