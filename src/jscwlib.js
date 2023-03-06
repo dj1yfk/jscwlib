@@ -214,8 +214,7 @@
         this.showSettings = false;
         this.startDelay = 0;    // delay in seconds before audio starts
         this.prosign = false;   // we're within a prosign (no letter spaces)
-        this.characterPlayTimers = [];
-        this.finishedTimeout = null;
+        this.timers = [];
 
         this.help_url = "https://fkurz.net/ham/jscwlib.html";   // Shows up in the settings dialog - to disable, change to null
         this.help_text = "jscwlib - Documentation";
@@ -780,8 +779,8 @@
             this.playTiming = out;
 
             if (this.onFinished) {
-                clearTimeout(this.finishedTimeout);
-                this.finishedTimeout = setTimeout(this.onFinished, this.playLength*1000);
+                this.timers.splice(0).forEach(clearTimeout);
+                this.timers.push(setTimeout(this.onFinished, this.playLength*1000));
             }
 
         } // play
@@ -791,13 +790,12 @@
             if (this.audioCtx.state === "running") {
                 this.paused = true;
                 this.audioCtx.suspend();
-                this.characterPlayTimeouts.splice(0).forEach(clearTimeout);
-                clearTimeout(this.finishedTimeout);
+                this.timers.splice(0).forEach(clearTimeout);
             }
             else {
                 this.paused = false;
                 this.audioCtx.resume();
-                this.finishedTimeout = setTimeout(this.onFinished, this.getRemaining()*1000);
+                this.timers.push(setTimeout(this.onFinished, this.getRemaining()*1000));
             }
             console.log("paused: " + this.paused);
         }
@@ -807,8 +805,7 @@
                 this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
                 this.gainNode.gain.setValueAtTime(0, this.audioCtx.currentTime);
                 this.playEnd = 0;
-                this.characterPlayTimeouts.splice(0).forEach(clearTimeout);
-                clearTimeout(this.finishedTimeout);
+                this.timers.splice(0).forEach(clearTimeout);
             }
             else {
                 this.player.pause();
@@ -825,7 +822,7 @@
         this.setCharacterCb = function (c, t) {
             var cb = this.onCharacterPlay;
             var timer = setTimeout(function() { cb(c); }, t);
-            this.characterPlayTimers.push(timer);
+            this.timers.push(timer);
         }
 
 
