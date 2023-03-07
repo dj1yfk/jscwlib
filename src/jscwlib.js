@@ -738,7 +738,13 @@
             if (!out.length) {
                 return;
             }
+            this.playTiming = out;
+            this.fillAudioBuffers();
+            this.setTimers();
+        } // play
 
+        this.fillAudioBuffers = function() {
+            var out = this.playTiming;
             var start = this.audioCtx.currentTime + 0.01;
 
             // if the generated audio is very long, we need to add an extra
@@ -746,28 +752,11 @@
             // array. For short text, this is not noticeable at all.
             start += out.length/10000;
 
-            // if there's a "lamp" element, we generate visual CW.
-            var lamp = document.getElementById('lamp')
-            var turn_lamp_off = function() { lamp.style.backgroundColor = 'white';};
-            var turn_lamp_on = function() { lamp.style.backgroundColor = 'yellow';};
-
             for (var i = 0; i < out.length; i++) {
                 var s = start + out[i]['t'];
-                if (out[i].hasOwnProperty('c')) {
-                    this.setCharacterCb(out[i]['c'], out[i]['t']*1000);
-                }
                 // volume change
                 if (out[i].hasOwnProperty('v')) {
                     this.gainNode.gain.setValueAtTime(out[i]['v'], s);
-                    var tmp;
-                    if (lamp) {
-                        if (out[i]['v'] == 0) {
-                            this.timers.push(setTimeout(turn_lamp_off, out[i]['t']*1000));
-                        }
-                        else {
-                            this.timers.push(setTimeout(turn_lamp_on, out[i]['t']*1000));
-                        }
-                    }
                 }
                 // freq change
                 if (out[i].hasOwnProperty('f')) {
@@ -778,26 +767,58 @@
 
             this.playLength = out[out.length-1]['t'];
             this.playEnd = start + this.playLength;
-            this.playTiming = out;
+        } // fillAUdioBuffers
 
-            if (this.onFinished) {
-                this.timers.splice(0).forEach(clearTimeout);
-                this.timers.push(setTimeout(this.onFinished, this.playLength*1000));
+        this.setTimers = function() {
+            var out = this.playTiming;
+
+            // if there's a "lamp" element, we generate visual CW.
+            var lamp = document.getElementById('lamp')
+            var turn_lamp_off = function() { lamp.style.backgroundColor = 'white';};
+            var turn_lamp_on = function() { lamp.style.backgroundColor = 'yellow';};
+
+            for (var i = 0; i < out.length; i++) {
+                var t = (out[i]['t'] - this.audioCtx.currentTime) * 1000;
+                if (t < 0) {
+                    continue;
+                }
+                if (out[i].hasOwnProperty('c')) {
+                    this.setCharacterCb(out[i]['c'], t);
+                }
+                // volume change
+                if (out[i].hasOwnProperty('v')) {
+                    var tmp;
+                    if (lamp) {
+                        if (out[i]['v'] == 0) {
+                            this.timers.push(setTimeout(turn_lamp_off, t));
+                        }
+                        else {
+                            this.timers.push(setTimeout(turn_lamp_on, t));
+                        }
+                    }
+                }
             }
 
-        } // play
+            if (this.onFinished) {
+                this.timers.push(setTimeout(this.onFinished, this.getRemaining()*1000 - start));
+            }
+        } // setTimers
+
+        this.resetTimers = function() {
+            this.timers.splice(0).forEach(clearTimeout);
+        }
 
         // pause simply suspends this audioCtx
         this.pause = function () {
             if (this.audioCtx.state === "running") {
                 this.paused = true;
                 this.audioCtx.suspend();
-                this.timers.splice(0).forEach(clearTimeout);
+                this.resetTimers();
             }
             else {
                 this.paused = false;
                 this.audioCtx.resume();
-                this.timers.push(setTimeout(this.onFinished, this.getRemaining()*1000));
+                this.setTimers();
             }
             console.log("paused: " + this.paused);
         }
@@ -807,7 +828,7 @@
                 this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
                 this.gainNode.gain.setValueAtTime(0, this.audioCtx.currentTime);
                 this.playEnd = 0;
-                this.timers.splice(0).forEach(clearTimeout);
+                this.resetTimers();
             }
             else {
                 this.player.pause();
@@ -826,7 +847,6 @@
             var timer = setTimeout(function() { cb(c); }, t);
             this.timers.push(timer);
         }
-
 
         // in: a single character (except space) and a start time
         // out: array of timing for this character w/o spaces after the last element, starting at "time"
