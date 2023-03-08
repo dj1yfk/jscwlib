@@ -952,6 +952,9 @@
                     }
                 }
                 else {
+                    var ti = this.gen_morse_timing(c, time);
+                    ti[0]['c'] = {"n": i, "c": c };  // in the first element, include the character and the position, so we can fire the onCharacterPlay function
+                    out = out.concat(ti);
                     time += this.wordspace;
                     if (this.ews) {
                         time += (this.wordspace + this.letterspace) * this.ews;
