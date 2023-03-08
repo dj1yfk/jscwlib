@@ -197,6 +197,7 @@
         this.q = 10;
         this.dotlen;
         this.playLength = 0;
+        this.playStart = 0;
         this.playEnd = 0;
         this.playTiming = [];   // last generated text 
         this.init_done = false;
@@ -766,11 +767,13 @@
             }
 
             this.playLength = out[out.length-1]['t'];
+            this.playStart = this.audioCtx.currentTime;
             this.playEnd = start + this.playLength;
         } // fillAUdioBuffers
 
         this.setTimers = function() {
             var out = this.playTiming;
+            var offset = this.audioCtx.currentTime - this.playStart;
 
             // if there's a "lamp" element, we generate visual CW.
             var lamp = document.getElementById('lamp')
@@ -778,7 +781,7 @@
             var turn_lamp_on = function() { lamp.style.backgroundColor = 'yellow';};
 
             for (var i = 0; i < out.length; i++) {
-                var t = (out[i]['t'] - this.audioCtx.currentTime) * 1000;
+                var t = (out[i]['t'] - offset) * 1000;
                 if (t < 0) {
                     continue;
                 }
