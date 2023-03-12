@@ -174,6 +174,7 @@
             "--.-", "ك": "-.-", "ل": ".-..", "م": "--", "ن": "-.", "و": ".--", "ء": ".", "لا": ".-...-", "ﻕ": "--.-",
             "ي": "..", "ه": "..-..",
             " ":" " };
+        this.alphabet = alphabet;
         var el_len = { ".": 1, "-": 3, " ": 1 };
 
         this.controls_options = {
@@ -197,6 +198,7 @@
         this.q = 10;
         this.dotlen;
         this.playLength = 0;
+        this.playStart = 0;
         this.playEnd = 0;
         this.playTiming = [];   // last generated text 
         this.init_done = false;
@@ -214,7 +216,7 @@
         this.showSettings = false;
         this.startDelay = 0;    // delay in seconds before audio starts
         this.prosign = false;   // we're within a prosign (no letter spaces)
-        this.finishedTimeout = null;
+        this.timers = [];
 
         this.help_url = "https://fkurz.net/ham/jscwlib.html";   // Shows up in the settings dialog - to disable, change to null
         this.help_text = "jscwlib - Documentation";
@@ -738,34 +740,25 @@
             if (!out.length) {
                 return;
             }
+            this.playTiming = out;
+            this.fillAudioBuffers();
+            this.setTimers();
+        } // play
 
+        this.fillAudioBuffers = function() {
+            var out = this.playTiming;
             var start = this.audioCtx.currentTime + 0.01;
 
             // if the generated audio is very long, we need to add an extra
-            // delay of about one second for every 10k elements in the our
+            // delay of about one second for every 10k elements in the out
             // array. For short text, this is not noticeable at all.
             start += out.length/10000;
 
-            // if there's a "lamp" element, we generate visual CW.
-            var lamp = document.getElementById('lamp')
-
             for (var i = 0; i < out.length; i++) {
                 var s = start + out[i]['t'];
-                if (out[i].hasOwnProperty('c')) {
-                    this.setCharacterCb(out[i]['c'], out[i]['t']*1000);
-                }
                 // volume change
                 if (out[i].hasOwnProperty('v')) {
                     this.gainNode.gain.setValueAtTime(out[i]['v'], s);
-                    var tmp;
-                    if (lamp) {
-                        if (out[i]['v'] == 0) {
-                            setTimeout(function() { lamp.style.backgroundColor = 'white';}, out[i]['t']*1000);
-                        }
-                        else {
-                            setTimeout(function() { lamp.style.backgroundColor = 'yellow';}, out[i]['t']*1000);
-                        }
-                    }
                 }
                 // freq change
                 if (out[i].hasOwnProperty('f')) {
@@ -775,27 +768,61 @@
             }
 
             this.playLength = out[out.length-1]['t'];
+            this.playStart = this.audioCtx.currentTime;
             this.playEnd = start + this.playLength;
-            this.playTiming = out;
+        } // fillAUdioBuffers
 
-            if (this.onFinished) {
-                clearTimeout(this.finishedTimeout);
-                this.finishedTimeout = setTimeout(this.onFinished, this.playLength*1000);
+        this.setTimers = function() {
+            var out = this.playTiming;
+            var offset = this.audioCtx.currentTime - this.playStart;
+
+            // if there's a "lamp" element, we generate visual CW.
+            var lamp = document.getElementById('lamp')
+            var turn_lamp_off = function() { lamp.style.backgroundColor = 'white';};
+            var turn_lamp_on = function() { lamp.style.backgroundColor = 'yellow';};
+
+            for (var i = 0; i < out.length; i++) {
+                var t = (out[i]['t'] - offset) * 1000;
+                if (t < 0) {
+                    continue;
+                }
+                if (out[i].hasOwnProperty('c')) {
+                    this.setCharacterCb(out[i]['c'], t);
+                }
+                // volume change
+                if (out[i].hasOwnProperty('v')) {
+                    var tmp;
+                    if (lamp) {
+                        if (out[i]['v'] == 0) {
+                            this.timers.push(setTimeout(turn_lamp_off, t));
+                        }
+                        else {
+                            this.timers.push(setTimeout(turn_lamp_on, t));
+                        }
+                    }
+                }
             }
 
-        } // play
+            if (this.onFinished) {
+                this.timers.push(setTimeout(this.onFinished, this.getRemaining()*1000 - start));
+            }
+        } // setTimers
+
+        this.resetTimers = function() {
+            this.timers.splice(0).forEach(clearTimeout);
+        }
 
         // pause simply suspends this audioCtx
         this.pause = function () {
             if (this.audioCtx.state === "running") {
                 this.paused = true;
                 this.audioCtx.suspend();
-                clearTimeout(this.finishedTimeout);
+                this.resetTimers();
             }
             else {
                 this.paused = false;
                 this.audioCtx.resume();
-                this.finishedTimeout = setTimeout(this.onFinished, this.getRemaining()*1000);
+                this.setTimers();
             }
             console.log("paused: " + this.paused);
         }
@@ -805,7 +832,7 @@
                 this.gainNode.gain.cancelScheduledValues(this.audioCtx.currentTime);
                 this.gainNode.gain.setValueAtTime(0, this.audioCtx.currentTime);
                 this.playEnd = 0;
-                clearTimeout(this.finishedTimeout);
+                this.resetTimers();
             }
             else {
                 this.player.pause();
@@ -821,9 +848,9 @@
 
         this.setCharacterCb = function (c, t) {
             var cb = this.onCharacterPlay;
-            setTimeout(function() { cb(c); }, t);
+            var timer = setTimeout(function() { cb(c); }, t);
+            this.timers.push(timer);
         }
-
 
         // in: a single character (except space) and a start time
         // out: array of timing for this character w/o spaces after the last element, starting at "time"
@@ -925,6 +952,9 @@
                     }
                 }
                 else {
+                    var ti = this.gen_morse_timing(c, time);
+                    ti[0]['c'] = {"n": i, "c": c };  // in the first element, include the character and the position, so we can fire the onCharacterPlay function
+                    out = out.concat(ti);
                     time += this.wordspace;
                     if (this.ews) {
                         time += (this.wordspace + this.letterspace) * this.ews;
