@@ -747,15 +747,15 @@
 
         this.fillAudioBuffers = function() {
             var out = this.playTiming;
-            var start = this.audioCtx.currentTime + 0.01;
+            this.playStart = this.audioCtx.currentTime + 0.01;
 
             // if the generated audio is very long, we need to add an extra
             // delay of about one second for every 10k elements in the out
             // array. For short text, this is not noticeable at all.
-            start += out.length/10000;
+            this.playStart += out.length/10000;
 
             for (var i = 0; i < out.length; i++) {
-                var s = start + out[i]['t'];
+                var s = this.playStart + out[i]['t'];
                 // volume change
                 if (out[i].hasOwnProperty('v')) {
                     this.gainNode.gain.setValueAtTime(out[i]['v'], s);
@@ -768,8 +768,7 @@
             }
 
             this.playLength = out[out.length-1]['t'];
-            this.playStart = this.audioCtx.currentTime;
-            this.playEnd = start + this.playLength;
+            this.playEnd = this.playStart + this.playLength;
         } // fillAUdioBuffers
 
         this.setTimers = function() {
@@ -804,7 +803,7 @@
             }
 
             if (this.onFinished) {
-                this.timers.push(setTimeout(this.onFinished, this.getRemaining()*1000 - start));
+                this.timers.push(setTimeout(this.onFinished, this.getRemaining()*1000 - this.playStart));
             }
         } // setTimers
 
