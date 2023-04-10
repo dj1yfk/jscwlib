@@ -3,7 +3,7 @@
  *  Author:     Fabian Kurz, DJ5CW
  *  Homepage:   https://fkurz.net/ham/jscwlib.html
  *  Repository: https://git.fkurz.net/dj1yfk/jscwlib
- *  
+ *
  *  The MIT license applies.
  */
     function jscw (params) {
@@ -17,23 +17,23 @@
 
         var settings_open_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiI+PHBhdGggZD0ibTEwNy43NSAyMi4xNTl2MjEuNTcxYy04LjgzNSAyLjExNy0xNy4yODYgNS42MDgtMjUuMDQgMTAuMzQ3bC0xNS4yMzQtMTUuMjM0LTI4LjYzMiAyOC42MzQgMTUuMjYgMTUuMjZjLTQuNzQ0OCA3Ljc0NDQtOC4yNDQzIDE2LjE4Ni0xMC4zNzEgMjUuMDE2aC0yMS41NzN2NDAuNDkzaDIxLjU3MWMyLjExNjEgOC44MzgyIDUuNjA3NiAxNy4yODkgMTAuMzQ3IDI1LjA0M2wtMTUuMjM0IDE1LjIzNCAyOC42MzIgMjguNjM0IDE1LjI2Mi0xNS4yNjJjNy43NDQ0IDQuNzQ0OCAxNi4xODYgOC4yNDQzIDI1LjAxNiAxMC4zNzF2MjEuNTczaDQwLjQ5M3YtMjEuNTcxYzguODM3NS0yLjExNjMgMTcuMjg4LTUuNjA3OCAyNS4wNDEtMTAuMzQ3bDE1LjIzNiAxNS4yMzYgMjguNjMyLTI4LjYzNC0xNS4yNi0xNS4yNmM0Ljc0NS03Ljc0NSA4LjI0NDUtMTYuMTg3IDEwLjM3MS0yNS4wMThoMjEuNTczdi00MC40OTNoLTIxLjU3MWMtMi4xMTYzLTguODM3NS01LjYwNzgtMTcuMjg4LTEwLjM0Ny0yNS4wNDFsMTUuMjUtMTUuMjIyLTI4LjY0LTI4LjYzNC0xNS4yNiAxNS4yNmMtNy43NDUtNC43NDUtMTYuMTg3LTguMjQ0NS0yNS4wMTgtMTAuMzcxdi0yMS41NzNoLTQwLjQ5M3ptMjAuMjQ3IDU3LjUzN2E0OC4zMDMgNDguMzAzIDAgMCAxIDQ4LjMgNDguMzA0IDQ4LjMwMyA0OC4zMDMgMCAwIDEgLTQ4LjMgNDguMyA0OC4zMDMgNDguMzAzIDAgMCAxIC00OC4zMDMgLTQ4LjMgNDguMzAzIDQ4LjMwMyAwIDAgMSA0OC4zMDMgLTQ4LjMwNHoiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZmlsbD0iI2FhYWFhYSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjgiIC8+PC9zdmc+Cg==";
 
-        var alphabet = {"a": ".-", "b": "-...", "c": "-.-.", "d": "-..", "e": ".", 
+        var alphabet = {"a": ".-", "b": "-...", "c": "-.-.", "d": "-..", "e": ".",
             "f": "..-.", "g": "--.", "h": "....", "i": "..", "j": ".---", "k":
             "-.-", "l": ".-..", "m": "--", "n": "-.", "o": "---", "p": ".--.",
             "q": "--.-", "r": ".-.", "s": "...", "t": "-", "u": "..-", "v":
-            "...-", "w": ".--", "x": "-..-", "y": "-.--", "z": "--..", 
+            "...-", "w": ".--", "x": "-..-", "y": "-.--", "z": "--..",
             "1": ".----", "2": "..---", "3": "...--", "4": "....-", "5":
             ".....", "6": "-....", "7": "--...", "8": "---..", "9": "----.",
             "0": "-----", "/": "-..-.", "+": ".-.-.", "=": "-...-", "?": "..--..",
             ".": ".-.-.-", ",": "--..--", ":": "---...", "(": "-.--.", ")": "-.--.-",
             "@": ".--.-.", "-": "-....-", "\"": ".-..-.", "!": "..--.",
-            "$": "...-..-", "'": ".----.", "`": ".-----.", 
+            "$": "...-..-", "'": ".----.", "`": ".-----.",
             "&": ". ...",
-            "-": "-....-", ";": "-.-.-.", 
-            "«": ".-..-.", "»": ".-..-.", 
+            "-": "-....-", ";": "-.-.-.",
+            "«": ".-..-.", "»": ".-..-.",
             "ä": ".-.-", "ß": "...--..",
             "à": ".--.-", "á": ".--.-", "â": ".-", "ã": ".-",
-            "å": ".--.-", "æ": ".-.-", "ç": "-.-..", "è": "..-..", "é": "..-..", 
+            "å": ".--.-", "æ": ".-.-", "ç": "-.-..", "è": "..-..", "é": "..-..",
             "ê": ".", "ë": ".", "ì": ".---.", "í": "..", "î": "..", "ï": "..",
             "ð": "..--.", "ñ": "--.--", "ò": "---", "ó": "---", "ô": "---",
             "õ": "---", "ö": "---.", "ø": "---.", "ù": "..-", "ú": "..-",
@@ -52,10 +52,10 @@
             "ů": "..-", "ű": "..-", "ų": "..-", "ŵ": ".--", "ŷ": "-.--",
             "Ÿ": "-.--", "ź": "--..", "ż": "--..", "ž": "--..", "ſ": "...",
             /* Greek */
-            "α": ".-", "β": "-...", "γ": "--.", "δ": "-..", "ε": ".", 
-            "ζ": "--..", "η": "....", "θ": "-.-.", "ι": "..", "κ": "-.-", 
-            "λ": ".-..", "μ": "--", "ν": "-.", "ξ": "-..-", "ο": "---", 
-            "π": ".--.", "ρ": ".-.", "σ": "...", "τ": "-", "υ": "-.--", 
+            "α": ".-", "β": "-...", "γ": "--.", "δ": "-..", "ε": ".",
+            "ζ": "--..", "η": "....", "θ": "-.-.", "ι": "..", "κ": "-.-",
+            "λ": ".-..", "μ": "--", "ν": "-.", "ξ": "-..-", "ο": "---",
+            "π": ".--.", "ρ": ".-.", "σ": "...", "τ": "-", "υ": "-.--",
             "φ": "..-.", "χ": "----", "ψ": "--.-", "ω": ".--", "ς": "...",
             /* cyrillic */
             "а": ".-", "б": "-...", "в": ".--", "г": "--.", "д": "-..",
@@ -160,11 +160,11 @@
             "」": ".-.-..",                /* \n */
 
             /* Hebrew */
-            "א": ".-", "ב": "-...", "ג": "--.", "ד": "-..", "ה": "---", 
-            "ו": ".", "ז": "--..", "ח": "....", "ט": "..-", "י": "..", 
-            "כ": "-.-", "ל": ".-..", "מ": "--", "נ": "-.", "ס": "-.-.", 
-            "ע": ".---", "פ": ".--.", "צ": ".--", "ק": "--.-", "ר": ".-.", 
-            "ש": "...", "ת": "-", "ך": "-.-", "ם": "--", "ן": "-.", 
+            "א": ".-", "ב": "-...", "ג": "--.", "ד": "-..", "ה": "---",
+            "ו": ".", "ז": "--..", "ח": "....", "ט": "..-", "י": "..",
+            "כ": "-.-", "ל": ".-..", "מ": "--", "נ": "-.", "ס": "-.-.",
+            "ע": ".---", "פ": ".--.", "צ": ".--", "ק": "--.-", "ר": ".-.",
+            "ש": "...", "ת": "-", "ך": "-.-", "ם": "--", "ן": "-.",
             "ף": ".--.", "ץ": ".--",
             /* Arabic */
             "ا" : ".-", "ب": "-...", "ت": "-", "ث": "-.-.", "ج": ".---", "ح":
@@ -178,9 +178,9 @@
         var el_len = { ".": 1, "-": 3, " ": 1 };
 
         this.controls_options = {
-            "wpm_min": 5, "wpm_max": 50, 
-            "eff_min": 0, "eff_max": 50, 
-            "ews_min": 0, "ews_max": 5, 
+            "wpm_min": 5, "wpm_max": 50,
+            "eff_min": 0, "eff_max": 50,
+            "ews_min": 0, "ews_max": 5,
             "freq_min": 300, "freq_max": 1500,
             "edge_min": 1, "edge_max": 25,
             "volume_min": 0, "volume_max": 100
@@ -200,14 +200,14 @@
         this.playLength = 0;
         this.playStart = 0;
         this.playEnd = 0;
-        this.playTiming = [];   // last generated text 
+        this.playTiming = [];   // last generated text
         this.init_done = false;
         this.text = "";
         this.paused = true;
         this.progressbar = false;
         this.mode = 'audio';    /* audio: AudioContext, embed: <audio> tag */
         this.cgiurl = "https://cgi2.lcwo.net/cgi-bin/";
-        this.real = false;  // If set to true, use Real speed, not PARIS 
+        this.real = false;  // If set to true, use Real speed, not PARIS
         this.vvv = false;
         this.prefix = "vvv = ";
         this.suffix = " +";
@@ -251,11 +251,11 @@
 
         try {
     	    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            console.log("AudioContext OK");   
+            console.log("AudioContext OK");
         }
         catch (e) {
             this.mode = 'embed';
-            console.log("AudioContext not supported. Fall back to HTML audio element");   
+            console.log("AudioContext not supported. Fall back to HTML audio element");
         }
 
         this.init = function() {
@@ -268,7 +268,7 @@
             else {
                 this.gainNode = this.audioCtx.createGain(); // this gainNode modulates the CW
                 this.gainNodePlay = this.audioCtx.createGain(); // this gainNode is the overall volume
-                this.gainNodeLimiter = this.audioCtx.createGain(); // this limits the osc output to avoid clipping with high Q filters 
+                this.gainNodeLimiter = this.audioCtx.createGain(); // this limits the osc output to avoid clipping with high Q filters
 
                 this.oscillator = this.audioCtx.createOscillator();
                 this.biquadFilter = this.audioCtx.createBiquadFilter();
@@ -328,7 +328,7 @@
             }
             this.init_done = true;
         }
-       
+
         this.getLength = function () {
             if (this.mode == 'audio') {
                 return this.playLength;
@@ -418,7 +418,7 @@
             }
             this.updateControls();
         }
- 
+
         this.setEff = function (e) {
             console.log("setEff = " + e);
             if (this.mode == 'audio' && this.init_done) {
@@ -465,7 +465,7 @@
                 this.gainNodePlay.gain.setValueAtTime(v, this.audioCtx.currentTime);
             }
         }
-        
+
         this.setStartDelay = function (s) {
             console.log("setStartDelay = " + s);
             this.startDelay = s;
@@ -520,7 +520,7 @@
             }
 
             this.refresh_download_link();
-        } 
+        }
 
         this.enableControls = function (obj, b) {
             console.log("enableControls = " + b);
@@ -551,7 +551,7 @@
 
                 if(i === 0) {
                     ctx.moveTo(x, y);
-                } 
+                }
                 else {
                     ctx.lineTo(x, y);
                 }
@@ -577,7 +577,7 @@
             // duration of last text
             var d = this.playTiming[this.playTiming.length-1]["t"];
 
-            // pixels (width) per second, leave 10 pixels right and left 
+            // pixels (width) per second, leave 10 pixels right and left
             var pps = (w - 20) / d;
 
             // draw!
@@ -625,7 +625,7 @@
             }
 
             var eff = this.eff;
-            
+
             // real speed (not PARIS) => no farnsworth timing, eff = char speed
             if (this.real || this.eff == 0) {
                 eff = this.wpm;
@@ -692,7 +692,7 @@
                 this.player.play();
                 console.log(this.player);
                 return;
-            }    
+            }
 
             /*
              * ugly: in ebook2cw we use |Wx to set the extra word spacing. Here
@@ -706,9 +706,9 @@
             this.setText(text);
 
             // generate array with all events on a timeline.
-            // possible events are 
+            // possible events are
             // 1) changes of volume (the Morse "keying") itself
-            // 2) changes of tone frequency 
+            // 2) changes of tone frequency
             // returns an an object:
             // { "nc": num_chars, "length": length_seconds, "timings": timing_array, "paris": paris_speed }
 
@@ -881,7 +881,7 @@
         this.gen_morse_events = function(text) {
             var out = [];
             var time = this.startDelay;
-           
+
             this.textStart = time;
             this.textEnd = Number.MAX_VALUE;
 
@@ -975,7 +975,7 @@
             }
 
             // real characters requested, not PARIS.
-            // this means we need to multiply the 
+            // this means we need to multiply the
             // PARIS timing by a factor, which we now
             // calculate
             if (this.real == true) {
@@ -1029,7 +1029,7 @@
                 sec -= obj.textStart;   // start in negative time if we have vvv prefx
                 var sign = sec >= 0 ? "&nbsp;" : "-";
                 sec = Math.abs(sec);
-                
+
                 obj.progresslabel.innerHTML = obj.fmtTime(sec, sign) + " /" + obj.fmtTime(obj.getLength() - obj.textStart,"");
 
                 if (obj.paused || obj.getRemaining() == 0) {
@@ -1070,7 +1070,7 @@
             return " " + sign + min + ":" + sec;
         }
 
- 
+
         // render a player with play/pause button to element "el"
         this.renderPlayer = function(el, obj) {
             var el = document.getElementById(el);
@@ -1093,7 +1093,7 @@
             l.style.fontSize = "12px";
             l.style.fontWeight = "normal";
             l.style.display = "inline-block";
-            
+
             obj.setProgressbar(pb, l);
 
             var btn_pp = document.createElement("img");
@@ -1118,7 +1118,7 @@
                     obj.pause();
                 }
                 else {
-                    obj.play(); 
+                    obj.play();
                 }
             }
             var btn_stop = document.createElement("img");
@@ -1154,7 +1154,7 @@
             btn_down_img.style.verticalAlign = "middle";
             btn_down_img.style.textDecoration = "none";
             btn_down_img.style.color = "#000000";
-            btn_down_img.src = download_svg; 
+            btn_down_img.src = download_svg;
             btn_down_img.style.width = "25px";
             btn_down_img.style.height = "25px";
             btn_down.appendChild(btn_down_img);
@@ -1180,7 +1180,7 @@
             btn_set_img.style.verticalAlign = "middle";
             btn_set_img.style.textDecoration = "none";
             btn_set_img.style.color = "#000000";
-            btn_set_img.src = settings_svg; 
+            btn_set_img.src = settings_svg;
             btn_set_img.style.width = "25px";
             btn_set_img.style.height = "25px";
             obj.btn_set_img = btn_set_img;
@@ -1208,7 +1208,7 @@
             var tbl = document.createElement('table');
 
             // speed
-            var speed = document.createElement("input"); 
+            var speed = document.createElement("input");
             speed.id = "speed";
             speed.type = "range";
             speed.min = obj.controls_options["wpm_min"];
@@ -1225,7 +1225,7 @@
             speed_label.htmlFor = "speed";
             speed_label.style.fontSize = "12px";
             speed_label.innerHTML = "0 WpM";
-            
+
             obj.control_labels["wpm"] = speed_label;
             obj.control_inputs["wpm"] = speed;
 
@@ -1238,7 +1238,7 @@
             td.appendChild(speed_label);
 
             // eff
-            var eff = document.createElement("input"); 
+            var eff = document.createElement("input");
             eff.id = "eff";
             eff.type = "range";
             eff.min = obj.controls_options["eff_min"];
@@ -1255,7 +1255,7 @@
             eff_label.htmlFor = "eff";
             eff_label.style.fontSize = "12px";
             eff_label.innerHTML = "0 WpM";
-            
+
             obj.control_labels["eff"] = eff_label;
             obj.control_inputs["eff"] = eff;
 
@@ -1268,7 +1268,7 @@
             td.appendChild(eff_label);
 
             // ews
-            var ews = document.createElement("input"); 
+            var ews = document.createElement("input");
             ews.id = "ews";
             ews.type = "range";
             ews.min = obj.controls_options["ews_min"];
@@ -1285,7 +1285,7 @@
             ews_label.htmlFor = "ews";
             ews_label.style.fontSize = "12px";
             ews_label.innerHTML = "0";
-            
+
             obj.control_labels["ews"] = ews_label;
             obj.control_inputs["ews"] = ews;
 
@@ -1298,7 +1298,7 @@
             td.appendChild(ews_label);
 
             // freq
-            var freq = document.createElement("input"); 
+            var freq = document.createElement("input");
             freq.id = "freq";
             freq.type = "range";
             freq.min = obj.controls_options["freq_min"];
@@ -1328,7 +1328,7 @@
             td.appendChild(freq_label);
 
             // edge
-            var edge = document.createElement("input"); 
+            var edge = document.createElement("input");
             edge.id = "edge";
             edge.type = "range";
             edge.min = obj.controls_options["edge_min"];
@@ -1358,7 +1358,7 @@
             td.appendChild(edge_label);
 
             // volume
-            var vol = document.createElement("input"); 
+            var vol = document.createElement("input");
             vol.id = "vol";
             vol.type = "range";
             vol.min = obj.controls_options["volume_min"];
@@ -1378,7 +1378,7 @@
 
             obj.control_labels["vol"] = vol_label;
             obj.control_inputs["vol"] = vol;
-            
+
             tr = tbl.insertRow();
             td = tr.insertCell();
             td.appendChild(document.createTextNode("Volume:"));
