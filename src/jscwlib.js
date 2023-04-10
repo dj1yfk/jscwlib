@@ -17,40 +17,224 @@
 
         var settings_open_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiI+PHBhdGggZD0ibTEwNy43NSAyMi4xNTl2MjEuNTcxYy04LjgzNSAyLjExNy0xNy4yODYgNS42MDgtMjUuMDQgMTAuMzQ3bC0xNS4yMzQtMTUuMjM0LTI4LjYzMiAyOC42MzQgMTUuMjYgMTUuMjZjLTQuNzQ0OCA3Ljc0NDQtOC4yNDQzIDE2LjE4Ni0xMC4zNzEgMjUuMDE2aC0yMS41NzN2NDAuNDkzaDIxLjU3MWMyLjExNjEgOC44MzgyIDUuNjA3NiAxNy4yODkgMTAuMzQ3IDI1LjA0M2wtMTUuMjM0IDE1LjIzNCAyOC42MzIgMjguNjM0IDE1LjI2Mi0xNS4yNjJjNy43NDQ0IDQuNzQ0OCAxNi4xODYgOC4yNDQzIDI1LjAxNiAxMC4zNzF2MjEuNTczaDQwLjQ5M3YtMjEuNTcxYzguODM3NS0yLjExNjMgMTcuMjg4LTUuNjA3OCAyNS4wNDEtMTAuMzQ3bDE1LjIzNiAxNS4yMzYgMjguNjMyLTI4LjYzNC0xNS4yNi0xNS4yNmM0Ljc0NS03Ljc0NSA4LjI0NDUtMTYuMTg3IDEwLjM3MS0yNS4wMThoMjEuNTczdi00MC40OTNoLTIxLjU3MWMtMi4xMTYzLTguODM3NS01LjYwNzgtMTcuMjg4LTEwLjM0Ny0yNS4wNDFsMTUuMjUtMTUuMjIyLTI4LjY0LTI4LjYzNC0xNS4yNiAxNS4yNmMtNy43NDUtNC43NDUtMTYuMTg3LTguMjQ0NS0yNS4wMTgtMTAuMzcxdi0yMS41NzNoLTQwLjQ5M3ptMjAuMjQ3IDU3LjUzN2E0OC4zMDMgNDguMzAzIDAgMCAxIDQ4LjMgNDguMzA0IDQ4LjMwMyA0OC4zMDMgMCAwIDEgLTQ4LjMgNDguMyA0OC4zMDMgNDguMzAzIDAgMCAxIC00OC4zMDMgLTQ4LjMgNDguMzAzIDQ4LjMwMyAwIDAgMSA0OC4zMDMgLTQ4LjMwNHoiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZmlsbD0iI2FhYWFhYSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjgiIC8+PC9zdmc+Cg==";
 
-        var alphabet = {"a": ".-", "b": "-...", "c": "-.-.", "d": "-..", "e": ".",
-            "f": "..-.", "g": "--.", "h": "....", "i": "..", "j": ".---", "k":
-            "-.-", "l": ".-..", "m": "--", "n": "-.", "o": "---", "p": ".--.",
-            "q": "--.-", "r": ".-.", "s": "...", "t": "-", "u": "..-", "v":
-            "...-", "w": ".--", "x": "-..-", "y": "-.--", "z": "--..",
-            "1": ".----", "2": "..---", "3": "...--", "4": "....-", "5":
-            ".....", "6": "-....", "7": "--...", "8": "---..", "9": "----.",
-            "0": "-----", "/": "-..-.", "+": ".-.-.", "=": "-...-", "?": "..--..",
-            ".": ".-.-.-", ",": "--..--", ":": "---...", "(": "-.--.", ")": "-.--.-",
-            "@": ".--.-.", "-": "-....-", "\"": ".-..-.", "!": "..--.",
-            "$": "...-..-", "'": ".----.", "`": ".-----.",
+        var alphabet = {
+            " ":" ",
+
+            // International Morse code, as per ITU-R M.1677-1
+
+            // 1. Morse code signals
+            // 1.1.1. Letters (Latins cript)
+            "a": ".-",
+            "b": "-...",
+            "c": "-.-.",
+            "d": "-..",
+            "e": ".",
+            "f": "..-.",
+            "g": "--.",
+            "h": "....",
+            "i": "..",
+            "j": ".---",
+            "k": "-.-",
+            "l": ".-..",
+            "m": "--",
+            "n": "-.",
+            "o": "---",
+            "p": ".--.",
+            "q": "--.-",
+            "r": ".-.",
+            "s": "...",
+            "t": "-",
+            "u": "..-",
+            "v": "...-",
+            "w": ".--",
+            "x": "-..-",
+            "y": "-.--",
+            "z": "--..",
+
+            // 1.1.2. Figures (Hindu-Arab digits)
+            "0": "-----",
+            "1": ".----",
+            "2": "..---",
+            "3": "...--",
+            "4": "....-",
+            "5": ".....",
+            "6": "-....",
+            "7": "--...",
+            "8": "---..",
+            "9": "----.",
+
+            // 1.1.3. Punctuation marks and miscellaneous signs
+            ".": ".-.-.-",  // Full stop (period)
+            ",": "--..--",  // Comma
+            ":": "---...",  // Colon r division sign
+            "?": "..--..",  // Question mark
+            "'": ".----.",  // Apostrophe
+            "-": "-....-",  // Hyphen
+            "/": "-..-.",  // Fraction bar or division sign
+            "(": "-.--.",  // Left-hand bracket (parenthesis)
+            ")": "-.--.-",  // Right-hand bracket (parenthesis)
+            // Inverted commas (before and after the words)
+            // English
+            "“": ".-..-.",
+            "”": ".-..-.",
+            // French
+            "«": ".-..-.",
+            "»": ".-..-.",
+            "=": "-...-",  // Double hyphen
+            // NA  // Understood
+            // NA  // Error
+            "+": ".-.-.",  // Cross or addition sign
+            // NA  // Invitation to transmit
+            // NA  // Wait
+            // NA  // End of work
+            // NA  // Starting signal
+            "×": "-..-",  // Multiplication sign (same as letter X)
+            "@": ".--.-.",  // Commercial at
+
+            // 3. Transmission of signs for which there is no corresponding signal in the Morse code
+            // 3.1. Signs that have no corresponding signal in the Morse code,
+            //      but that are acceptable in the writing of telegrams, shall
+            //      be sent as follows:
+            // 3.2. Multiplication sign
+            // 3.2.1. For the multiplication sign, the signal corresponding to
+            //        the letter X shall be transmitted.
+            // NOTE: already listed in 1.1.3
+            // 3.3. Percentage or per thousand sign
+            // 3.3.1. To indicate the signal % or ‰, the figure 0, the fraction
+            //        bar and the figures 0 or 00 shall be transmitted
+            //        successively (i.e. 0/0, 0/00).
+            "%": "----- -..-. -----",
+            "‰": "----- -..-. ----- -----",
+            // 3.3.2 A whole number, a fractional number, or a fraction,
+            //       followed by a % or ‰ sign, shall be transmitted by joining
+            //       up the whole number, the fraction number, or the fraction
+            //       to the % or ‰ by a single hyphen.
+            // TODO: This is not implemented
+            // 3.4 Inverted commas (quotation marks)
+            // 3.4.1 The special signal for inverted commas shall be transmitted
+            //       before and after the word or words. However, where code
+            //       converters are used, the apostrophe may be transmitted
+            //       twice before and twice after the word or words to signal
+            //       inverted commas (quotation marks).
+            // NOTE: NA
+            // 3.5 Minute and second signs
+            // 3.5.1 To transmit the minute ( ′ ) or second ( ″ ) signs, when
+            //       such signs follow figures – for example 1′15″ – the
+            //       apostrophe signal (. − − − −.) must be used once or twice
+            //       as appropriate. The signal (.− . . −.) reserved for
+            //       inverted commas may not be used for the second sign.
+            "′": ".----.",
+            "″": ".----. .----.",
+
+            // Non-standard punctuation marks
+            "\"": ".-..-.",
+            "!": "..--.",
+            "$": "...-..-",
+            "`": ".-----.",
             "&": ". ...",
-            "-": "-....-", ";": "-.-.-.",
-            "«": ".-..-.", "»": ".-..-.",
-            "ä": ".-.-", "ß": "...--..",
-            "à": ".--.-", "á": ".--.-", "â": ".-", "ã": ".-",
-            "å": ".--.-", "æ": ".-.-", "ç": "-.-..", "è": "..-..", "é": "..-..",
-            "ê": ".", "ë": ".", "ì": ".---.", "í": "..", "î": "..", "ï": "..",
-            "ð": "..--.", "ñ": "--.--", "ò": "---", "ó": "---", "ô": "---",
-            "õ": "---", "ö": "---.", "ø": "---.", "ù": "..-", "ú": "..-",
-            "û": "..-", "ü": "..--", "ý": "-.--", "þ": ".--..", "ÿ": "-.--",
-            "ā": ".-", "ă": ".-", "ą": ".-", "ć": "-.-.", "ĉ": "-.-..",
-            "ċ": "-.-.", "č": "-.-.", "ď": "-..", "đ": "-..", "ē": ".",
-            "ĕ": ".", "ė": ".", "ę": ".", "ě": ".", "ĝ": "--.-.", "ğ": "--.",
-            "ġ": "--.", "ģ": "--.", "ĥ": "----", "ħ": "....", "ĩ": "..",
-            "ī": "..", "ĭ": "..", "į": "..", "ı": "..", "ĳ": ".. .---",
-            "ĵ": ".---.", "ķ": "-.-", "ĸ": "-.-", "ĺ": ".-..", "ļ": ".-..",
-            "ľ": ".-..", "ŀ": ".-..", "ł": ".-..", "ń": "-.", "ņ": "-.",
-            "ň": "-.", "ŉ": "-.", "ŋ": "-.", "ō": "---", "ŏ": "---",
-            "ő": "---", "œ": "---.", "ŕ": ".-.", "ŗ": ".-.", "ř": ".-.",
-            "ś": "...", "ŝ": "...-.", "ş": "...", "š": "...", "ţ": "-",
-            "ť": "-", "ŧ": "-", "ũ": "..-", "ū": "..-", "ŭ": "..--",
-            "ů": "..-", "ű": "..-", "ų": "..-", "ŵ": ".--", "ŷ": "-.--",
-            "Ÿ": "-.--", "ź": "--..", "ż": "--..", "ž": "--..", "ſ": "...",
+            "-": "-....-",
+            ";": "-.-.-.",
+
+            // Latin script with diacritics (non-standard)
+            "ä": ".-.-",
+            "ß": "...--..",
+            "à": ".--.-",
+            "á": ".--.-",
+            "â": ".-",
+            "ã": ".-",
+            "å": ".--.-",
+            "æ": ".-.-",
+            "ç": "-.-..",
+            "è": "..-..",
+            "é": "..-..",
+            "ê": ".",
+            "ë": ".",
+            "ì": ".---.",
+            "í": "..",
+            "î": "..",
+            "ï": "..",
+            "ð": "..--.",
+            "ñ": "--.--",
+            "ò": "---",
+            "ó": "---",
+            "ô": "---",
+            "õ": "---",
+            "ö": "---.",
+            "ø": "---.",
+            "ù": "..-",
+            "ú": "..-",
+            "û": "..-",
+            "ü": "..--",
+            "ý": "-.--",
+            "þ": ".--..",
+            "ÿ": "-.--",
+            "ā": ".-",
+            "ă": ".-",
+            "ą": ".-",
+            "ć": "-.-.",
+            "ĉ": "-.-..",
+            "ċ": "-.-.",
+            "č": "-.-.",
+            "ď": "-..",
+            "đ": "-..",
+            "ē": ".",
+            "ĕ": ".",
+            "ė": ".",
+            "ę": ".",
+            "ě": ".",
+            "ĝ": "--.-.",
+            "ğ": "--.",
+            "ġ": "--.",
+            "ģ": "--.",
+            "ĥ": "----",
+            "ħ": "....",
+            "ĩ": "..",
+            "ī": "..",
+            "ĭ": "..",
+            "į": "..",
+            "ı": "..",
+            "ĳ": ".. .---",
+            "ĵ": ".---.",
+            "ķ": "-.-",
+            "ĸ": "-.-",
+            "ĺ": ".-..",
+            "ļ": ".-..",
+            "ľ": ".-..",
+            "ŀ": ".-..",
+            "ł": ".-..",
+            "ń": "-.",
+            "ņ": "-.",
+            "ň": "-.",
+            "ŉ": "-.",
+            "ŋ": "-.",
+            "ō": "---",
+            "ŏ": "---",
+            "ő": "---",
+            "œ": "---.",
+            "ŕ": ".-.",
+            "ŗ": ".-.",
+            "ř": ".-.",
+            "ś": "...",
+            "ŝ": "...-.",
+            "ş": "...",
+            "š": "...",
+            "ţ": "-",
+            "ť": "-",
+            "ŧ": "-",
+            "ũ": "..-",
+            "ū": "..-",
+            "ŭ": "..--",
+            "ů": "..-",
+            "ű": "..-",
+            "ų": "..-",
+            "ŵ": ".--",
+            "ŷ": "-.--",
+            "Ÿ": "-.--",
+            "ź": "--..",
+            "ż": "--..",
+            "ž": "--..",
+            "ſ": "...",
+
             /* Greek */
             "α": ".-", "β": "-...", "γ": "--.", "δ": "-..", "ε": ".",
             "ζ": "--..", "η": "....", "θ": "-.-.", "ι": "..", "κ": "-.-",
