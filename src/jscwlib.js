@@ -450,6 +450,38 @@
             "、": ".-.-.-",  // .
             "」": ".-.-..",  // \n
 
+            // SKATS for Korean
+            // The ARRL handbook for the radio amateur, 19-3 (1985)
+            // https://archive.org/details/arrlhandbookforr0000unse_w7j4/page/n415/mode/2up
+            "ㄱ": ".-..",    // kiyeok
+            "ㄴ": "..-.",    // nieun
+            "ㄷ": "-...",    // tikeut
+            "ㄹ": "...-",    // rieul
+            "ㅁ": "--",      // mieum
+            "ㅂ": ".--",     // pieup
+            "ㅅ": "--.",     // sios
+            "ㅇ": "-.-",     // ieung
+            "ㅈ": ".--.",    // cieuc
+            "ㅊ": "-.-.",    // chieuch
+            "ㅋ": "-..-",    // khieukh
+            "ㅌ": "--..",    // thieuth
+            "ㅍ": "---",     // phieuph
+            "ㅎ": ".---",    // hieuh
+            "ㅏ": ".",       // a
+            "ㅐ": "--.-",    // ae
+            "ㅑ": "..",      // ya
+            "ㅒ": ".. ..-",  // yae
+            "ㅓ": "-",       // eo
+            "ㅔ": "-.--",    // e
+            "ㅕ": "...",     // yeo
+            "ㅖ": "... ..-", // ye
+            "ㅗ": ".-",      // o
+            "ㅛ": "-.",      // yo
+            "ㅜ": "....",    // u
+            "ㅠ": ".-.",     // yu
+            "ㅡ": "-..",     // eu
+            "ㅣ": "..-",     // i
+
             // Hebrew
             // The ARRL handbook for the radio amateur, 19-3 (1985)
             // https://archive.org/details/arrlhandbookforr0000unse_w7j4/page/n415/mode/2up
