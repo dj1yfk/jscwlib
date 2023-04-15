@@ -594,7 +594,7 @@
         this.text = "";
         this.paused = true;
         this.progressbar = false;
-        this.mode = 'audio';    /* audio: AudioContext, embed: <audio> tag */
+        this.mode = 'audio';    // audio: AudioContext, embed: <audio> tag
         this.cgiurl = "https://cgi2.lcwo.net/cgi-bin/";
         this.real = false;  // If set to true, use Real speed, not PARIS
         this.vvv = false;
@@ -733,13 +733,13 @@
         }
 
         this.setFilter = function (f) {
-            console.log("setFilter f = " + f);
+            console.debug("setFilter f = " + f);
             this.biquadFilter.frequency.setValueAtTime(f, this.audioCtx.currentTime);
         }
 
         this.setQ = function (q) {
             console.log("setQ = " + q);
-            /* try storing Q in local storage */
+            // try storing Q in local storage
             try {
                 localStorage.setItem('jscwlib_q', q);
             }
@@ -842,7 +842,7 @@
 
         this.setVolume = function(v) {
             this.playvolume = v;
-            /* try storing this in local storage */
+            // try storing this in local storage
             try {
                 localStorage.setItem('jscwlib_vol', v);
             }
@@ -1282,7 +1282,7 @@
 
             for (var i = 0; i < text.length; i++) {
                 var c = text.substr(i, 1);
-                if (c == "|") { /* text command */
+                if (c == "|") { // text command
                     i++;
                     c = text.substr(i, 1);
                     i++;
