@@ -523,13 +523,45 @@
             "ת": "-",     // dotless tav
             "תּ": "-",     // dotted tav
 
-            /* Arabic */
-            "ا" : ".-", "ب": "-...", "ت": "-", "ث": "-.-.", "ج": ".---", "ح":
-            "....", "خ": "---", "د": "-..", "ذ": "--..", "ر": ".-.", "ز":
-            "---.", "س": "...", "ش": "----", "ص": "-..-", "ض": "...-", "ط":
-            "..-", "ظ": "-.--", "ع": ".-.-", "غ":" --.", "ف": "..-.", "ق":
-            "--.-", "ك": "-.-", "ل": ".-..", "م": "--", "ن": "-.", "و": ".--", "ء": ".", "لا": ".-...-", "ﻕ": "--.-",
-            "ي": "..", "ه": "..-..",
+            // Arabic
+            // The ARRL handbook for the radio amateur, 19-3 (1985)
+            // https://archive.org/details/arrlhandbookforr0000unse_w7j4/page/n415/mode/2up
+            // Unicode points were copied from “Isolated form”, and names from “Letter name” in
+            // https://en.wikipedia.org/wiki/Arabic_alphabet#Table_of_basic_letters
+            // TODO: add contextual forms
+            "ا": ".-",     // ʾalif
+            "ب": "-...",   // bāʾ/bah
+            "ت": "-",      // tāʾ/tah
+            "ث": "-.-.",   // thāʾ/thah
+            "ج": ".---",   // jīm
+            "ح": "....",   // ḥāʾ/ḥah
+            "خ": "---",    // khāʾ/khah
+            "د": "-..",    // dāl/dāʾ/dah
+            "ذ": "--..",   // dhāl/dhāʾ/dhah
+            "ر": ".-.",    // rāʾ/rah
+            "ز": "---.",   // zāy/zayn/zāʾ/zah
+            "س": "...",    // sīn
+            "ش": "----",   // shīn
+            "ص": "-..-",   // ṣād
+            "ض": "...-",   // ḍād/ḍāʾ/ḍah
+            "ط": "..-",    // ṭāʾ/ṭah
+            "ظ": "-.--",   // ẓāʾ/ẓah
+            "ع": ".-.-",   // ʿayn
+            "غ": "--.",    // ghayn
+            "ف": "..-.",   // fāʾ/fah
+            "ق": "--.-",   // qāf
+            "ڪ": "-.-",    // kāf/kāʾ/kah
+            "ك": "-.-",    // kāf/kāʾ/kah
+            "ل": ".-..",   // lām
+            "م": "--",     // mīm
+            "ن": "-.",     // nūn
+            "ه": "..-..",  // hāʾ/hah
+            "و": ".--",    // wāw
+            "ے": "..",     // yāʾ/yah
+            "ي": "..",     // yāʾ/yah
+            "لا": ".-...-", // lām-alif (ligature)
+            // other characters without a reference
+            "ء": ".",      // hamzah
         };
         this.alphabet = alphabet;
         var el_len = { ".": 1, "-": 3, " ": 1 };
