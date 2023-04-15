@@ -1433,8 +1433,6 @@
                         obj.enableControls(obj, false);
                     }
                 }
-
-
             }
         }
 
