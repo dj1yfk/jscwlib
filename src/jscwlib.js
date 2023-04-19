@@ -1328,17 +1328,15 @@
                 else if (c != " ") {
                     var ti = this.gen_morse_timing(c, time);
                     ti[0]['c'] = {"n": i, "c": c };  // in the first element, include the character and the position, so we can fire the onCharacterPlay function
-                    if (ti) {
-                        out = out.concat(ti);
-                        time = out[out.length - 1]['t'];
-                        if (!this.prosign) {
-                            time += this.letterspace;
-                        }
-                        else {
-                            time += this.dotlen;
-                        }
-                        nc++;
+                    out = out.concat(ti);
+                    time = out[out.length - 1]['t'];
+                    if (!this.prosign) {
+                        time += this.letterspace;
                     }
+                    else {
+                        time += this.dotlen;
+                    }
+                    nc++;
                 }
                 else {
                     var ti = this.gen_morse_timing(c, time);
