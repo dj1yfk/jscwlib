@@ -772,17 +772,10 @@
                 return 0;
             }
             if (this.mode == 'audio') {
-                var r = this.playEnd - this.audioCtx.currentTime;
+                return this.playEnd - this.audioCtx.currentTime;
             }
             else {
-                var r = this.player.duration - this.player.currentTime;
-            }
-
-            if (r >= 0) {
-                return Math.round(r*10)/10;;
-            }
-            else {
-                return 0;
+                return this.player.duration - this.player.currentTime;
             }
         }
 
