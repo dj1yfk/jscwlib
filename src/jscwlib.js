@@ -1253,17 +1253,15 @@
             }
 
             for (var j = 0; j < l.length; j++) {
-                var el = l.substr(j,1);  // . or -
+                var el = l.substr(j,1);  // dit, dah or letter space
                 if (el != " ")
                     out.push({"t": time, "v": this.volume});
                 time += this.dotlen * el_len[el];
                 out.push({"t": time, "v": 0});
-                if (j < l.length - 1) {
-                    time += this.dotlen;
-                }
+                // symbol space
+                time += this.dotlen;
             }
 
-            out.push({"t": time, "v": 0});
             return out;
         }
 
