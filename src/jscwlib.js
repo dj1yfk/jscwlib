@@ -1342,14 +1342,15 @@
                 }
                 else {  // word space
                     if (nc == 0) {
-                        // when the text starts with a space, add a symbol space
-                        // that would have been added by the previous letter
-                        time += this.dotlen;
+                        // when the text starts with a (word) space, add a
+                        // letter space that would have been added by the
+                        // previous letter (in previous else-if block)
+                        time += this.letterspace;
                     }
                     var ti = this.gen_morse_timing(c, time);
                     ti[0]['c'] = {"n": i, "c": c };  // in the first element, include the character and the position, so we can fire the onCharacterPlay function
                     out = out.concat(ti);
-                    time += this.wordspace;
+                    time += this.wordspace;  // NOTE: this.wordspace is actually a wordspace minus a letter space; this composates the fact that each letter is followed by a letter space
                     if (this.ews) {
                         time += (this.wordspace + this.letterspace) * this.ews;
                     }
