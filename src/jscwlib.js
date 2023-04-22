@@ -6,6 +6,7 @@
  *
  *  The MIT license applies.
  */
+
     function jscw (params) {
 
         var download_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4LjciIGhlaWdodD0iMTAiIHZpZXdCb3g9IjAgMCA4LjcgMTAiPjxwYXRoIHN0eWxlPSJzdHJva2U6IzAwMDtzdHJva2Utd2lkdGg6MC4yNnB4OyIgZD0ibSA0LjQsMi41IHYgNC43IGwgMS42LC0xLjYgdiAwLjMgbCAtMS42NywxLjY3IC0xLjY3LC0xLjY3IHYgLTAuMyBsIDEuNTYsMS42IDAsLTQuNyB6IiAvPjxwYXRoIHN0eWxlPSJzdHJva2U6IzAwMDtzdHJva2Utd2lkdGg6MC40OyIgZD0iTSAyLjUsOCBIIDYuMSIgLz48L3N2Zz4K";
@@ -18,7 +19,7 @@
         var settings_open_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2IiB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiI+PHBhdGggZD0ibTEwNy43NSAyMi4xNTl2MjEuNTcxYy04LjgzNSAyLjExNy0xNy4yODYgNS42MDgtMjUuMDQgMTAuMzQ3bC0xNS4yMzQtMTUuMjM0LTI4LjYzMiAyOC42MzQgMTUuMjYgMTUuMjZjLTQuNzQ0OCA3Ljc0NDQtOC4yNDQzIDE2LjE4Ni0xMC4zNzEgMjUuMDE2aC0yMS41NzN2NDAuNDkzaDIxLjU3MWMyLjExNjEgOC44MzgyIDUuNjA3NiAxNy4yODkgMTAuMzQ3IDI1LjA0M2wtMTUuMjM0IDE1LjIzNCAyOC42MzIgMjguNjM0IDE1LjI2Mi0xNS4yNjJjNy43NDQ0IDQuNzQ0OCAxNi4xODYgOC4yNDQzIDI1LjAxNiAxMC4zNzF2MjEuNTczaDQwLjQ5M3YtMjEuNTcxYzguODM3NS0yLjExNjMgMTcuMjg4LTUuNjA3OCAyNS4wNDEtMTAuMzQ3bDE1LjIzNiAxNS4yMzYgMjguNjMyLTI4LjYzNC0xNS4yNi0xNS4yNmM0Ljc0NS03Ljc0NSA4LjI0NDUtMTYuMTg3IDEwLjM3MS0yNS4wMThoMjEuNTczdi00MC40OTNoLTIxLjU3MWMtMi4xMTYzLTguODM3NS01LjYwNzgtMTcuMjg4LTEwLjM0Ny0yNS4wNDFsMTUuMjUtMTUuMjIyLTI4LjY0LTI4LjYzNC0xNS4yNiAxNS4yNmMtNy43NDUtNC43NDUtMTYuMTg3LTguMjQ0NS0yNS4wMTgtMTAuMzcxdi0yMS41NzNoLTQwLjQ5M3ptMjAuMjQ3IDU3LjUzN2E0OC4zMDMgNDguMzAzIDAgMCAxIDQ4LjMgNDguMzA0IDQ4LjMwMyA0OC4zMDMgMCAwIDEgLTQ4LjMgNDguMyA0OC4zMDMgNDguMzAzIDAgMCAxIC00OC4zMDMgLTQ4LjMgNDguMzAzIDQ4LjMwMyAwIDAgMSA0OC4zMDMgLTQ4LjMwNHoiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZmlsbD0iI2FhYWFhYSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjgiIC8+PC9zdmc+Cg==";
 
         var alphabet = {
-            " ": " ",
+            " ": " ",  // word space
 
             // International Morse code, as per ITU-R M.1677-1
 
@@ -564,7 +565,14 @@
             "ء": ".",      // hamzah
         };
         this.alphabet = alphabet;
-        var el_len = { ".": 1, "-": 3, " ": 1 };
+        var el_len = {
+            ".": 1, // dit
+            "-": 3, // dah
+            // letter space,
+            // minus symbol space added after previous character,
+            // and minutes symbol space added after letter space itself
+            " ": 1,
+        };
 
         this.controls_options = {
             "wpm_min": 5, "wpm_max": 50,
@@ -764,17 +772,10 @@
                 return 0;
             }
             if (this.mode == 'audio') {
-                var r = this.playEnd - this.audioCtx.currentTime;
+                return this.playEnd - this.audioCtx.currentTime;
             }
             else {
-                var r = this.player.duration - this.player.currentTime;
-            }
-
-            if (r >= 0) {
-                return Math.round(r*10)/10;;
-            }
-            else {
-                return 0;
+                return this.player.duration - this.player.currentTime;
             }
         }
 
@@ -1192,7 +1193,11 @@
             }
 
             if (this.onFinished) {
-                this.timers.push(setTimeout(this.onFinished, this.getRemaining()*1000 - this.playStart));
+                // although setValueAtTime changes the value of this.gainNode
+                // immediately, the low-pass filter will slightly delay the end
+                // of the actual signal; value of 30 ms found empirically
+                const finishTime = this.getRemaining() + 0.030;
+                this.timers.push(setTimeout(this.onFinished, finishTime * 1000 - this.playStart));
             }
         } // setTimers
 
@@ -1252,17 +1257,15 @@
             }
 
             for (var j = 0; j < l.length; j++) {
-                var el = l.substr(j,1);  // . or -
+                var el = l.substr(j,1);  // dit, dah or letter space
                 if (el != " ")
                     out.push({"t": time, "v": this.volume});
                 time += this.dotlen * el_len[el];
                 out.push({"t": time, "v": 0});
-                if (j < l.length - 1) {
-                    time += this.dotlen;
-                }
+                // symbol space
+                time += this.dotlen;
             }
 
-            out.push({"t": time, "v": 0});
             return out;
         }
 
@@ -1327,23 +1330,27 @@
                 else if (c != " ") {
                     var ti = this.gen_morse_timing(c, time);
                     ti[0]['c'] = {"n": i, "c": c };  // in the first element, include the character and the position, so we can fire the onCharacterPlay function
-                    if (ti) {
-                        out = out.concat(ti);
-                        time = out[out.length - 1]['t'];
-                        if (!this.prosign) {
-                            time += this.letterspace;
-                        }
-                        else {
-                            time += this.dotlen;
-                        }
-                        nc++;
+                    out = out.concat(ti);
+                    time = out[out.length - 1]['t'];
+                    if (!this.prosign) {
+                        time += this.letterspace;
                     }
+                    else {
+                        time += this.dotlen;
+                    }
+                    nc++;
                 }
-                else {
+                else {  // word space
+                    if (nc == 0) {
+                        // when the text starts with a (word) space, add a
+                        // letter space that would have been added by the
+                        // previous letter (in previous else-if block)
+                        time += this.letterspace;
+                    }
                     var ti = this.gen_morse_timing(c, time);
                     ti[0]['c'] = {"n": i, "c": c };  // in the first element, include the character and the position, so we can fire the onCharacterPlay function
                     out = out.concat(ti);
-                    time += this.wordspace;
+                    time += this.wordspace;  // NOTE: this.wordspace is actually a wordspace minus a letter space; this composates the fact that each letter is followed by a letter space
                     if (this.ews) {
                         time += (this.wordspace + this.letterspace) * this.ews;
                     }
