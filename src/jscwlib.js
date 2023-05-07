@@ -1200,11 +1200,7 @@
             }
 
             if (this.onFinished) {
-                // although setValueAtTime changes the value of this.gainNode
-                // immediately, the low-pass filter will slightly delay the end
-                // of the actual signal; value of 30 ms found empirically
-                const finishTime = this.getRemaining() + 0.030;
-                this.timers.push(setTimeout(this.onFinished, finishTime * 1000));
+                this.timers.push(setTimeout(this.onFinished, this.getRemaining() * 1000));
             }
         } // setTimers
 
