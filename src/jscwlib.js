@@ -76,10 +76,12 @@
             "(": "-.--.",  // Left-hand bracket (parenthesis)
             ")": "-.--.-",  // Right-hand bracket (parenthesis)
             // Inverted commas (before and after the words)
-            // English
+            // Straight quotes
+            '"': ".-..-.",
+            // English quotes
             "“": ".-..-.",
             "”": ".-..-.",
-            // French
+            // French quotes
             "«": ".-..-.",
             "»": ".-..-.",
             "=": "-...-",  // Double hyphen
@@ -129,12 +131,11 @@
             "″": ".----. .----.",
 
             // Non-standard punctuation marks
-            "\"": ".-..-.",
-            "!": "..--.",
+            "!": "..--.",  // mapped to interrogation mark
             "$": "...-..-",
             "`": ".-----.",
-            "&": ". ...",
             ";": "-.-.-.",
+            "&": ". ...",  // "es"
 
             // non-Latin extensions (from https://en.wikipedia.org/wiki/Morse_code#Letters,_numbers,_punctuation,_prosigns_for_Morse_code_and_non-Latin_variants)
             // Uppercase    Lowercase
