@@ -1204,7 +1204,7 @@
                 // immediately, the low-pass filter will slightly delay the end
                 // of the actual signal; value of 30 ms found empirically
                 const finishTime = this.getRemaining() + 0.030;
-                this.timers.push(setTimeout(this.onFinished, finishTime * 1000 - this.playStart));
+                this.timers.push(setTimeout(this.onFinished, finishTime * 1000));
             }
         } // setTimers
 
