@@ -779,7 +779,7 @@
             }
 
             if (r >= 0) {
-                return Math.round(r*10)/10;;
+                return r;
             }
             else {
                 return 0;
