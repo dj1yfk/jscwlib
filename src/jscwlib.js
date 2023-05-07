@@ -76,10 +76,12 @@
             "(": "-.--.",  // Left-hand bracket (parenthesis)
             ")": "-.--.-",  // Right-hand bracket (parenthesis)
             // Inverted commas (before and after the words)
-            // English
+            // Straight quotes
+            '"': ".-..-.",
+            // English quotes
             "“": ".-..-.",
             "”": ".-..-.",
-            // French
+            // French quotes
             "«": ".-..-.",
             "»": ".-..-.",
             "=": "-...-",  // Double hyphen
@@ -129,12 +131,11 @@
             "″": ".----. .----.",
 
             // Non-standard punctuation marks
-            "\"": ".-..-.",
-            "!": "..--.",
+            "!": "..--.",  // mapped to interrogation mark
             "$": "...-..-",
             "`": ".-----.",
-            "&": ". ...",
             ";": "-.-.-.",
+            "&": ". ...",  // "es"
 
             // non-Latin extensions (from https://en.wikipedia.org/wiki/Morse_code#Letters,_numbers,_punctuation,_prosigns_for_Morse_code_and_non-Latin_variants)
             // Uppercase    Lowercase
@@ -779,7 +780,7 @@
             }
 
             if (r >= 0) {
-                return Math.round(r*10)/10;;
+                return r;
             }
             else {
                 return 0;
@@ -1200,11 +1201,7 @@
             }
 
             if (this.onFinished) {
-                // although setValueAtTime changes the value of this.gainNode
-                // immediately, the low-pass filter will slightly delay the end
-                // of the actual signal; value of 30 ms found empirically
-                const finishTime = this.getRemaining() + 0.030;
-                this.timers.push(setTimeout(this.onFinished, finishTime * 1000 - this.playStart));
+                this.timers.push(setTimeout(this.onFinished, this.getRemaining() * 1000));
             }
         } // setTimers
 
@@ -1357,7 +1354,7 @@
                     var ti = this.gen_morse_timing(c, time);
                     ti[0]['c'] = {"n": i, "c": c };  // in the first element, include the character and the position, so we can fire the onCharacterPlay function
                     out = out.concat(ti);
-                    time += this.wordspace;  // NOTE: this.wordspace is actually a wordspace minus a letter space; this composates the fact that each letter is followed by a letter space
+                    time += this.wordspace;  // NOTE: this.wordspace is actually a wordspace minus a letter space; this compensates the fact that each letter is followed by a letter space
                     if (this.ews) {
                         time += (this.wordspace + this.letterspace) * this.ews;
                     }
