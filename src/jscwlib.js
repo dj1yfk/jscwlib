@@ -619,6 +619,21 @@
         this.help_url = "https://fkurz.net/ham/jscwlib.html";   // Shows up in the settings dialog - to disable, change to null
         this.help_text = "jscwlib - Documentation";
 
+        // if there's a "lamp" element, we generate visual CW.
+        const that = this;
+        this.onLampOff = null;
+        this.onLampOn = null;
+        // NOTE: if the JavaScript is loaded synchronously and is before the
+        // HTML for the lamp, we might not find it, so we delay the search
+        // until after the document has been fully parsed
+        setTimeout(() => {
+            var lamp = document.getElementById('lamp')
+            if (lamp) {
+                that.onLampOff = function() { lamp.style.backgroundColor = 'white';};
+                that.onLampOn = function() { lamp.style.backgroundColor = 'yellow';};
+            }
+        }, 0);
+
         // see if volume is saved in localStorage
         try {
             var vl = parseFloat(localStorage.getItem("jscwlib_vol"));
@@ -1173,11 +1188,6 @@
             var out = this.playTiming;
             var offset = this.audioCtx.currentTime - this.playStart;
 
-            // if there's a "lamp" element, we generate visual CW.
-            var lamp = document.getElementById('lamp')
-            var turn_lamp_off = function() { lamp.style.backgroundColor = 'white';};
-            var turn_lamp_on = function() { lamp.style.backgroundColor = 'yellow';};
-
             for (var i = 0; i < out.length; i++) {
                 var t = (out[i]['t'] - offset) * 1000;
                 if (t < 0) {
@@ -1189,12 +1199,14 @@
                 // volume change
                 if (out[i].hasOwnProperty('v')) {
                     var tmp;
-                    if (lamp) {
-                        if (out[i]['v'] == 0) {
-                            this.timers.push(setTimeout(turn_lamp_off, t));
+                    if (out[i]['v'] == 0) {
+                        if (this.onLampOff !== null) {
+                            this.timers.push(setTimeout(this.onLampOff, t));
                         }
-                        else {
-                            this.timers.push(setTimeout(turn_lamp_on, t));
+                    }
+                    else {
+                        if (this.onLampOn !== null) {
+                            this.timers.push(setTimeout(this.onLampOn, t));
                         }
                     }
                 }

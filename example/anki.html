@@ -5,7 +5,7 @@
 <div id="player"></div>  
 <script>
     var r = new XMLHttpRequest();
-    r.open("GET", "https://fkurz.net/ham/jscwlib/src/jscwlib.js");
+    r.open("GET", "../src/jscwlib.js");
     r.onreadystatechange = function () {
         eval(r.responseText);
         var m = new jscw();
