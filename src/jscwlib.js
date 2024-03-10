@@ -1512,6 +1512,7 @@
             btn_pp_img.style.margin = "0px";
             btn_pp_img.style.padding = "0px 0px";
             btn_pp_img.style.verticalAlign = "middle";
+            btn_pp.type = "button";
             btn_pp.title = "Play / Pause";
             btn_pp.style.borderRadius = "3px";
             btn_pp.style.backgroundColor = "#dadada";
