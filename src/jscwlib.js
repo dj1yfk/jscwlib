@@ -1443,14 +1443,14 @@
                 obj.progresslabel.innerHTML = obj.fmtTime(sec, sign) + " /" + obj.fmtTime(obj.getLength() - obj.textStart,"");
 
                 if (obj.paused || obj.getRemaining() == 0) {
-                    if (obj.btn_pp.src != play_svg) {
-                        obj.btn_pp.src = play_svg;
+                    if (obj.btn_pp_img.src != play_svg) {
+                        obj.btn_pp_img.src = play_svg;
                         obj.enableControls(obj, true);
                    }
                 }
                 else {
-                    if (obj.btn_pp.src != pause_svg) {
-                        obj.btn_pp.src = pause_svg;
+                    if (obj.btn_pp_img.src != pause_svg) {
+                        obj.btn_pp_img.src = pause_svg;
                         obj.enableControls(obj, false);
                     }
                 }
@@ -1504,8 +1504,14 @@
 
             obj.setProgressbar(pb, l);
 
-            var btn_pp = document.createElement("img");
-            btn_pp.src = play_svg;
+            var btn_pp = document.createElement("button");
+            var btn_pp_img = document.createElement("img");
+            btn_pp_img.src = play_svg;
+            btn_pp_img.style.width = "27px";
+            btn_pp_img.style.height = "27px";
+            btn_pp_img.style.margin = "0px";
+            btn_pp_img.style.padding = "0px 0px";
+            btn_pp_img.style.verticalAlign = "middle";
             btn_pp.title = "Play / Pause";
             btn_pp.style.borderRadius = "3px";
             btn_pp.style.backgroundColor = "#dadada";
@@ -1514,13 +1520,10 @@
             btn_pp.style.textAlign = "center";
             btn_pp.style.padding = "0px 0px";
             btn_pp.style.margin = "4px";
-            btn_pp.style.display = "inline-block";
-            btn_pp.style.verticalAlign = "middle";
-            btn_pp.style.textDecoration = "none";
-            btn_pp.style.color = "#000000";
-            btn_pp.style.width = "25px";
-            btn_pp.style.height = "25px";
+            btn_pp.style.height = "27px";
+            btn_pp.appendChild(btn_pp_img);
             obj.btn_pp = btn_pp;
+            obj.btn_pp_img = btn_pp_img;
             btn_pp.onclick = function () {
                 if (obj.getRemaining()) {
                     obj.pause();
@@ -1544,7 +1547,7 @@
             btn_stop.style.color = "#000000";
             btn_stop.src = stop_svg;
             btn_stop.title = "Stop";
-            btn_stop.style.width = "25px";
+            btn_stop.style.width = "27px";
             btn_stop.style.height = "25px";
             btn_stop.onclick = function () {
                 obj.stop();
@@ -1563,7 +1566,7 @@
             btn_down_img.style.textDecoration = "none";
             btn_down_img.style.color = "#000000";
             btn_down_img.src = download_svg;
-            btn_down_img.style.width = "25px";
+            btn_down_img.style.width = "27px";
             btn_down_img.style.height = "25px";
             btn_down.appendChild(btn_down_img);
             btn_down.title = "Download MP3";
@@ -1589,7 +1592,7 @@
             btn_set_img.style.textDecoration = "none";
             btn_set_img.style.color = "#000000";
             btn_set_img.src = settings_svg;
-            btn_set_img.style.width = "25px";
+            btn_set_img.style.width = "27px";
             btn_set_img.style.height = "25px";
             obj.btn_set_img = btn_set_img;
 
