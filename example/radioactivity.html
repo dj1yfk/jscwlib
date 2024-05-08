@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<script src="../src/jscwlib.js"></script>
+
+<h2>jscwlib example: radioaktivität</h2>
+
+<div id="player1"></div>
+<div id="out">&nbsp;</div>
+
+
+<script>
+  var f = 1022;
+
+  var m1 = new jscw();
+  m1.setWpm(20);
+  m1.setEff(13);
+  m1.setFreq(f);
+  m1.setText("радіоаċтіくітυ is in the air for you and me |S800 |f1234 |e0 |w80 TTT |w25 TTT|w80 TTT |S800 |w80 TTT  |w25 TTT|w80 TTT |S800 |w80 TTT |w25 TTT|w80 TTT |S800 |w80 TTT |w25 TTT|w80 TTT |w20 |e13 |f700 ");
+  m1.renderPlayer('player1', m1);
+  m1.onPlay = function () {
+    f = 1022;
+    m2.play();
+  }
+
+  var m2 = new jscw();
+  m2.setWpm(20);
+  m2.setEff(13);
+  m2.setFreq(f);
+  m2.setText("radioactivity is in the air for you and me");
+  
+  m2.onCharacterPlay = function (c) {
+          document.getElementById("out").innerHTML += c.c;
+          f -= 12;
+          m2.setFreq(f);
+          m2.setQ(25);
+          m1.setQ(2);
+  }
+
+</script>
+
+<hr>
+<a href="https://fkurz.net/ham/jscwlib.html">jscwlib homepage</a>
