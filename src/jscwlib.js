@@ -131,7 +131,7 @@
             "″": ".----. .----.",
 
             // Non-standard punctuation marks
-            "!": "..--.",  // mapped to interrogation mark
+            "!": "-.-.--",
             "$": "...-..-",
             "`": ".-----.",
             ";": "-.-.-.",
