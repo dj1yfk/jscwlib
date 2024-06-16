@@ -24,7 +24,7 @@
             // International Morse code, as per ITU-R M.1677-1
 
             // 1. Morse code signals
-            // 1.1.1. Letters (Latins cript)
+            // 1.1.1. Letters (Latin script)
             // Uppercase Lowercase
             "A": ".-",   "a": ".-",
             "B": "-...", "b": "-...",
