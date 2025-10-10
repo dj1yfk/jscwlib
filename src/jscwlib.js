@@ -613,6 +613,7 @@
         this.startDelay = 0;    // delay in seconds before audio starts
         this.prosign = false;   // we're within a prosign (no letter spaces)
         this.timers = [];
+        this.vibration = false;
 
         this.help_url = "https://fkurz.net/ham/jscwlib.html";   // Shows up in the settings dialog - to disable, change to null
         this.help_text = "jscwlib - Documentation";
@@ -658,6 +659,8 @@
             for (var p in params) {
                 this[p] = params[p];
             }
+
+            this.setVibration(params.vibration);
         }
 
         try {
@@ -888,6 +891,16 @@
 
         this.setSuffix = function (s) {
             this.suffix = s;
+        }
+
+        this.setVibration = function (v) {
+            v = !!v;
+            if (v && !navigator.vibrate) {
+                console.warn('Vibration is not supported on this device');
+                this.vibration = false;
+            } else {
+                this.vibration = v;
+            }
         }
 
         this.enablePS = function (b) {
@@ -1153,8 +1166,34 @@
             }
             this.playTiming = out;
             this.fillAudioBuffers();
+            this.scheduleVibration();
             this.setTimers();
         } // play
+
+        this.scheduleVibration = function() {
+            if (!this.vibration) {
+                return;
+            }
+
+            // pattern contains alternating intervals of vibration and silence, in milliseconds
+            // see: https://developer.mozilla.org/en-US/docs/Web/API/Vibration_API
+            var pattern = []; 
+
+            for (var i = 0; i < (this.playTiming.length - 1);) { // note! `i` is not incremented here
+                var thisEl = this.playTiming[i];
+                var nextElIndex = this.playTiming.findIndex(function(el, j) { return j > i && el.v !== thisEl.v }, i + 1);
+                if (nextElIndex === -1) {
+                    break;
+                }
+                var nextEl = this.playTiming[nextElIndex];
+                var duration = (nextEl.t - thisEl.t) * 1000; // convert to ms
+                pattern.push(duration);
+
+                i = nextElIndex;
+            }
+
+            navigator.vibrate(pattern);
+        } // scheduleVibration
 
         this.fillAudioBuffers = function() {
             var out = this.playTiming;
@@ -1231,6 +1270,11 @@
                 this.audioCtx.resume();
                 this.setTimers();
             }
+
+            if (this.vibration) {
+                navigator.vibrate(0);
+            }
+
             console.log("paused: " + this.paused);
         }
 
@@ -1243,6 +1287,10 @@
             }
             else {
                 this.player.pause();
+            }
+
+            if (this.vibration) {
+                navigator.vibrate(0);
             }
         }
 
