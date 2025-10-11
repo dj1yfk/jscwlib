@@ -47,7 +47,9 @@
     <button onclick="m.oscilloscope(document.getElementById('osci'));">Start Oscilloscope</button>
 
     <br>
-    <input onclick="m.setReal(this.checked);" type="checkbox" value="1"> Real speed (no PARIS, no Farnsworth)
+    <label><input onclick="m.setReal(this.checked);" type="checkbox" value="1"> Real speed (no PARIS, no Farnsworth)</label>
+    <br>
+    <label><input onclick="m.setVibration(this.checked);" type="checkbox" value="1"> Vibration</label>
 
     <br>
     <canvas width=1000 height=20 id="canvas">
