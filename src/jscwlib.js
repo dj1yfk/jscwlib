@@ -660,7 +660,11 @@
                 this[p] = params[p];
             }
 
-            this.setVibration(params.vibration);
+            // disable vibration if navigator does not support it
+            if (params.vibration && !navigator.vibrate) {
+                console.warn('Vibration is not supported on this device');
+                this.vibration = false;
+            }
         }
 
         try {
